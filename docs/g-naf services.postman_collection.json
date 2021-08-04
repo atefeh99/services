@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "fbca3aa4-0563-4237-be37-03a605f42651",
+		"name": "g-naf services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PositionByPostcode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"PostCodes\":\"7518777853\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/PositionByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"PositionByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WorkshopByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/WorkshopByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"WorkshopByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuildingUnitsByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/BuildingUnitsByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"BuildingUnitsByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidatePostCode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/ValidatePostCode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"ValidatePostCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/AddressByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"AddressByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TelephonesByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/TelephonesByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"TelephonesByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressAndTelephones",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"PostCodes\":\"3713893386\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/AddressAndTelephones",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"AddressAndTelephones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressStringByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/AddressAndTelephones",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"AddressAndTelephones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostcodeByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/PostcodeByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"PostcodeByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WorkshopByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Telephones\":\"2538822882\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/WorkshopByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"WorkshopByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/AddressByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"AddressByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PositionByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Telephones\":\"2538822882\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/PositionByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"PositionByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidateTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Telephones\":\"537229348\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/ValidateTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"ValidateTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressAndPostcodeByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/AddressAndPostcodeByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"AddressAndPostcodeByTelephone"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
