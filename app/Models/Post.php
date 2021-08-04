@@ -3,11 +3,8 @@
 namespace App\Models;
 
 use App\Exceptions\RequestRulesException;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
-use function PHPUnit\Framework\throwException;
 
 
 class Post extends Model

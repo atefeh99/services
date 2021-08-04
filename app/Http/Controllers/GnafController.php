@@ -7,14 +7,40 @@ use App\Models\Post;
 use App\PostalPatrol;
 use App\StaticMap;
 use App\Helpers\Helpers;
+use App\Http\Services\Gnafservices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use function PHPUnit\Framework\isEmpty;
+use App\Http\Controllers\ApiController;
 
-class GnafController extends Controller
+class GnafController extends ApiController
 {
 //        if change key of aliases, must be change swagger route!
+    public $can = [
+        'postalcode' => [
+            'Telephones',
+            'Postcode',
+            'Address',
+            'AddressAndTelephones',
+            'Workshop',
+            'Position',
+            'ValidatePostCode',
+            'ActivityCode',
+            'BuildingUnits',
+            'AddressString'
+        ],
+        'tel' => [
+            'Postcode',
+            'Address',
+            'AddressAndPostcode',
+            'Workshop',
+            'Position',
+            'ValidateTelephone',
+            'ActivityCode'
+        ],
+
+    ];
     public $aliases = [
         'location' => 'geom',
         'map' => 'static',
@@ -46,21 +72,6 @@ class GnafController extends Controller
 
 
     ];
-//        fields that is set as array in db!
-    public $farsi = [
-        'statename' => 'استان',
-        'townname' => '',
-        'zonename' => 'بخش',
-//        'villagename' => 'village',
-//        'locationtype' => 'localitiytype',
-//        'locationname' => 'localityname',
-        'parish' => 'محله',
-        'preaven' => 'خیابان',
-        'avenue' => 'خیابان',
-        'pelak' => 'پلاک',
-        'floorno' => 'طبقه',
-//        'building_name' => 'building_name'
-    ];
     public $outputcheck = [
         'PostcodeByTelephone' => 'Postcode',
         'AddressByTelephone' => 'Address',
@@ -82,203 +93,29 @@ class GnafController extends Controller
         'AccuratePosition' => 'AccuratePosition',
         'EstimatedPosition' => 'EstimatedPosition'
     ];
-    public $can = [
-        'postalcode' => [
-            'Telephones',
-            'Postcode',
-            'Address',
-            'AddressAndTelephones',
-            'Workshop',
-            'Position',
-            'ValidatePostCode',
-            'ActivityCode',
-            'BuildingUnits',
-            'AddressString'
-        ],
-        'tel' => [
-            'Postcode',
-            'Address',
-            'AddressAndPostcode',
-            'Workshop',
-            'Position',
-            'ValidateTelephone',
-            'ActivityCode'
-        ],
-
-    ];
-    public $composite_result = [
-        'Position' => [
-            'st_x' => 'Latitude',
-            'st_y' => 'Longitude'
-        ]
-        ,
-        'Telephones' => [
-            'tel' => 'SubscriberNumber'
-        ],
-        'Postcode' => [
-            'postalcode' => 'Value'
-        ],
-        'Address' => [
-            'statename' => 'province',
-            'townname' => 'township',
-            'zonename' => 'zone',
-            'villagename' => 'village',
-            'locationtype' => 'localitiytype',
-            'locationname' => 'localityname',
-            'parish' => 'sublocality',
-            'preaven' => 'street2',
-            'avenue' => 'street',
-            'pelak' => 'Housenumber',
-            'floorno' => 'floor',
-            'building_name' => 'building_name'
-
-        ],
-        'AddressAndTelephones' => [
-            'statename' => 'province',
-            'townname' => 'township',
-            'zonename' => 'zone',
-            'villagename' => 'village',
-            'locationtype' => 'localitiytype',
-            'locationname' => 'localityname',
-            'parish' => 'sublocality',
-            'preaven' => 'street2',
-            'avenue' => 'street',
-            'pelak' => 'Housenumber',
-            'floorno' => 'floor',
-            'building_name' => 'building_name',
-            'tel' => 'TelephoneNo'
-
-        ],
-        'AddressAndPostcode' => [
-            'postalcode' => 'Postcode',
-            'statename' => 'province',
-            'townname' => 'township',
-            'zonename' => 'zone',
-            'villagename' => 'village',
-            'locationtype' => 'localitiytype',
-            'locationname' => 'localityname',
-            'parish' => 'sublocality',
-            'preaven' => 'street2',
-            'avenue' => 'street',
-            'pelak' => 'Housenumber',
-            'floorno' => 'floor',
-            'building_name' => 'building_name',
-        ],
-        'Workshop' => [
-            'activity_type' => 'Activity',
-            'activity_name' => 'Name'
-        ],
-        'ValidateTelephone' => [
-            'tel' => 'Value'
-        ],
-        'ValidatePostCode' => [
-            'postalcode' => 'Value'
-        ],
-        'BuildingUnits' => [
-            'unit' => 'Units'
-        ],
-        'AddressString' => [
-            'address' => 'Value'
-        ]
-
-    ];
-    public $composite_output = [
-        'Position' => ['ST_X(geom),ST_Y(geom)']
-        ,
-        'Telephones' => [
-            'tel'
-        ],
-        'Postcode' => [
-            'postalcode'
-        ],
-        'Address' => [
-            'statename',
-            'townname',
-            'zonename',
-            'villagename',
-            'locationtype',
-            'locationname',
-            'parish',
-            'preaven',
-            'avenue',
-            'pelak',
-            'floorno',
-            'building_name'
-        ],
-        'AddressString' => [
-            'statename',
-            'townname',
-            'zonename',
-//            'villagename',
-//            'locationtype',
-//            'locationname',
-            'parish',
-            'preaven',
-            'avenue',
-            'pelak',
-            'floorno',
-//            'building_name'
-        ],
-        'AddressAndTelephones' => [
-            'statename',
-            'townname',
-            'zonename',
-            'villagename',
-            'locationtype',
-            'locationname',
-            'parish',
-            'preaven',
-            'avenue',
-            'pelak',
-            'floorno',
-            'building_name',
-            'tel'
-        ],
-        'AddressAndPostcode' => [
-            'postalcode',
-            'statename',
-            'townname',
-            'zonename',
-            'villagename',
-            'locationtype',
-            'locationname',
-            'parish',
-            'preaven',
-            'avenue',
-            'pelak',
-            'floorno',
-            'building_name',
-
-        ],
-        'Workshop' => [
-            'activity_name',
-            'activity_type'
-        ],
-        'ValidateTelephone' => [
-            'tel'
-        ],
-        'ValidatePostCode' => [
-            'postalcode'
-        ],
-        'BuildingUnits' => [
-            'unit'
-        ]
-    ];
     protected $casts = [
         'postalcode' => 'integer',
     ];
-    public $output_attrs = [];
+    public static $output_attrs = [];
 
     public function search($input, $output, Request $request)
     {
 
+
         $inputmaps = [
             'Telephone' => 'Telephones',
-            'Postcode' => 'PostCodes'
+            'Postcode' => 'Postcodes'
         ];
-        $value = $request->all();
-        $inputvaleu = $value[$inputmaps[$input]];
+        $inputm = [
+            'Telephone' => 'TelephoneNo',
+            'Postcode' => 'PostCode'
+        ];
 
+        $value = $request->all();
+        $inputval= $value[$inputmaps[$input]];
+        $count=count($inputval);
+        $result=[];
+        $inp=$input;
         $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
@@ -298,68 +135,18 @@ class GnafController extends Controller
                 'code' => 10003
             ], 422);
         }
-        $this->createOutFields($output);
-        $out_fileds = $this->output_attrs;
-        $response = $this->handlingField($input, $output, $inputvaleu, $out_fileds);
-        return response()->json($response);
-    }
+       //dd("kjkk");
 
-    public function handlingField($input, $output, $value, $out_fields)
-    {
 
-        $output_result = $this->createresultFields($output);
-        if ($input == "tel") {
-            $result = Post::searchinarray($input, $value, $out_fields);
-        } else {
-            $result = Post::search($input, $value, $out_fields);
+        $out_fileds = Gnafservices::createOutFields($output);
+        for ($i=0;$i<$count;$i++){
+            $inputvaleu=$inputval[$i][$inputm[$inp]];
+        $response = Gnafservices::handlingField($input, $output, $inputvaleu, $out_fileds);
+        $result[$i]=$response;
         }
-
-        if ($output == "AddressString") {
-            $r = "";
-            foreach ($result as $key => $value) {
-                $r .= array_key_exists($key, $this->farsi) ? $this->farsi[$key] : $key;
-                $r .= ' '.$value.' ,';
-            }
-            unset($result);
-            $result['address'] = $r;
-        }
-
-        foreach ($result as $key => $value) {
-
-            $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
-            if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
-                    $temp['Value'] = "true";
-            }
-             else {
-                $temp[$key1] = $result[$key];
-            }
-        }
-
-        $temp['ErrorCode'] = 0;
-        $temp['ErrorMessage'] = null;
-        $temp['TraceID'] = "";
-
-
-        return $temp;
+        return $this->respondArrayResult($result);
+       // return response()->json($response);
     }
 
 
-    private function createOutFields($name)
-    {
-        if (in_array($name, array_keys($this->composite_output))) {
-            return array_map(function ($item) use ($name) {
-                return $this->createOutFields($item);
-            }, $this->composite_output[$name]);
-        } else {
-            $this->output_attrs[] = $name;
-            return $name;
-        }
-    }
-
-    private function createresultFields($name)
-    {
-        $name = in_array($name, array_keys($this->composite_result)) ? $this->composite_result[$name] : $name;
-        return $name;
-
-    }
 }
