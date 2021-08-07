@@ -50,6 +50,7 @@ class ApiController extends Controller
      */
     public function respondArrayResult($data)
     {
+
         $total_count = $data['count'] ?? count($data);
         unset($data['count']);
         array_walk_recursive($data, function(&$value)

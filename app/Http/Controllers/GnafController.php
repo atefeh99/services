@@ -119,24 +119,12 @@ class GnafController extends ApiController
         $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
-            return response()->json([
-                'status' => 422,
-                'message' => "$input is not valid",
-                'fields' => [$input => 'is required'],
-                'code' => 10002
-            ], 422);
+            return $this->respondError("$input is not valid",422,10002);
         }
 
         if ((in_array($input, array_keys($this->can)) && !in_array($output, $this->can[$input]))) {
-            return response()->json([
-                'status' => 422,
-                'message' => "$output is not valid",
-                'fields' => [$output => 'is required'],
-                'code' => 10003
-            ], 422);
+            return $this->respondError("$output is not valid",422,10003);
         }
-       //dd("kjkk");
-
 
         $out_fileds = Gnafservices::createOutFields($output);
         for ($i=0;$i<$count;$i++){
