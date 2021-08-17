@@ -51,7 +51,7 @@ class Post extends Model
     ];
 
 //
-    protected $table = 'post_data_integrated';
+    protected $table = 'sina_units';
     protected static $_table = 'post_data_integrated';
 //    protected $table = 'post_data_integrated_01_qom_100_01_new';
 

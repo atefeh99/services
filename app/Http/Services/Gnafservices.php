@@ -17,7 +17,7 @@ class Gnafservices
         'parish' => 'محله',
         'preaven' => 'خیابان',
         'avenue' => 'خیابان',
-        'pelak' => 'پلاک',
+        'plate_no' => 'پلاک',
         'floorno' => 'طبقه',
 //        'building_name' => 'building_name'
     ];
@@ -45,7 +45,7 @@ class Gnafservices
             'parish' => 'sublocality',
             'preaven' => 'street2',
             'avenue' => 'street',
-            'pelak' => 'Housenumber',
+            'plate_no' => 'Housenumber',
             'floorno' => 'floor',
             'building_name' => 'building_name'
 
@@ -60,7 +60,7 @@ class Gnafservices
             'parish' => 'sublocality',
             'preaven' => 'street2',
             'avenue' => 'street',
-            'pelak' => 'Housenumber',
+            'plate_no' => 'Housenumber',
             'floorno' => 'floor',
             'building_name' => 'building_name',
             'tel' => 'TelephoneNo'
@@ -77,7 +77,7 @@ class Gnafservices
             'parish' => 'sublocality',
             'preaven' => 'street2',
             'avenue' => 'street',
-            'pelak' => 'Housenumber',
+            'plate_no' => 'Housenumber',
             'floorno' => 'floor',
             'building_name' => 'building_name',
         ],
@@ -118,7 +118,7 @@ class Gnafservices
             'parish',
             'preaven',
             'avenue',
-            'pelak',
+            'plate_no',
             'floorno',
             'building_name'
         ],
@@ -132,7 +132,7 @@ class Gnafservices
             'parish',
             'preaven',
             'avenue',
-            'pelak',
+            'plate_no',
             'floorno',
 //            'building_name'
         ],
@@ -146,7 +146,7 @@ class Gnafservices
             'parish',
             'preaven',
             'avenue',
-            'pelak',
+            'plate_no',
             'floorno',
             'building_name',
             'tel'
@@ -162,7 +162,7 @@ class Gnafservices
             'parish',
             'preaven',
             'avenue',
-            'pelak',
+            'plate_no',
             'floorno',
             'building_name',
 
