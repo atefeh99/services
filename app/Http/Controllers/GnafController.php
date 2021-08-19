@@ -107,6 +107,7 @@ class GnafController extends ApiController
 
         $value = $request->all();
         $inputval = $value[$inputmaps[$input]];
+        $inputval = is_string($inputval) ? [$inputval] : $inputval;
         $count = is_string($inputval) ? 1 : count($inputval);
         $result = [];
         $inp = $input;
