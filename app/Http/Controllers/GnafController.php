@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Post;
-use App\PostalPatrol;
-use App\StaticMap;
-use App\Helpers\Helpers;
 use App\Http\Services\Gnafservices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use function PHPUnit\Framework\isEmpty;
 use App\Http\Controllers\ApiController;
 
 class GnafController extends ApiController
@@ -100,8 +96,6 @@ class GnafController extends ApiController
 
     public function search($input, $output, Request $request)
     {
-
-
         $inputmaps = [
             'Telephone' => 'Telephones',
             'Postcode' => 'Postcodes'
@@ -112,28 +106,26 @@ class GnafController extends ApiController
         ];
 
         $value = $request->all();
-        $inputval= $value[$inputmaps[$input]];
-        $count=count($inputval);
-        $result=[];
-        $inp=$input;
+        $inputval = $value[$inputmaps[$input]];
+        $count = is_string($inputval) ? 1 : count($inputval);
+        $result = [];
+        $inp = $input;
         $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
-            return $this->respondError("$input is not valid",422,10002);
+            return $this->respondError("$input is not valid", 422, 10002);
         }
 
         if ((in_array($input, array_keys($this->can)) && !in_array($output, $this->can[$input]))) {
-            return $this->respondError("$output is not valid",422,10003);
+            return $this->respondError("$output is not valid", 422, 10003);
         }
-
         $out_fileds = Gnafservices::createOutFields($output);
-        for ($i=0;$i<$count;$i++){
-            $inputvaleu=$inputval[$i][$inputm[$inp]];
-        $response = Gnafservices::handlingField($input, $output, $inputvaleu, $out_fileds);
-        $result[$i]=$response;
+        for ($i = 0; $i < $count; $i++) {
+            $inputvalue = $inputval[$i][$inputm[$inp]];
+            $response = Gnafservices::handlingField($input, $output, $inputvalue, $out_fileds);
+            $result[$i] = $response;
         }
         return $this->respondArrayResult($result);
-       // return response()->json($response);
     }
 
 
