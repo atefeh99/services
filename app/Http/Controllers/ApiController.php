@@ -48,6 +48,15 @@ class ApiController extends Controller
      * @param $total_count
      * @return mixed
      */
+    public function respondArray($data, $count)
+    {
+        return $this
+            ->setStatusCode(Response::HTTP_OK)
+            ->respond([
+                'odata.count' => $count,
+                'data' => $data
+            ]);
+    }
     public function respondArrayResult($data)
     {
 
@@ -172,7 +181,6 @@ class ApiController extends Controller
         if (!$message) {
             $message = trans('messages.custom.success.update');
         }
-
         return $this
             ->setStatusCode(Response::HTTP_OK)
             ->setMessage($message)
