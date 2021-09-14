@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Throwable;
@@ -39,26 +40,35 @@ class Handler extends ExceptionHandler
             //
         });
     }
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
 
-        $response = parent::render($request, $exception);
+        $response = parent::render($request, $e);
         if (env('APP_DEBUG')) {
             $return_object = [
                 'data' => [],
                 'status' => 200
             ];
-            if ($exception instanceof RequestRulesException) {
+            if ($e instanceof RequestRulesException) {
 
                 $return_object = [
                     'data' => [
                         'ErrorMessage' => trans('messages.custom.'.Response::HTTP_NOT_FOUND),
-                        'ErrorCode' => $exception->getErrorCode(),
+                        'ErrorCode' => $e->getErrorCode(),
                         'TraceID'=>''
                     ],
                     'status' => Response::HTTP_NOT_FOUND
                 ];
 
+            }elseif ($e instanceof ModelNotFoundException) {
+                $return_object = [
+                    'data' => [
+                        'status' => Response::HTTP_NOT_FOUND,
+                        'message' => trans('messages.custom.' . Response::HTTP_NOT_FOUND),
+                        'code' => 105
+                    ],
+                    'status' => Response::HTTP_NOT_FOUND
+                ];
             }
             return response()
                 ->json($return_object['data'], $return_object['status'])

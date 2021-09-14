@@ -21,3 +21,14 @@ $router->group(['prefix' => '/api/v0'], function () use ($router) {
     $router->post("/{input}/{output}", "GnafController@search");
 
 });
+$router->group(['prefix' => '/routes'], function () use ($router) {
+
+    $router->post("", "RouteCRUDController@createItem");
+    $router->get("/{id}", "RouteCRUDController@readItem");
+    $router->get("", "RouteCRUDController@showAll");
+    $router->patch("/{id}", "RouteCRUDController@updateField");
+    $router->delete("/{id}", "RouteCRUDController@deleteRecord");
+
+
+});
+
