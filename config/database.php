@@ -45,53 +45,64 @@ return [
     */
 
     'connections' => [
-
-        'testing' => [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-        ],
-
-        'sqlite' => [
-            'driver'   => 'sqlite',
-            'database' => env('DB_DATABASE', base_path('database/database.sqlite')),
-            'prefix'   => env('DB_PREFIX', ''),
-        ],
-
-        'mysql' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST', 'localhost'),
-            'port'      => env('DB_PORT', 3306),
-            'database'  => env('DB_DATABASE', 'forge'),
-            'username'  => env('DB_USERNAME', 'forge'),
-            'password'  => env('DB_PASSWORD', ''),
-            'charset'   => env('DB_CHARSET', 'utf8mb4'),
-            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-            'prefix'    => env('DB_PREFIX', ''),
-            'timezone'  => env('DB_TIMEZONE', '+00:00'),
-            'strict'    => env('DB_STRICT_MODE', false),
-        ],
+//
+//        'testing' => [
+//            'driver' => 'sqlite',
+//            'database' => ':memory:',
+//        ],
+//
+//        'sqlite' => [
+//            'driver'   => 'sqlite',
+//            'database' => env('DB_DATABASE', base_path('database/database.sqlite')),
+//            'prefix'   => env('DB_PREFIX', ''),
+//        ],
+//
+//        'mysql' => [
+//            'driver'    => 'mysql',
+//            'host'      => env('DB_HOST', 'localhost'),
+//            'port'      => env('DB_PORT', 3306),
+//            'database'  => env('DB_DATABASE', 'forge'),
+//            'username'  => env('DB_USERNAME', 'forge'),
+//            'password'  => env('DB_PASSWORD', ''),
+//            'charset'   => env('DB_CHARSET', 'utf8mb4'),
+//            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+//            'prefix'    => env('DB_PREFIX', ''),
+//            'timezone'  => env('DB_TIMEZONE', '+00:00'),
+//            'strict'    => env('DB_STRICT_MODE', false),
+//        ],
 
         'pgsql' => [
-            'driver'   => 'pgsql',
-            'host'     => env('DB_HOST', 'localhost'),
-            'port'     => env('DB_PORT', 5432),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset'  => env('DB_CHARSET', 'utf8'),
-            'prefix'   => env('DB_PREFIX', ''),
-            'schema'   => env('DB_SCHEMA', 'public'),
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+        ],
+        'gnaf' => [
+            'driver' => 'pgsql',
+            'host' => env('DB2_HOST'),
+            'port' => env('DB2_PORT'),
+            'database' => env('DB2_DATABASE'),
+            'username' => env('DB2_USERNAME'),
+            'password' => env('DB2_PASSWORD'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
         ],
 
-        'sqlsrv' => [
-            'driver'   => 'sqlsrv',
-            'host'     => env('DB_HOST', 'localhost'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset'  => env('DB_CHARSET', 'utf8'),
-            'prefix'   => env('DB_PREFIX', ''),
-        ],
+//        'sqlsrv' => [
+//            'driver'   => 'sqlsrv',
+//            'host'     => env('DB_HOST', 'localhost'),
+//            'database' => env('DB_DATABASE', 'forge'),
+//            'username' => env('DB_USERNAME', 'forge'),
+//            'password' => env('DB_PASSWORD', ''),
+//            'charset'  => env('DB_CHARSET', 'utf8'),
+//            'prefix'   => env('DB_PREFIX', ''),
+//        ],
 
     ],
 

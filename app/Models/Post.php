@@ -53,6 +53,8 @@ class Post extends Model
 //
     protected $table = 'sina_units';
     protected static $_table = 'post_data_integrated';
+    protected $connection = 'gnaf';
+
 //    protected $table = 'post_data_integrated_01_qom_100_01_new';
 
     public static $role = '';
