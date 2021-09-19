@@ -1,0 +1,1150 @@
+{
+	"info": {
+		"_postman_id": "4a5c5b17-c420-4494-81df-0716ee5abc0c",
+		"name": "Gnaf - Services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "routes",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{ACCESS_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Host}}/services/routes",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"services",
+								"routes"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "list",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Host}}/services/routes",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:05:10 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"odata.count\": 15,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"uri\": \"/api/v0/Postcode/PositionByPostcode\",\n            \"description\": \"PositionByPostcode\"\n        },\n        {\n            \"id\": 2,\n            \"uri\": \"/api/v0/Postcode/WorkshopByPostcode\",\n            \"description\": \"WorkshopByPostcode\"\n        },\n        {\n            \"id\": 3,\n            \"uri\": \"/api/v0/Postcode/BuildingUnitsByPostcode\",\n            \"description\": \"BuildingUnitsByPostcode\"\n        },\n        {\n            \"id\": 4,\n            \"uri\": \"/api/v0/Postcode/ValidatePostCode\",\n            \"description\": \"ValidatePostCode\"\n        },\n        {\n            \"id\": 5,\n            \"uri\": \"/api/v0/Postcode/AddressByPostcode\",\n            \"description\": \"AddressByPostcode\"\n        },\n        {\n            \"id\": 6,\n            \"uri\": \"/api/v0/Postcode/TelephonesByPostcode\",\n            \"description\": \"TelephonesByPostcode\"\n        },\n        {\n            \"id\": 7,\n            \"uri\": \"/api/v0/Telephone/PostcodeByTelephone\",\n            \"description\": \"PostcodeByTelephone\"\n        },\n        {\n            \"id\": 8,\n            \"uri\": \"/api/v0/Postcode/AddressAndTelephones\",\n            \"description\": \"AddressAndTelephones\"\n        },\n        {\n            \"id\": 9,\n            \"uri\": \"/api/v0/Postcode/AddressAndTelephones\",\n            \"description\": \"AddressStringByPostcode\"\n        },\n        {\n            \"id\": 10,\n            \"uri\": \"/api/v0/Telephone/AddressByTelephone\",\n            \"description\": \"AddressByTelephone\"\n        },\n        {\n            \"id\": 11,\n            \"uri\": \"/api/v0/Telephone/ValidateTelephone\",\n            \"description\": \"ValidateTelephone\"\n        },\n        {\n            \"id\": 12,\n            \"uri\": \"/api/v0/Telephone/PositionByTelephone\",\n            \"description\": \"PositionByTelephone\"\n        },\n        {\n            \"id\": 13,\n            \"uri\": \"/api/v0/Telephone/AddressAndPostcodeByTelephone\",\n            \"description\": \"AddressAndPostcodeByTelephone\"\n        },\n        {\n            \"id\": 14,\n            \"uri\": \"/api/v0/Telephone/WorkshopByTelephone\",\n            \"description\": \"WorkshopByTelephone\"\n        },\n        {\n            \"id\": 15,\n            \"uri\": \"test\",\n            \"description\": \"desc\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "get one",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{ACCESS_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Host}}/services/routes/:id",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"services",
+								"routes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get one - success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Host}}/services/routes/:id",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:04:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"uri\": \"/api/v0/Postcode/PositionByPostcode\",\n        \"description\": \"PositionByPostcode\",\n        \"id\": 1\n    }\n}"
+						},
+						{
+							"name": "get one",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Host}}/services/routes/:id",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "122"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:03:26 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 404,\n    \"message\": \"resource not found\",\n    \"code\": 105\n}"
+						}
+					]
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{ACCESS_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"uri\": \"test\",\n    \"description\": \"desc\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/services/routes",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"services",
+								"routes"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uri\": \"test\",\n    \"description\": \"desc\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Host}}/services/routes",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:04:25 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"uri\": \"test\",\n        \"description\": \"desc\"\n    },\n    \"message\": \"successfully created\"\n}"
+						}
+					]
+				},
+				{
+					"name": "delete one",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{ACCESS_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Host}}/services/routes/:id",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"services",
+								"routes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete one",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Host}}/services/routes/:id",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "15"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:05:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"15\",\n    \"message\": \"successfully deleted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update one",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-api-key",
+								"type": "text",
+								"value": "{{API_KEY}}"
+							},
+							{
+								"key": "token",
+								"type": "text",
+								"value": "{{ACCESS_TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"desc0102\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/services/routes/:id",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"services",
+								"routes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete one",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Host}}/services/routes/:id",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "15"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:05:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"15\",\n    \"message\": \"successfully deleted\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "PositionByPostcode",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/services/api/v0/Postcode/PositionByPostcode",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"services",
+						"api",
+						"v0",
+						"Postcode",
+						"PositionByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WorkshopByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/WorkshopByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"WorkshopByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuildingUnitsByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/services/api/v0/Postcode/BuildingUnitsByPostcode",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"services",
+						"api",
+						"v0",
+						"Postcode",
+						"BuildingUnitsByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidatePostCode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/services/api/v0/Postcode/ValidatePostCode",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"services",
+						"api",
+						"v0",
+						"Postcode",
+						"ValidatePostCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1215/api/v0/Postcode/AddressByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "1215",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"AddressByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TelephonesByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/TelephonesByPostcode",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"TelephonesByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressAndTelephones",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"PostCodes\":\"3713893386\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Postcode/AddressAndTelephones",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"AddressAndTelephones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressStringByPostcode‬‬",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/services/api/v0/Postcode/AddressStringByPostcode",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"services",
+						"api",
+						"v0",
+						"Postcode",
+						"AddressStringByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostcodeByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/PostcodeByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"PostcodeByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WorkshopByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Telephones\":\"2538822882\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/WorkshopByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"WorkshopByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/AddressByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"AddressByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PositionByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Telephones\":\"2538822882\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/PositionByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"PositionByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidateTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Telephones\":\"537229348\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/ValidateTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"ValidateTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressAndPostcodeByTelephone‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/v0/Telephone/AddressAndPostcodeByTelephone",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"AddressAndPostcodeByTelephone"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
