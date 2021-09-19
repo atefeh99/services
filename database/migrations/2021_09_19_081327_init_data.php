@@ -1,14 +1,17 @@
 <?php
 
+use App\Models\Route;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use App\Models\Route;
 
 class InitData extends Migration
 {
-
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Route::createItem([
@@ -105,8 +108,6 @@ class InitData extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("Routes");
+        Route::query()->truncate();
     }
-
-
 }
