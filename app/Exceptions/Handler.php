@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
 
                 $return_object = [
                     'data' => [
-                        'ErrorMessage' => trans('messages.custom.'.Response::HTTP_NOT_FOUND),
+                        'ErrorMessage' => trans('messages.custom.'.Response::HTTP_BAD_REQUEST),
                         'ErrorCode' => $e->getErrorCode(),
                         'TraceID'=>''
                     ],

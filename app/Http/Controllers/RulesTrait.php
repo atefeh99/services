@@ -27,8 +27,8 @@ trait RulesTrait
                 ],
                 'updateField' => [
                     'id'=>'required|numeric',
-                    'uri' => 'required|string',
-                    'description' => 'required|string'
+                    'uri' => 'string',
+                    'description' => 'string'
                 ],
                 'deleteRecord' => [
                     'id' => 'integer',
