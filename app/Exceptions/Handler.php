@@ -55,7 +55,6 @@ class Handler extends ExceptionHandler
                     'data' => [
                         'ErrorMessage' => trans('messages.custom.'.Response::HTTP_NOT_FOUND),
                         'ErrorCode' => $e->getErrorCode(),
-                        'TraceID'=>''
                     ],
                     'status' => Response::HTTP_NOT_FOUND
                 ];
