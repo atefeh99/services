@@ -14,7 +14,7 @@ class RouteCRUDServices
     public static function readItem($id)
     {
         $item = Route::readItem($id);
-        unset($item['created_at'], $item['updated_at']);
+        unset($item['created_at'], $item['updated_at'], $item['deleted_at']);
         return $item;
     }
 
