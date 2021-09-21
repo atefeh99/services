@@ -14,9 +14,13 @@ class CreateRoutesTable extends Migration
     public function up()
     {
         Schema::create('routes', function (Blueprint $table) {
-            $table->string('uri');
-            $table->string('description');
             $table->id();
+            $table->string('fa_name');
+            $table->string('description');
+            $table->string('uri');
+            $table->string('document_link');
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

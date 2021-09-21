@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 //use Illuminate\Support\Facades\DB;
@@ -11,9 +12,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class Route extends Model
 {
     // use Common;
+    use SoftDeletes;
+
     protected $fillable = [
         'uri',
         'description',
+        'fa_name',
+        'document_link',
 
     ];
     protected $table = 'routes';
@@ -43,6 +48,12 @@ class Route extends Model
         if (isset($data['uri'])) {
             $item->uri = $data['uri'];
         }
+        if (isset($data['fa_name'])) {
+            $item->uri = $data['uri'];
+        }
+        if (isset($data['document_link'])) {
+            $item->uri = $data['uri'];
+        }
 
         return $item->save();
 
@@ -56,7 +67,7 @@ class Route extends Model
 
     public static function showAll()
     {
-        $items = self::all(['id', 'uri', 'description'])->toArray();
+        $items = self::all(['id', 'uri', 'description','fa_name','document_link'])->toArray();
         if (count($items) > 0) {
            return $items;
         }else{

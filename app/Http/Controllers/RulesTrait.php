@@ -20,7 +20,9 @@ trait RulesTrait
             RouteCRUDController::class => [
                 'createItem' => [
                     'uri' => 'required|string',
-                    'description' => 'required|string'
+                    'description' => 'required|string',
+                    'fa_name'=>'required|string',
+                    'document_link' => 'required|string'
                 ],
                 'readItem' => [
                     'id' => 'numeric|required',
@@ -28,14 +30,14 @@ trait RulesTrait
                 'updateField' => [
                     'id'=>'required|numeric',
                     'uri' => 'string',
-                    'description' => 'string'
+                    'description' => 'string',
+                    'fa_name'=>'string',
+                    'document_link' => 'string',
                 ],
                 'deleteRecord' => [
                     'id' => 'integer',
                 ],
-                'showAll' => [
 
-                ]
             ],
         ];
     }
