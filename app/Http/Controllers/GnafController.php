@@ -6,12 +6,14 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Services\Gnafservices;
 use Illuminate\Http\Request;
+use App\Http\Controllers\RulesTrait;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Http\Controllers\ApiController;
 
 class GnafController extends ApiController
 {
+    use RulesTrait;
 //        if change key of aliases, must be change swagger route!
     public $can = [
         'postalcode' => [
@@ -96,6 +98,7 @@ class GnafController extends ApiController
 
     public function search($input, $output, Request $request)
     {
+
         $inputmaps = [
             'Telephone' => 'Telephones',
             'Postcode' => 'Postcodes'
@@ -105,8 +108,11 @@ class GnafController extends ApiController
             'Postcode' => 'PostCode'
         ];
 
-        $value = $request->all();
-        $inputval = $value[$inputmaps[$input]];
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            30000);
+        $inputval = $data[$inputmaps[$input]];
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
         $count = is_string($inputval) ? 1 : count($inputval);
         $result = [];
