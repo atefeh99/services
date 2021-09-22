@@ -101,7 +101,9 @@ class Post extends Model
     public static function searchinarray($input, $value, $out_fields)
     {
         $a = Post::whereRaw("$input @> array[?]", [$value])->first();
-        if (!$a) {   throw new RequestRulesException($input, "404");}
+        if (!$a) {
+            throw new RequestRulesException($input, "404");
+        }
 
         if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
 
@@ -116,28 +118,32 @@ class Post extends Model
 
     }
 
-    public static function search($input, $value, $out_fields)
+    public static function search($input, $values, $out_fields)
     {
-        $a = Post::where($input, $value)->first();
-        if (!$a) {    throw new RequestRulesException($input, "404");}
 
         //dd($out_fields);
         if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
 
-            $result = Post::where($input, $value)->get(array(DB::raw($out_fields[0])));
+            $result = Post::whereIn($input, $values)->get(array(DB::raw($out_fields[0])));
             $result = $result->toArray();
-            return $result[0];
+//            return $result[0];
         } else {
-            $result = Post::where($input, $value)
-                ->get($out_fields)->unique(function ($item) use ($out_fields) {
+
+            $result = Post::whereIn($input, $values)
+                ->get($out_fields)
+                ->unique(function ($item) use ($out_fields) {
                     $temp = "";
                     foreach ($out_fields as $out_field) {
                         $temp .= $item[$out_field];
                     }
                     return $temp;
-                                                                               })->toArray();
-
-            return $result[0];
+                })
+                ->toArray();
+        }
+        if(count($result) > 0){
+            return $result;
+        }else{
+            return null;
         }
 
     }

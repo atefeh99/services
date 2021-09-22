@@ -14,6 +14,7 @@ use App\Http\Controllers\ApiController;
 class GnafController extends ApiController
 {
     use RulesTrait;
+
 //        if change key of aliases, must be change swagger route!
     public $can = [
         'postalcode' => [
@@ -114,6 +115,7 @@ class GnafController extends ApiController
             30000);
         $inputval = $data[$inputmaps[$input]];
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
+//        dd($inputval);
         $count = is_string($inputval) ? 1 : count($inputval);
         $result = [];
         $inp = $input;
@@ -127,11 +129,14 @@ class GnafController extends ApiController
             return $this->respondError("$output is not valid", 422, 10003);
         }
         $out_fileds = Gnafservices::createOutFields($output);
+        $inputvalue = array();
         for ($i = 0; $i < $count; $i++) {
-            $inputvalue = $inputval[$i][$inputm[$inp]];
-            $response = Gnafservices::handlingField($input, $output, $inputvalue, $out_fileds);
-            $result[$i] = $response;
+            $inputvalue[] = $inputval[$i][$inputm[$inp]];
         }
+        $response = Gnafservices::handlingField($input, $output, $inputvalue, $out_fileds);
+        dd($response);
+        $result[$i] = $response;
+//    }
         return $this->respondArrayResult($result);
     }
 

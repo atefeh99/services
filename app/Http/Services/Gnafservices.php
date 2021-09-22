@@ -185,15 +185,17 @@ class Gnafservices
 
 
 
-    public static function handlingField($input, $output, $value, $out_fields)
+    public static function handlingField($input, $output, $values, $out_fields)
     {
 
         $output_result = self::createresultFields($output);
         if ($input == "tel") {
-            $result = Post::searchinarray($input, $value, $out_fields);
+            $result = Post::searchinarray($input, $values, $out_fields);
         } else {
-            $result = Post::search($input, $value, $out_fields);
+            $result = Post::search($input, $values, $out_fields);
         }
+        dd($result);
+
 
         if ($output == "AddressString") {
             $r = "";
