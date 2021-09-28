@@ -5,18 +5,20 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Http\Response;
 
-class RequestRulesException extends Exception
+class RequestRulesException
+
 {
-    protected $fields;
-    protected $error_code;
+    protected $res_code;
+    protected $res_message;
+    protected $data;
 
     public function __construct($fields,$error_code)
     {
-        parent::__construct();
+//        parent::__construct();
         $this->fields = $fields;
         $this->error_code = $error_code;
-        self::setCode(Response::HTTP_NOT_FOUND);
-        self::setMessage(trans('messages.custom.'.Response::HTTP_NOT_FOUND));
+//        self::setCode(Response::HTTP_NOT_FOUND);
+        self::setMessage(trans('messages.custom.'.Response::HTTP_BAD_REQUEST));
 
     }
 

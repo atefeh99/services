@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\Response;
+use App\Helpers\Data;
 
 /**
  * Class ApiController
@@ -48,34 +49,39 @@ class ApiController extends Controller
      * @param $total_count
      * @return mixed
      */
-    public function respondArray($data, $count)
+    public function respondArray($response)
     {
         return $this
             ->setStatusCode(Response::HTTP_OK)
             ->respond([
-                'odata.count' => $count,
-                'data' => $data
+                $response
             ]);
     }
-    public function respondArrayResult($data)
-    {
-
-        $total_count = $data['count'] ?? count($data);
-        unset($data['count']);
-        array_walk_recursive($data, function(&$value)
-            {
-                $value = is_string($value) ? rtrim($value) : $value;
-            });
-        return $this
-            ->setStatusCode(Response::HTTP_OK)
-            ->respond([
-                'ResCode:' => $total_count,
-                'ResMsg:'=>"موفق",
-                'Data' => ([
-                    'Result'=>$data
-                ])
-            ]);
-    }
+//    public function respondArrayResult(
+//        $res_code,
+//        $succ,
+//        $data)
+//    {
+//
+////        $total_count = $data['count'] ?? count($data);
+////        unset($data['count']);
+//        array_walk_recursive($data, function(&$value)
+//            {
+//                $value = is_string($value) ? rtrim($value) : $value;
+//            });
+//        return $this
+//            ->setStatusCode(Response::HTTP_OK)
+//            ->respond([
+//                'ResCode:' => $res_code,
+//                'ResMsg:'=>$succ,
+//                'Data' => $data
+////                    $errors = null,
+////                    $postcode = null,
+////                    $telephone = null,
+////                    $area_code = null
+//
+//            ]);
+//    }
 
     /**
      * @param $message

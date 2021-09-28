@@ -53,12 +53,14 @@ class Handler extends ExceptionHandler
 
                 $return_object = [
                     'data' => [
-                        'ErrorMessage' => trans('messages.custom.'.Response::HTTP_BAD_REQUEST),
+                        'ErrorMessage' => $e->getMessage(),
                         'ErrorCode' => $e->getErrorCode(),
+                        'ErrorFields'=>$e->getFields(),
                         'TraceID'=>''
                     ],
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => Response::HTTP_BAD_REQUEST
                 ];
+//                dd($return_object);
 
             }elseif ($e instanceof ModelNotFoundException) {
                 $return_object = [

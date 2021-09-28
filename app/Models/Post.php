@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class Post extends Model
 {
-    // use Common;
+
     protected $fillable = [
         'id',
         'gnaf',
@@ -52,7 +52,9 @@ class Post extends Model
 
 //
     protected $table = 'sina_units';
-    protected static $_table = 'post_data_integrated';
+    protected static $_table = 'sina_units';
+
+//    protected  $table = 'post_data_integrated';
     protected $connection = 'gnaf';
 
 //    protected $table = 'post_data_integrated_01_qom_100_01_new';
@@ -121,16 +123,9 @@ class Post extends Model
     public static function search($input, $values, $out_fields)
     {
 
-        //dd($out_fields);
         if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
-
-            $result = Post::whereIn($input, $values)->get(array(DB::raw($out_fields[0])));
-            $result = $result->toArray();
-//            return $result[0];
-        } else {
-
-            $result = Post::whereIn($input, $values)
-                ->get($out_fields)
+            $result = self::whereIn($input, $values)
+                ->get(array(DB::raw($out_fields[0])))
                 ->unique(function ($item) use ($out_fields) {
                     $temp = "";
                     foreach ($out_fields as $out_field) {
@@ -139,14 +134,41 @@ class Post extends Model
                     return $temp;
                 })
                 ->toArray();
+            ;
+            $result = $result->toArray();
+//            return $result[0];
+        } else {
+            try{
+            $result = self::whereIn($input, $values)
+                ->get($out_fields)
+                ->unique(function ($item) use ($out_fields) {
+                    $temp = "";
+                    foreach ($out_fields as $out_field) {
+                        $temp .= $item[$out_field];
+                    }
+                    return $temp;
+                })->keyby('postalcode')
+                ->toArray();
+        }catch (\Exception $e){
+                dd($e->getMessage());
+            }
         }
+//        dd(isset($result));
         if(count($result) > 0){
             return $result;
         }else{
+            dd(false);
             return null;
         }
 
     }
+
+    public function getTelAttribute($value)
+    {
+        self::hasC
+            return null;
+
+//    }
 
 
 }

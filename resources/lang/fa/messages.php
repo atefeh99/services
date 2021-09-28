@@ -27,7 +27,8 @@ return [
             'model_not_found' => 'requested :model not found',
             'unauthorized' => 'unauthorized',
             'query' => 'query exception',
-            'expire'=>'کد شما منقضی شد !'
+            'expire'=>'کد شما منقضی شد !',
+            
         ],
         'success' => [
             'send'=>'کد شما باموفقیت ارسال شد !',
@@ -38,7 +39,8 @@ return [
             'ok_validation' => 'your account has been successfully validated',
             'forgot_password' => 'please check your email to continue!',
             'unsubscribe' => 'you have unsubscribed successfully',
-            'avaliablecode'=>'کد شما موجود است'
+            'avaliablecode'=>'کد شما موجود است',
+            'ResMsg'=> 'موفق',
 
         ],
         'massage'=>[

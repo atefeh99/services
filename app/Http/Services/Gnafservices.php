@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Services;
 
 use App\Models\Post;
@@ -184,66 +185,138 @@ class Gnafservices
     public static $output_attrs = [];
 
 
-
-    public static function handlingField($input, $output, $values, $out_fields)
+    public static function handlingField($inp, $input, $output, $values, $out_fields)
     {
-
-        $output_result = self::createresultFields($output);
+        $query_field = collect($values)->pluck($inp)->all();
+        $output_result = self::createResultFields($input, $output);
         if ($input == "tel") {
-            $result = Post::searchinarray($input, $values, $out_fields);
+            $result = Post::searchinarray($input, $query_field, $out_fields);
         } else {
-            $result = Post::search($input, $values, $out_fields);
+            $result = Post::search($input, $query_field, $out_fields);
         }
         dd($result);
+        $data = array();
+        if (isset($result)) {
+            //loop through postcodes or telephones
+            foreach ($values as $PorT) {
+                dd($PorT);
+                //check if the postcode has data or not
+                $temp = $PorT[$inp];
+                $client_row_id = $PorT['ClientRowID'];
 
+                if (array_key_exists($temp, $result)) {
+                    $data[$temp] = [
+                        'Errors' => null,
+                        $inp => $temp,
+                        'ClientRowID' => $client_row_id,
+                        'Succ' => true,
+                    ];
+                    if ($output == "AddressString") {
 
-        if ($output == "AddressString") {
-            $r = "";
-            foreach ($result as $key => $value) {
-                $r .= array_key_exists($key,self::$farsi) ? self::$farsi[$key] : $key;
-                $r .= ' ' . $value . ' ,';
+                        foreach ($result as $k => $v) {
+                            $address_string = "";
+                            foreach ($v as $kelid => $meghdar) {
+                                if ($kelid != 'postalcode') {
+                                    $address_string .= array_key_exists($kelid, self::$farsi) ? self::$farsi[$kelid] : $kelid;
+                                    $address_string .= ' ' . $meghdar . ',';
+                                }
+                            }
+                            $data[$temp]['Result'] = [
+                                'Value' => $address_string,
+                                "PostCode" => $k,
+                                'TraceID' => "",
+                                'ErrorCode' => 0,
+                                'ErrorMessage' => null
+                            ];
+
+                        }
+                    } else {
+                        //loop through postalcode or telephones
+                        foreach ($result as $k => $v) {
+                            if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
+                                $result[$k]['Value'] = "true";
+                            }
+                            //loop through attributes
+                            foreach ($v as $key => $value) {
+                                //change the keys when we have result
+                                $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
+                                $attribute = $result[$k][$key];
+                                unset($result[$k][$key]);
+                                $result[$k][$key1] = $attribute;
+                                $data[$temp]['Result'] = $result[$k];
+                                $data[$temp]['Result'] += [
+                                    'TraceID' => "",
+                                    'ErrorCode' => 0,
+                                    'ErrorMessage' => null
+                                ];
+                            }
+                        }
+                    }
+//no data for the specific postcode
+                } else {
+                    $data[$temp] = [
+                        'Result' => null,
+                        $inp => $PorT[$inp],
+                        'ClientRowID' => $client_row_id,
+                        'Succ' => false,
+                        'Errors' => [
+                            'ErrorCode' => "",
+                            'ErrorMessage' => ""
+                        ]
+                    ];
+                }
             }
-            unset($result);
-            $result['address'] = $r;
-        }
+            return [
+                "ResCode" => 0,
+                "ResMsg" => trans('messages.custom.success.ResMsg'),
+                "Data" => array_values($data)
+            ];
+            //if no data available for all postcodes
+        } else {
+            foreach ($values as $PorT) {
 
-        foreach ($result as $key => $value) {
+                $temp = $PorT[$inp];
+                $client_row_id = $PorT['ClientRowID'];
 
-            $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
-            if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
-                $temp['Value'] = "true";
-            } else {
-                $temp[$key1] = $result[$key];
+                $data[$temp] = [
+                    'Result' => null,
+                    $inp => $temp,
+                    'ClientRowID' => $client_row_id,
+                    'Succ' => false,
+                    'Errors' => [
+                        'ErrorCode' => "",
+                        'ErrorMessage' => ""
+                    ]
+                ];
             }
+            return [
+                "ResCode" => "",
+                "ResMsg" => trans('messages.custom.error.ResMsg'),
+                "Data" => array_values($data)
+            ];
         }
-
-        $temp['ErrorCode'] = 0;
-        $temp['ErrorMessage'] = null;
-        $temp['TraceID'] = "";
-
-
-        return $temp;
     }
 
 
-    public static function  createOutFields($name)
+    public static function createOutFields($input, $name)
     {
-//        if (in_array($name, array_keys(self::$composite_output))) {
-//            return array_map(function ($item) use ($name) {
-//                return $this->createOutFields($item);
-//            }, self::$composite_output[$name]);
-//        } else {
-//            self::$output_attrs[] = $name;
-//            return $name;
-//        }
+//        dd($input,$name);
         $name = in_array($name, array_keys(self::$composite_output)) ? self::$composite_output[$name] : $name;
+        if ($input == 'Postcode'/* && $name !== 'validate' ToDo*/) {
+            $name [] = 'postalcode';
+        }
         return $name;
 
     }
 
-    public static function createresultFields($name)
+    public static function createResultFields($input, $name)
     {
+
         $name = in_array($name, array_keys(self::$composite_result)) ? self::$composite_result[$name] : $name;
+        if ($input == 'postalcode'/* && $name !== 'validate' ToDo*/) {
+            $name ['postalcode'] = 'PostCode';
+        }
+//        dd($input, $name);
         return $name;
 
     }
