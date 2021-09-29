@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\RequestRulesException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 
 class Post extends Model
@@ -32,7 +33,8 @@ class Post extends Model
         'avenue',
         'pelak',
         'floorno',
-        'building_name'
+        'building_name',
+        'parcel'
     ];
 
     protected $postgisFields = [
@@ -54,10 +56,8 @@ class Post extends Model
     protected $table = 'sina_units';
     protected static $_table = 'sina_units';
 
-//    protected  $table = 'post_data_integrated';
     protected $connection = 'gnaf';
 
-//    protected $table = 'post_data_integrated_01_qom_100_01_new';
 
     public static $role = '';
 
@@ -100,31 +100,14 @@ class Post extends Model
         'postalcode'
     ];
 
-    public static function searchinarray($input, $value, $out_fields)
+    public static function searchInArray($input, $value, $out_fields)
     {
-        $a = Post::whereRaw("$input @> array[?]", [$value])->first();
-        if (!$a) {
-            throw new RequestRulesException($input, "404");
-        }
+//        dd($input, $value, $out_fields);
+
 
         if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
 
-            $result = Post::whereRaw("$input @> array[?]", [$value])->get(array(DB::raw($out_fields[0])));
-            $result = $result->toArray();
-            return $result[0];
-        } else {
-            $result = Post::whereRaw("$input @> array[?]", [$value])->get($out_fields);
-            $result = $result->toArray();
-            return $result[0];
-        }
-
-    }
-
-    public static function search($input, $values, $out_fields)
-    {
-
-        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
-            $result = self::whereIn($input, $values)
+            $result = Post::whereRaw("$input @> array[?]", [$value])
                 ->get(array(DB::raw($out_fields[0])))
                 ->unique(function ($item) use ($out_fields) {
                     $temp = "";
@@ -133,12 +116,59 @@ class Post extends Model
                     }
                     return $temp;
                 })
+                ->keyby($input)
                 ->toArray();
-            ;
-            $result = $result->toArray();
-//            return $result[0];
         } else {
-            try{
+            $result = Post::whereRaw("$input @> array[?]", [$value])
+                ->get($out_fields)
+                ->unique(function ($item) use ($out_fields) {
+                    $temp = "";
+                    foreach ($out_fields as $out_field) {
+                        $temp .= $item[$out_field];
+                    }
+                    return $temp;
+                })
+                ->keyby($input)
+                ->toArray();
+        }
+        if (count($result) > 0) {
+            return $result;
+        } else {
+            return null;
+        }
+
+    }
+
+    public static function search($input, $values, $out_fields)
+    {
+//        dd($out_fields);
+
+
+        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" || $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))") {
+            $i = 0;
+            $count = count($out_fields);
+            $temp = "";
+            foreach ($out_fields as $field) {
+                $temp .= $field;
+                if (++$i !== $count) {
+                    $temp .= ',';
+                }
+
+            }
+
+            $result = self::whereIn($input, $values)
+                ->get(DB::raw($temp))
+                ->unique(function ($item) use ($out_fields) {
+                    $temp = "";
+                    foreach ($out_fields as $out_field) {
+                        $temp .= $item[$out_field];
+                    }
+                    return $temp;
+                })
+                ->keyby($input)
+                ->toArray();
+//            dd($result);
+        } else {
             $result = self::whereIn($input, $values)
                 ->get($out_fields)
                 ->unique(function ($item) use ($out_fields) {
@@ -147,28 +177,19 @@ class Post extends Model
                         $temp .= $item[$out_field];
                     }
                     return $temp;
-                })->keyby('postalcode')
+                })
+                ->keyby($input)
                 ->toArray();
-        }catch (\Exception $e){
-                dd($e->getMessage());
-            }
+
+//            dd($result);
         }
-//        dd(isset($result));
-        if(count($result) > 0){
+        if (count($result) > 0) {
             return $result;
-        }else{
-            dd(false);
+        } else {
             return null;
         }
 
     }
-
-    public function getTelAttribute($value)
-    {
-        self::hasC
-            return null;
-
-//    }
 
 
 }

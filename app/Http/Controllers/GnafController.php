@@ -27,7 +27,9 @@ class GnafController extends ApiController
             'ValidatePostCode',
             'ActivityCode',
             'BuildingUnits',
-            'AddressString'
+            'AddressString',
+            'AccuratePosition',
+            'EstimatedPosition'
         ],
         'tel' => [
             'Postcode',
@@ -99,6 +101,7 @@ class GnafController extends ApiController
 
     public function search($input, $output, Request $request)
     {
+//        dd('in controller');
         $inputmaps = [
             'Telephone' => 'Telephones',
             'Postcode' => 'Postcodes'
@@ -114,9 +117,10 @@ class GnafController extends ApiController
             3000);
         $inputval = $data[$inputmaps[$input]];
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
-        $count = is_string($inputval) ? 1 : count($inputval);
-        $result = [];
+//        $count = is_string($inputval) ? 1 : count($inputval);
+//        $result = [];
         $inp = $input;
+//        dd($inp);
         $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
@@ -126,10 +130,10 @@ class GnafController extends ApiController
 
             return $this->respondError("$output is not valid", 422, 10003);
         }
-        $out_fileds = Gnafservices::createOutFields($inp,$output);
+        $out_fileds = Gnafservices::createDatabaseFields($inp,$output);
 
-//        dd($input, $output, $inputval, $out_fileds);
-        $response = Gnafservices::handlingField($inputm[$inp],$input, $output, $inputval, $out_fileds);
+//        dd($inputm[$inp],$input, $output, $inputval, $out_fileds);
+        $response = Gnafservices::serach($inputm[$inp],$input, $output, $inputval, $out_fileds);
 
         return $this->respondArray($response);
     }

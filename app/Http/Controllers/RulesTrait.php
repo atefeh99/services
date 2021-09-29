@@ -44,12 +44,20 @@ trait RulesTrait
                     'postcode'=>[
                         'ClientBatchID'=> 'numeric|required',
                         'Postcodes' => 'required|array',
-                        'PostCode.*'=> 'required|object',
+                        'Postcodes.*'=> 'required|array',
                         'Postcodes.*.ClientRowID' => 'required|numeric',
-                        'Postcodes.*.PostCode'=> 'required|max:10',
+                        'Postcodes.*.PostCode'=> 'required',
                         'Signature'=> 'string'
                     ],
-                    'telephone'=>[]
+                    'telephone'=>[
+                        'ClientBatchID'=> 'numeric|required',
+                        'Telephones' => 'required|array',
+                        'Telephones.*'=> 'required|array',
+                        'Telephones.*.ClientRowID' => 'required|numeric',
+                        'Telephones.*.TelephoneNo'=> 'required',
+                        'Telephones.*.AreaCode'=> 'required',
+                        'Signature'=> 'string'
+                    ]
                 ]
             ]
         ];
@@ -92,7 +100,7 @@ trait RulesTrait
 
         if ($validation->fails()) {
             dd($validation->errors()->getMessages());
-            throw new RequestRulesException($validation->errors()->getMessages(), $code);
+//            throw new RequestRulesException($validation->errors()->getMessages(), $code);
         }
 
 

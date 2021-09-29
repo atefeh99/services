@@ -24,7 +24,7 @@ class Gnafservices
     ];
 
 
-    public static $composite_result = [
+    public static $composite_response = [
         'Position' => [
             'st_x' => 'Latitude',
             'st_y' => 'Longitude'
@@ -83,8 +83,8 @@ class Gnafservices
             'building_name' => 'building_name',
         ],
         'Workshop' => [
+            'activity_name' => 'Name',
             'activity_type' => 'Activity',
-            'activity_name' => 'Name'
         ],
         'ValidateTelephone' => [
             'tel' => 'Value'
@@ -97,10 +97,21 @@ class Gnafservices
         ],
         'AddressString' => [
             'address' => 'Value'
+        ],
+        'ActivityCode' => [
+            ''
+        ],
+        'AccuratePosition' => [
+            'st_x' => 'Lat',
+            'st_y' => 'Lon'
+        ],
+        'EstimatedPosition' => [
+            'st_x' => 'Lat',
+            'st_y' => 'Lon'
         ]
 
     ];
-    public static $composite_output = [
+    public static $composite_database_fields = [
         'Position' => ['ST_X(geom),ST_Y(geom)']
         ,
         'Telephones' => [
@@ -180,29 +191,46 @@ class Gnafservices
         ],
         'BuildingUnits' => [
             'unit'
+        ],
+        'ActivityCode'=> [
+            'activity_type1',
+            'activity_type2',
+            'activity_type3',
+
+        ],
+        'AccuratePosition' => [
+            'ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))'
+        ],
+        'EstimatedPosition' => [
+            'ST_X(geom),ST_Y(geom)'
         ]
     ];
     public static $output_attrs = [];
 
 
-    public static function handlingField($inp, $input, $output, $values, $out_fields)
+    public static function serach($inp, $input, $output, $values, $out_fields)
     {
         $query_field = collect($values)->pluck($inp)->all();
-        $output_result = self::createResultFields($input, $output);
+        $output_result = self::createResponseFields($input, $output);
         if ($input == "tel") {
-            $result = Post::searchinarray($input, $query_field, $out_fields);
+//            $result = Post::searchInArray($input, $query_field, $out_fields);
         } else {
             $result = Post::search($input, $query_field, $out_fields);
         }
-        dd($result);
         $data = array();
+        $area_code = '';
+        $result = ['2538822882'=> ['name'=>'fff']];//pak shavad
         if (isset($result)) {
             //loop through postcodes or telephones
             foreach ($values as $PorT) {
-                dd($PorT);
+//                dd($PorT);
                 //check if the postcode has data or not
                 $temp = $PorT[$inp];
+//                dd($temp);
                 $client_row_id = $PorT['ClientRowID'];
+                if(isset($PorT['AreaCode'])){
+                    $area_code = $PorT['AreaCode'];
+                }
 
                 if (array_key_exists($temp, $result)) {
                     $data[$temp] = [
@@ -211,7 +239,12 @@ class Gnafservices
                         'ClientRowID' => $client_row_id,
                         'Succ' => true,
                     ];
-                    if ($output == "AddressString") {
+                    if ($input == "tel") {
+                        $data[$temp] = [
+                            'AreaCode' => $area_code];
+                    }
+
+                        if ($output == "AddressString") {
 
                         foreach ($result as $k => $v) {
                             $address_string = "";
@@ -252,7 +285,7 @@ class Gnafservices
                             }
                         }
                     }
-//no data for the specific postcode
+//no data for the specific postcode or tel
                 } else {
                     $data[$temp] = [
                         'Result' => null,
@@ -264,6 +297,10 @@ class Gnafservices
                             'ErrorMessage' => ""
                         ]
                     ];
+                    if ($input == "tel") {
+                        $data[$temp] = [
+                            'AreaCode' => $area_code];
+                    }
                 }
             }
             return [
@@ -273,11 +310,16 @@ class Gnafservices
             ];
             //if no data available for all postcodes
         } else {
+
             foreach ($values as $PorT) {
 
                 $temp = $PorT[$inp];
                 $client_row_id = $PorT['ClientRowID'];
-
+                if(isset($PorT['AreaCode'])){
+                    $area_code = $PorT['AreaCode'];
+                    $data[$temp] = [
+                        'AreaCode' => $area_code];
+                }
                 $data[$temp] = [
                     'Result' => null,
                     $inp => $temp,
@@ -298,10 +340,10 @@ class Gnafservices
     }
 
 
-    public static function createOutFields($input, $name)
+    public static function createDatabaseFields($input, $name)
     {
 //        dd($input,$name);
-        $name = in_array($name, array_keys(self::$composite_output)) ? self::$composite_output[$name] : $name;
+        $name = in_array($name, array_keys(self::$composite_database_fields)) ? self::$composite_database_fields[$name] : $name;
         if ($input == 'Postcode'/* && $name !== 'validate' ToDo*/) {
             $name [] = 'postalcode';
         }
@@ -309,10 +351,11 @@ class Gnafservices
 
     }
 
-    public static function createResultFields($input, $name)
+    public static function createResponseFields($input, $name)
     {
+//        dd($input,$name);
 
-        $name = in_array($name, array_keys(self::$composite_result)) ? self::$composite_result[$name] : $name;
+        $name = in_array($name, array_keys(self::$composite_response)) ? self::$composite_response[$name] : $name;
         if ($input == 'postalcode'/* && $name !== 'validate' ToDo*/) {
             $name ['postalcode'] = 'PostCode';
         }
