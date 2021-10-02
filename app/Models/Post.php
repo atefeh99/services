@@ -104,11 +104,21 @@ class Post extends Model
     {
 //        dd($input, $value, $out_fields);
 
+//toDo if statement should be correct
+        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" /*|| $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))"*/) {
+            $i = 0;
+            $count = count($out_fields);
+            $temp = "";
+            foreach ($out_fields as $field) {
+                $temp .= $field;
+                if (++$i !== $count) {
+                    $temp .= ',';
+                }
 
-        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
+            }
 
             $result = Post::whereRaw("$input @> array[?]", [$value])
-                ->get(array(DB::raw($out_fields[0])))
+                ->get($temp)
                 ->unique(function ($item) use ($out_fields) {
                     $temp = "";
                     foreach ($out_fields as $out_field) {

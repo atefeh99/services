@@ -25,12 +25,11 @@
 							}
 						],
 						"url": {
-							"raw": "{{Host}}/services/routes",
+							"raw": "{{HOST}}/routes",
 							"host": [
-								"{{Host}}"
+								"{{HOST}}"
 							],
 							"path": [
-								"services",
 								"routes"
 							]
 						}
@@ -130,13 +129,11 @@
 							}
 						],
 						"url": {
-							"raw": "{{Host}}/services/routes/:id",
+							"raw": "{{HOST}}/:id",
 							"host": [
-								"{{Host}}"
+								"{{HOST}}"
 							],
 							"path": [
-								"services",
-								"routes",
 								":id"
 							],
 							"variable": [
@@ -336,7 +333,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"uri\": \"test\",\n    \"description\": \"desc\"\n}",
+							"raw": "{\n    \"uri\": \"test\",\n    \"description\": \"desc\",\n    \"fa_name\":\"dvvsvfsd\",\n    \"document_link\":\"dfx\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -344,12 +341,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{Host}}/services/routes",
+							"raw": "{{HOST}}/routes",
 							"host": [
-								"{{Host}}"
+								"{{HOST}}"
 							],
 							"path": [
-								"services",
 								"routes"
 							]
 						}
@@ -450,19 +446,18 @@
 							}
 						],
 						"url": {
-							"raw": "{{Host}}/services/routes/:id",
+							"raw": "{{HOST}}/routes/:id",
 							"host": [
-								"{{Host}}"
+								"{{HOST}}"
 							],
 							"path": [
-								"services",
 								"routes",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": "15"
+									"value": "23"
 								}
 							]
 						}
@@ -578,19 +573,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{Host}}/services/routes/:id",
+							"raw": "{{HOST}}/routes/:id",
 							"host": [
-								"{{Host}}"
+								"{{HOST}}"
 							],
 							"path": [
-								"services",
 								"routes",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": "15"
+									"value": "24"
 								}
 							]
 						}
@@ -700,7 +694,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613671\"\n        },\n        {\n            \"ClientRowID\": 129,\n            \"PostCode\": \"1111111112\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -708,12 +702,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{Host}}/services/api/v0/Postcode/PositionByPostcode",
+					"raw": "{{Host}}/api/v0/Postcode/PositionByPostcode",
 					"host": [
 						"{{Host}}"
 					],
 					"path": [
-						"services",
 						"api",
 						"v0",
 						"Postcode",
@@ -730,7 +723,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"8913613664\"},{\"ClientRowID\":128,\"PostCode\":\"8913613841\"}\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -738,11 +731,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Postcode/WorkshopByPostcode",
+					"raw": "{{Host}}/api/v0/Postcode/WorkshopByPostcode",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -771,7 +763,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        },\n         {\n            \"ClientRowID\": 127,\n            \"PostCode\": \"8913613841\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -779,12 +771,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{Host}}/services/api/v0/Postcode/BuildingUnitsByPostcode",
+					"raw": "{{Host}}/api/v0/Postcode/BuildingUnitsByPostcode",
 					"host": [
 						"{{Host}}"
 					],
 					"path": [
-						"services",
 						"api",
 						"v0",
 						"Postcode",
@@ -812,7 +803,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"1111111111\"\n        },\n         {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8912222222\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -820,12 +811,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{Host}}/services/api/v0/Postcode/ValidatePostCode",
+					"raw": "{{Host}}/api/v0/Postcode/ValidatePostCode",
 					"host": [
 						"{{Host}}"
 					],
 					"path": [
-						"services",
 						"api",
 						"v0",
 						"Postcode",
@@ -842,7 +832,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        },\n        {\n            \"ClientRowID\": 121,\n            \"PostCode\": \"8913613671\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -850,11 +840,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:1215/api/v0/Postcode/AddressByPostcode",
+					"raw": "{{Host}}/api/v0/Postcode/AddressByPostcode",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "1215",
 					"path": [
 						"api",
 						"v0",
@@ -872,7 +861,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"7518777853\"}\n],\n\"Signature\":\"\"\n}",
+					"raw": "{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"8913613747\"}\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -880,11 +869,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Postcode/TelephonesByPostcode",
+					"raw": "{{Host}}/api/v0/Postcode/TelephonesByPostcode",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -951,12 +939,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{Host}}/services/api/v0/Postcode/AddressStringByPostcode",
+					"raw": "{{Host}}/api/v0/Postcode/AddressStringByPostcode",
 					"host": [
 						"{{Host}}"
 					],
 					"path": [
-						"services",
 						"api",
 						"v0",
 						"Postcode",
@@ -973,7 +960,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822883},{\"ClientRowID\":128,\"AreaCode\":22,\"TelephoneNo\":2538822883}\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -981,11 +968,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Telephone/PostcodeByTelephone",
+					"raw": "{{Host}}/api/v0/Telephone/PostcodeByTelephone",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -1003,7 +989,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"Telephones\":\"2538822882\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":1},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":22}\n\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1011,11 +997,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Telephone/WorkshopByTelephone",
+					"raw": "{{Host}}/api/v0/Telephone/WorkshopByTelephone",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -1033,7 +1018,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":1},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":222}\n\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1041,11 +1026,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Telephone/AddressByTelephone",
+					"raw": "{{Host}}/api/v0/Telephone/AddressByTelephone",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -1063,7 +1047,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"Telephones\":\"2538822882\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":11},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":22}\n\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1071,11 +1055,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Telephone/PositionByTelephone",
+					"raw": "{{Host}}/api/v0/Telephone/PositionByTelephone",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -1093,7 +1076,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"Telephones\":\"537229348\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":1},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":222}\n\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1101,11 +1084,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Telephone/ValidateTelephone",
+					"raw": "{{Host}}/api/v0/Telephone/ValidateTelephone",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
@@ -1123,7 +1105,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":2538822882}\n],\n\"Signature\":\"\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":1},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":2}\n\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1131,16 +1113,131 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/v0/Telephone/AddressAndPostcodeByTelephone",
+					"raw": "{{Host}}/api/v0/Telephone/AddressAndPostcodeByTelephone",
 					"host": [
-						"localhost"
+						"{{Host}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"v0",
 						"Telephone",
 						"AddressAndPostcodeByTelephone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActivityCodeByPostCode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8000013786\"\n        },\n        {\n            \"ClientRowID\": 129,\n            \"PostCode\": \"1111111112\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/api/v0/Postcode/ActivityCodeByPostcode",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"ActivityCodeByPostcode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AccuratePosition",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"1111111111\"},{\"ClientRowID\":129,\"PostCode\":\"1111111112\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/api/v0/Postcode/AccuratePosition",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"AccuratePosition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "‫‪EstimatedPosition‬‬",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"8913613865\"},{\"ClientRowID\":129,\"PostCode\":\"8913613941\"}\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/api/v0/Postcode/EstimatedPosition",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"Postcode",
+						"EstimatedPosition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActivityCodeByTelephone",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":1},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":222}\n\n],\n\"Signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/api/v0/Telephone/ActivityCodeByTelephone",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"Telephone",
+						"ActivityCodeByTelephone"
 					]
 				}
 			},
