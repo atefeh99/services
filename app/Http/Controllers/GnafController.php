@@ -6,12 +6,15 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Services\Gnafservices;
 use Illuminate\Http\Request;
+use App\Http\Controllers\RulesTrait;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Http\Controllers\ApiController;
 
 class GnafController extends ApiController
 {
+    use RulesTrait;
+
 //        if change key of aliases, must be change swagger route!
     public $can = [
         'postalcode' => [
@@ -24,7 +27,9 @@ class GnafController extends ApiController
             'ValidatePostCode',
             'ActivityCode',
             'BuildingUnits',
-            'AddressString'
+            'AddressString',
+            'AccuratePosition',
+            'EstimatedPosition'
         ],
         'tel' => [
             'Postcode',
@@ -96,6 +101,7 @@ class GnafController extends ApiController
 
     public function search($input, $output, Request $request)
     {
+//        dd('in controller');
         $inputmaps = [
             'Telephone' => 'Telephones',
             'Postcode' => 'Postcodes'
@@ -105,28 +111,31 @@ class GnafController extends ApiController
             'Postcode' => 'PostCode'
         ];
 
-        $value = $request->all();
-        $inputval = $value[$inputmaps[$input]];
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            3000);
+        $inputval = $data[$inputmaps[$input]];
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
-        $count = is_string($inputval) ? 1 : count($inputval);
-        $result = [];
+//        $count = is_string($inputval) ? 1 : count($inputval);
+//        $result = [];
         $inp = $input;
+//        dd($inp);
         $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
             return $this->respondError("$input is not valid", 422, 10002);
         }
-
         if ((in_array($input, array_keys($this->can)) && !in_array($output, $this->can[$input]))) {
+
             return $this->respondError("$output is not valid", 422, 10003);
         }
-        $out_fileds = Gnafservices::createOutFields($output);
-        for ($i = 0; $i < $count; $i++) {
-            $inputvalue = $inputval[$i][$inputm[$inp]];
-            $response = Gnafservices::handlingField($input, $output, $inputvalue, $out_fileds);
-            $result[$i] = $response;
-        }
-        return $this->respondArrayResult($result);
+        $out_fileds = Gnafservices::createDatabaseFields($inp,$output);
+
+//        dd($inputm[$inp],$input, $output, $inputval, $out_fileds);
+        $response = Gnafservices::serach($inputm[$inp],$input, $output, $inputval, $out_fileds);
+
+        return $this->respondArray($response);
     }
 
 

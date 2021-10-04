@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Exceptions\RequestRulesException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 
 class Post extends Model
 {
-    // use Common;
+
     protected $fillable = [
         'id',
         'gnaf',
@@ -32,7 +33,8 @@ class Post extends Model
         'avenue',
         'pelak',
         'floorno',
-        'building_name'
+        'building_name',
+        'parcel'
     ];
 
     protected $postgisFields = [
@@ -52,10 +54,10 @@ class Post extends Model
 
 //
     protected $table = 'sina_units';
-    protected static $_table = 'post_data_integrated';
+    protected static $_table = 'sina_units';
+
     protected $connection = 'gnaf';
 
-//    protected $table = 'post_data_integrated_01_qom_100_01_new';
 
     public static $role = '';
 
@@ -98,46 +100,103 @@ class Post extends Model
         'postalcode'
     ];
 
-    public static function searchinarray($input, $value, $out_fields)
+    public static function searchInArray($input, $value, $out_fields)
     {
-        $a = Post::whereRaw("$input @> array[?]", [$value])->first();
-        if (!$a) {   throw new RequestRulesException($input, "404");}
+//        dd($input, $value, $out_fields);
 
-        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
+//toDo if statement should be correct
+        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" /*|| $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))"*/) {
+            $i = 0;
+            $count = count($out_fields);
+            $temp = "";
+            foreach ($out_fields as $field) {
+                $temp .= $field;
+                if (++$i !== $count) {
+                    $temp .= ',';
+                }
 
-            $result = Post::whereRaw("$input @> array[?]", [$value])->get(array(DB::raw($out_fields[0])));
-            $result = $result->toArray();
-            return $result[0];
-        } else {
-            $result = Post::whereRaw("$input @> array[?]", [$value])->get($out_fields);
-            $result = $result->toArray();
-            return $result[0];
-        }
+            }
 
-    }
-
-    public static function search($input, $value, $out_fields)
-    {
-        $a = Post::where($input, $value)->first();
-        if (!$a) {    throw new RequestRulesException($input, "404");}
-
-        //dd($out_fields);
-        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)") {
-
-            $result = Post::where($input, $value)->get(array(DB::raw($out_fields[0])));
-            $result = $result->toArray();
-            return $result[0];
-        } else {
-            $result = Post::where($input, $value)
-                ->get($out_fields)->unique(function ($item) use ($out_fields) {
+            $result = Post::whereRaw("$input @> array[?]", [$value])
+                ->get($temp)
+                ->unique(function ($item) use ($out_fields) {
                     $temp = "";
                     foreach ($out_fields as $out_field) {
                         $temp .= $item[$out_field];
                     }
                     return $temp;
-                                                                               })->toArray();
+                })
+                ->keyby($input)
+                ->toArray();
+        } else {
+            $result = Post::whereRaw("$input @> array[?]", [$value])
+                ->get($out_fields)
+                ->unique(function ($item) use ($out_fields) {
+                    $temp = "";
+                    foreach ($out_fields as $out_field) {
+                        $temp .= $item[$out_field];
+                    }
+                    return $temp;
+                })
+                ->keyby($input)
+                ->toArray();
+        }
+        if (count($result) > 0) {
+            return $result;
+        } else {
+            return null;
+        }
 
-            return $result[0];
+    }
+
+    public static function search($input, $values, $out_fields)
+    {
+//        dd($out_fields);
+
+
+        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" || $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))") {
+            $i = 0;
+            $count = count($out_fields);
+            $temp = "";
+            foreach ($out_fields as $field) {
+                $temp .= $field;
+                if (++$i !== $count) {
+                    $temp .= ',';
+                }
+
+            }
+
+            $result = self::whereIn($input, $values)
+                ->get(DB::raw($temp))
+                ->unique(function ($item) use ($out_fields) {
+                    $temp = "";
+                    foreach ($out_fields as $out_field) {
+                        $temp .= $item[$out_field];
+                    }
+                    return $temp;
+                })
+                ->keyby($input)
+                ->toArray();
+//            dd($result);
+        } else {
+            $result = self::whereIn($input, $values)
+                ->get($out_fields)
+                ->unique(function ($item) use ($out_fields) {
+                    $temp = "";
+                    foreach ($out_fields as $out_field) {
+                        $temp .= $item[$out_field];
+                    }
+                    return $temp;
+                })
+                ->keyby($input)
+                ->toArray();
+
+//            dd($result);
+        }
+        if (count($result) > 0) {
+            return $result;
+        } else {
+            return null;
         }
 
     }

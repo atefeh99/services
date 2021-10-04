@@ -27,7 +27,8 @@ return [
             'model_not_found' => 'requested :model not found',
             'unauthorized' => 'unauthorized',
             'query' => 'query exception',
-            'expire'=>'your code has expired'
+            'expire'=>'your code has expired',
+            'ResMsg'=> "ناموفق",
         ],
         'success' => [
             'send'=>'send successfully',
@@ -38,7 +39,8 @@ return [
             'ok_validation' => 'your account has been successfully validated',
             'forgot_password' => 'please check your email to continue!',
             'unsubscribe' => 'you have unsubscribed successfully',
-            'avaliablecode'=>'your code is available'
+            'avaliablecode'=>'your code is available',
+            'ResMsg'=> "موفق",
         ],
 
     ]
