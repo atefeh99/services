@@ -8,20 +8,20 @@ class Gnafservices
 {
 
 //        fields that is set as array in db!
-    public static $farsi = [
-        'statename' => 'استان',
-        'townname' => 'شهرستان',
-        'zonename' => 'بخش',
-        'villagename' => 'دهستان',
-//        'locationtype' => 'شهر/روستا/آبادی',
-//        'locationname' => 'localityname',
-        'parish' => 'محله',
-        'preaven' => 'خیابان',
-        'avenue' => 'خیابان',
-        'plate_no' => 'پلاک',
-        'floorno' => 'طبقه',
-//        'building_name' => 'building_name'
-    ];
+//    public static $farsi = [
+//        'statename' => 'استان',
+//        'townname' => 'شهرستان',
+//        'zonename' => 'بخش',
+//        'villagename' => 'دهستان',
+////        'locationtype' => 'شهر/روستا/آبادی',
+////        'locationname' => 'localityname',
+//        'parish' => 'محله',
+//        'preaven' => 'خیابان',
+//        'avenue' => 'خیابان',
+//        'plate_no' => 'پلاک',
+//        'floorno' => 'طبقه',
+////        'building_name' => 'building_name'
+//    ];
 
 
     public static $composite_response = [
@@ -31,7 +31,8 @@ class Gnafservices
         ]
         ,
         'Telephones' => [
-            'tel' => 'SubscriberNumber'
+            'tel' => 'SubscriberNumber',
+            'areacode' => 'AreaCode'
         ],
         'Postcode' => [
             'postalcode' => 'Value'
@@ -130,7 +131,8 @@ class Gnafservices
         'Position' => ['ST_X(geom),ST_Y(geom)']
         ,
         'Telephones' => [
-            'tel'
+            'tel',
+            'areacode'
         ],
         'Postcode' => [
             'postalcode'
@@ -162,14 +164,16 @@ class Gnafservices
             'townname',
             'zonename',
             'villagename',
-//            'locationtype',
-//            'locationname',
+            'locationtype',
+            'locationname',
             'parish',
+            'preaventypename',
+            'avenuetypename',
             'preaven',
             'avenue',
             'plate_no',
             'floorno',
-//            'unit',
+            'unit',
 //            'building_name'
         ],
         'AddressAndTelephones' => [
@@ -256,6 +260,19 @@ class Gnafservices
         $data = array();
         $area_code = '';
 //        $result = [
+//            '8000013786' => [
+//                'activity_type1' => 'TypeCode',
+//                'activity_type2' => 'TypeCode2',
+//                'activity_type3' => 'TypeCode3']
+//        ];
+//        $result = [
+//            '8913613747' => [
+//                'postalcode' => '8913613747',
+//                'tel' => 'dcdsc',
+//                'areacode' => 'dsc',
+//            ]
+//        ];
+//        $result = [
 //            '1' => [
 //                'tel' => 'ph',
 //
@@ -306,37 +323,42 @@ class Gnafservices
 //        ];
 //        $result = [
 //            '222' => [
-//                'postalcode' => 'lkll',
-//                'statename' => '999',
-//                'townname' => 'dd',
-//                'zonename' => 'pp',
-//                'villagename' => '',
-//                'locationtype' => '',
-//                'locationname' => '',
-//                'parish' => '',
-//                'avenue' => '',
-//                'preaven' => '',
-//                'plate_no' => 'sxa',
-//                'floorno' => 'll',
-//                'unit' => 'sd',
-//                'building_name' => 'll',
-//
+//               'statename' => 'Province',
+//            'townname' => 'TownShip',
+//            'zonename' => 'Zone',
+//            'villagename' => 'Village',
+//            'locationtype' => 'LocalityType',
+//            'locationname' => 'LocalityName',
+////            'localitycode'=>'LocalityCode',
+//            'parish' => 'SubLocality',
+//            'avenue' => 'Street',
+//            'preaven' => 'Street2',
+//            'plate_no' => 'HouseNumber',
+//            'floorno' => 'Floor',
+//            'unit' => 'SideFloor',
+//            'building_name' => 'BuildingName',
+////            'description'=>'Description',
+////        'areacode'=>'PrePhone',
+////            'tel' => 'TelephoneNo'
 //            ],
 //            '1' => [
-//                'postalcode' => 'lkll',
-//                'statename' => '999',
-//                'townname' => 'dd',
-//                'zonename' => 'pp',
-//                'villagename' => '',
-//                'locationtype' => '',
-//                'locationname' => '',
-//                'parish' => '',
-//                'avenue' => '',
-//                'preaven' => '',
-//                'plate_no' => 'sxa',
-//                'floorno' => 'll',
-//                'unit' => 'sd',
-//                'building_name' => 'll',
+//                'statename' => 'Province',
+//                'townname' => 'TownShip',
+//                'zonename' => 'Zone',
+//                'villagename' => 'Village',
+//                'locationtype' => 'LocalityType',
+//                'locationname' => 'LocalityName',
+////            'localitycode'=>'LocalityCode',
+//                'parish' => 'SubLocality',
+//                'avenue' => 'Street',
+//                'preaven' => 'Street2',
+//                'plate_no' => 'HouseNumber',
+//                'floorno' => 'Floor',
+//                'unit' => 'SideFloor',
+//                'building_name' => 'BuildingName',
+////            'description'=>'Description',
+////        'areacode'=>'PrePhone',
+////            'tel' => 'TelephoneNo'
 //
 //            ]
 //        ];//pak shavad
@@ -364,19 +386,17 @@ class Gnafservices
                         $inp => $temp,
                         'Succ' => true,
                     ];
-
-
                     if ($output == "AddressString") {
-                        foreach ($result as $k => $v) {
-                        $address_string =self::makeAddressString($v, $temp);
-                            $data[$temp]['Result']= [
-                                'Value' => $address_string,
-                                "PostCode" => $k,
-                                'TraceID' => "",
-                                'ErrorCode' => 0,
-                                'ErrorMessage' => null
-                            ];
-                        }
+                        $result[$temp]['address'] = self::makeAddressString($result[$temp]);
+//                        dd($result[$temp]);
+                        $data[$temp]['Result'] = [
+                            'Value' => $result[$temp]['address'],
+                            "PostCode" => $temp,
+                            'TraceID' => "",
+                            'ErrorCode' => 0,
+                            'ErrorMessage' => null
+                        ];
+
                     } else {
                         //loop through postalcode or telephones
                         foreach ($result as $k => $v) {
@@ -468,10 +488,16 @@ class Gnafservices
     public static function createDatabaseFields($input, $name)
     {
 //        dd($input, $name);
+        $activity_code = str_contains($name, "ActivityCode");
+        $validate = str_contains($name, 'validate');
         $name = in_array($name, array_keys(self::$composite_database_fields)) ? self::$composite_database_fields[$name] : $name;
-        if ($input == 'Postcode'/* && $name !== 'validate' ToDo*/) {
+        if ($input == 'Postcode'
+            && !$activity_code
+            && !$validate) {
             $name [] = 'postalcode';
+
         }
+//        dd($name);
 
         return $name;
 
@@ -480,9 +506,13 @@ class Gnafservices
     public static function createResponseFields($input, $name)
     {
 //        dd($input,$name);
+        $activity_code = str_contains($name, "ActivityCode");
+        $validate = str_contains($name, 'validate');
 
         $name = in_array($name, array_keys(self::$composite_response)) ? self::$composite_response[$name] : $name;
-        if ($input == 'postalcode'/* && $name !== 'validate' ToDo*/) {
+        if ($input == 'postalcode'
+            && !$activity_code
+            && !$validate) {
             $name ['postalcode'] = 'PostCode';
         }
 //        dd($input, $name);
@@ -490,118 +520,115 @@ class Gnafservices
 
     }
 
-    public static function makeAddressString($v,$temp)
+    public static function makeAddressString($v)
     {
+//        dd($v);
         $result = "";
-            foreach ($v as $kelid => $meghdar) {
-                if ($kelid != 'postalcode') {
+        //state
+        if (array_key_exists('statename', $v) && $v['statename']) {
+            $result .= 'استان ';
+            $result .= $v['statename'];
+            $result .= '، ';
+        }
+        //town
+        if (array_key_exists('townname', $v) && $v['townname']) {
+            $result .= 'شهرستان ';
+            $result .= $v['townname'];
+            $result .= '، ';
+        }
+        //zone
+        if (array_key_exists('zonename', $v) && $v['zonename']) {
+            $result .= 'بخش ';
+            $result .= $v['zonename'];
+            $result .= '، ';
+        }
+        //location
+        if (array_key_exists('locationtype', $v)
+            && array_key_exists('locationname', $v)) {
 
-//                    $address_string .= array_key_exists($kelid, self::$farsi) ? self::$farsi[$kelid] : $kelid;
-//                    $address_string .= ' ' . $meghdar . ',';
-                    $flag = false;
-                    if (array_key_exists('statename', $v)) {
-                        $result = 'استان ';
-                        $result .= $this->attributes['statename'];
-                        $result .= '، ';
-                    }
-//        city
-                    if (array_key_exists('locationtype', $this->attributes)
-                        && array_key_exists('locationname', $this->attributes)) {
-                        if ($this->attributes['locationtype'] == 'شهر' &&
-                            $this->attributes['locationname']) {
 
-                            $result .= 'شهر ';
-                            $result .= $this->attributes['locationname'];
-                            $result .= '، ';
-                        }
-                    }
+            if ($v['locationtype'] == 'شهر' &&
+                $v['locationname']) {
 
-//        parish
-                    if (array_key_exists('parish', $this->attributes)
-                        && array_key_exists('tour', $this->attributes)) {
-                        if ($this->attributes['parish']) {
-                            $result .= $this->attributes['parish'];
-                        }
-                        if ($this->attributes['parish'] && $this->attributes['tour']) {
-                            $result .= '/';
-                        }
-                        if ($this->attributes['tour']) {
-                            $result .= $this->attributes['tour'];
-                        }
-                        if ($this->attributes['parish'] || $this->attributes['tour']) {
-                            $result .= '، ';
-                        }
-                    }
+                $result .= 'شهر ';
+                $result .= $v['locationname'];
+                $result .= '، ';
+            } elseif ($v['locationtype'] == 'روستا' &&
+                $v['locationname']) {
 
-                    if (
-                        array_key_exists('preaventypename', $this->attributes)
-                        &&  array_key_exists('preaven', $this->attributes)
-                        && array_key_exists('avenue', $this->attributes)
-                        && array_key_exists('avenuetypename', $this->attributes)
-                    ) {
-                        if ($this->attributes['preaventypename'] ||
-                            $this->attributes['preaven']) {
-                            $result .= $this->attributes['preaventypename'];
-                            $result .= ' ';
-                            $result .= $this->attributes['preaven'];
-                        }
-                        if (($this->attributes['preaventypename'] ||
-                                $this->attributes['preaven']) && (
-                                $this->attributes['avenuetypename'] ||
-                                $this->attributes['avenue']
-                            )) {
-                            $result .= '/';
-                        }
-                        if ($this->attributes['avenuetypename'] ||
-                            $this->attributes['avenue']) {
-                            $result .= $this->attributes['avenuetypename'];
-                            $result .= ' ';
-                            $result .= $this->attributes['avenue'];
-                        }
-                        if (($this->attributes['preaventypename'] ||
-                                $this->attributes['preaven']) || (
-                                $this->attributes['avenuetypename'] ||
-                                $this->attributes['avenue']
-                            )) {
-                            $result .= '، ';
-                        }
-                    }
+                $result .= 'روستای ';
+                $result .= $v['locationname'];
+                $result .= '، ';
+            } elseif ($v['locationtype'] == 'آبادی' &&
+                $v['locationname']) {
+
+                $result .= 'آبادی ';
+                $result .= $v['locationname'];
+                $result .= '، ';
+            }
+        }
+//parish
+        if (array_key_exists('parish', $v)) {
+            if ($v['parish']) {
+                $result .= $v['parish'];
+                $result .= '، ';
+            }
+        }
+//preavenue avenue
+        if (
+            array_key_exists('preaventypename', $v)
+            && array_key_exists('preaven', $v)
+            && array_key_exists('avenue', $v)
+            && array_key_exists('avenuetypename', $v)
+        ) {
+            if ($v['preaventypename'] ||
+                $v['preaven']) {
+                $result .= $v['preaventypename'];
+                $result .= ' ';
+                $result .= $v['preaven'];
+                $result .= '، ';
+
+            }
+            if ($v['avenuetypename'] ||
+                $v['avenue']) {
+                $result .= $v['avenuetypename'];
+                $result .= ' ';
+                $result .= $v['avenue'];
+                $result .= '، ';
+
+            }
+
+        }
 //        plateno
-                    if (array_key_exists('pelak', $this->attributes)
-                        && $this->attributes['pelak']) {
-                        $result .= 'پلاک ';
-                        $result .= $this->attributes['pelak'];
-                        $result .= '، ';
-                    }
+        if (array_key_exists('plate_no', $v)
+            && $v['plate_no']) {
+            $result .= 'پلاک ';
+            $result .= $v['plate_no'];
+            $result .= '، ';
+        }
+        //building_name
+        if (array_key_exists('building_name', $v)
+            && $v['building_name']) {
+            $result .= $v['building_name'];
+            $result .= '، ';
+        }
 //        floor
-                    if (array_key_exists('floorno', $this->attributes)) {
-                        $result .= 'طبقه ';
-                        $result .= ((int)$this->attributes['floorno']==0)?
-                            'همکف':$this->attributes['floorno'];
-                        $result .= '، ';
-                    }
+        if (array_key_exists('floorno', $v)) {
+            $result .= 'طبقه ';
+            $result .= ((int)$v['floorno'] == 0) ?
+                'همکف' : $v['floorno'];
+            $result .= '، ';
+        }
 
 
 //        unit
-                    if (array_key_exists('unit', $this->attributes)
-                        && $this->attributes['unit']) {
-                        $result .= 'واحد ';
-                        $result .= $this->attributes['unit'];
-                        $result .= '، ';
-                    }
+        if (array_key_exists('unit', $v)
+            && $v['unit']) {
+            $result .= 'واحد ';
+            $result .= $v['unit'];
+//            $result .= '، ';
+        }
 
-
-//        postalcode
-                    if (array_key_exists('postalcode', $this->attributes)
-                        && $this->attributes['postalcode']) {
-                        $result .= 'کد پستی:';
-                        $result .= $this->attributes['postalcode'];
-                    }
-
-
-                }
-            }
-
-
-
+        return $result;
+    }
 }
