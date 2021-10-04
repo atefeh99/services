@@ -260,7 +260,24 @@ class Gnafservices
         $data = array();
         $area_code = '';
 //        $result = [
+//            '8000' => [
+//                'postalcode' => 'TypeCode2',
+//               ],
+//            '883' => [
+//                'postalcode' => 'TypujlCode2',
+//            ],
+//
+//
+//        ];
+//        $result = [
 //            '8000013786' => [
+//                'unit' => 'tt',
+//                'postalcode' => 'TypeCode2',
+//               ],
+//
+////        ];
+//        $result = [
+//            '1' => [
 //                'activity_type1' => 'TypeCode',
 //                'activity_type2' => 'TypeCode2',
 //                'activity_type3' => 'TypeCode3']
@@ -281,7 +298,7 @@ class Gnafservices
 //                'tel' => 'hh',
 //
 //            ],
-
+//
 //        ];
 //        $result = [
 //            '222' => [
@@ -322,26 +339,30 @@ class Gnafservices
 //            ]
 //        ];
 //        $result = [
-//            '222' => [
-//               'statename' => 'Province',
-//            'townname' => 'TownShip',
-//            'zonename' => 'Zone',
-//            'villagename' => 'Village',
-//            'locationtype' => 'LocalityType',
-//            'locationname' => 'LocalityName',
+//            '8000' => [
+//                                'postalcode' => 'TypeCode2',
+//
+//                'statename' => 'Province',
+//                'townname' => 'TownShip',
+//                'zonename' => 'Zone',
+//                'villagename' => 'Village',
+//                'locationtype' => 'LocalityType',
+//                'locationname' => 'LocalityName',
 ////            'localitycode'=>'LocalityCode',
-//            'parish' => 'SubLocality',
-//            'avenue' => 'Street',
-//            'preaven' => 'Street2',
-//            'plate_no' => 'HouseNumber',
-//            'floorno' => 'Floor',
-//            'unit' => 'SideFloor',
-//            'building_name' => 'BuildingName',
+//                'parish' => 'SubLocality',
+//                'avenue' => 'Street',
+//                'preaven' => 'Street2',
+//                'plate_no' => 'HouseNumber',
+//                'floorno' => 'Floor',
+//                'unit' => 'SideFloor',
+//                'building_name' => 'BuildingName',
 ////            'description'=>'Description',
 ////        'areacode'=>'PrePhone',
 ////            'tel' => 'TelephoneNo'
 //            ],
-//            '1' => [
+//            '883' => [
+//                                'postalcode' => 'TypeCode2',
+//
 //                'statename' => 'Province',
 //                'townname' => 'TownShip',
 //                'zonename' => 'Zone',
@@ -406,6 +427,7 @@ class Gnafservices
                                 //change the keys when we have result
                                 $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
                                 $attribute = $result[$k][$key];
+//                                dd($attribute);
                                 if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
                                     $attribute = 'true';
                                 }
@@ -489,7 +511,7 @@ class Gnafservices
     {
 //        dd($input, $name);
         $activity_code = str_contains($name, "ActivityCode");
-        $validate = str_contains($name, 'validate');
+        $validate = str_contains($name, 'Validate');
         $name = in_array($name, array_keys(self::$composite_database_fields)) ? self::$composite_database_fields[$name] : $name;
         if ($input == 'Postcode'
             && !$activity_code
@@ -507,7 +529,7 @@ class Gnafservices
     {
 //        dd($input,$name);
         $activity_code = str_contains($name, "ActivityCode");
-        $validate = str_contains($name, 'validate');
+        $validate = str_contains($name, 'Validate');
 
         $name = in_array($name, array_keys(self::$composite_response)) ? self::$composite_response[$name] : $name;
         if ($input == 'postalcode'

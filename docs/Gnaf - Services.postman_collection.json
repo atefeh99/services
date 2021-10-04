@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "99ca8914-d041-4ea5-abfa-ce743cf1378d",
+		"_postman_id": "b7168b89-9fed-4450-962f-8c2d8adc0334",
 		"name": "Gnaf - Services",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -146,88 +146,6 @@
 					},
 					"response": [
 						{
-							"name": "get one - success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "x-api-key",
-										"value": "{{API_KEY}}",
-										"type": "text"
-									},
-									{
-										"key": "token",
-										"value": "{{ACCESS_TOKEN}}",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{Host}}/services/routes/:id",
-									"host": [
-										"{{Host}}"
-									],
-									"path": [
-										"services",
-										"routes",
-										":id"
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "1"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "openresty"
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 19 Sep 2021 09:04:55 GMT"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "x-token-state",
-									"value": "valid"
-								},
-								{
-									"key": "x-remain",
-									"value": "12000"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private"
-								},
-								{
-									"key": "Content-Encoding",
-									"value": "gzip"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"data\": {\n        \"uri\": \"/api/v0/Postcode/PositionByPostcode\",\n        \"description\": \"PositionByPostcode\",\n        \"id\": 1\n    }\n}"
-						},
-						{
 							"name": "get one",
 							"originalRequest": {
 								"method": "GET",
@@ -312,6 +230,88 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"status\": 404,\n    \"message\": \"resource not found\",\n    \"code\": 105\n}"
+						},
+						{
+							"name": "get one - success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{ACCESS_TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Host}}/services/routes/:id",
+									"host": [
+										"{{Host}}"
+									],
+									"path": [
+										"services",
+										"routes",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Sep 2021 09:04:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-token-state",
+									"value": "valid"
+								},
+								{
+									"key": "x-remain",
+									"value": "12000"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"uri\": \"/api/v0/Postcode/PositionByPostcode\",\n        \"description\": \"PositionByPostcode\",\n        \"id\": 1\n    }\n}"
 						}
 					]
 				},
@@ -763,7 +763,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613398\"\n        },\n         {\n            \"ClientRowID\": 127,\n            \"PostCode\": \"8913613841\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
+					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913613747\"\n        },\n         {\n            \"ClientRowID\": 127,\n            \"PostCode\": \"80\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -884,7 +884,7 @@
 			"response": []
 		},
 		{
-			"name": "AddressAndTelephones",
+			"name": "AddressAndTelephonesByPostcode",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -898,7 +898,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{Host}}/api/v0/Postcode/AddressAndTelephones",
+					"raw": "{{Host}}/api/v0/Postcode/AddressAndTelephonesByPostcode",
 					"host": [
 						"{{Host}}"
 					],
@@ -906,7 +906,7 @@
 						"api",
 						"v0",
 						"Postcode",
-						"AddressAndTelephones"
+						"AddressAndTelephonesByPostcode"
 					]
 				}
 			},
@@ -1191,7 +1191,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"8913613865\"},{\"ClientRowID\":129,\"PostCode\":\"8913613941\"}\n],\n\"Signature\":\"\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":38,\n\"Postcodes\":[\n{\"ClientRowID\":120,\"PostCode\":\"8913613865\"},{\"ClientRowID\":129,\"PostCode\":\"891\"}\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
