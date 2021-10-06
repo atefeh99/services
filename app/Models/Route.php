@@ -68,8 +68,8 @@ class Route extends Model
     public static function showAll($take, $skip)
     {
         $items = self::all(['id', 'uri', 'description', 'fa_name', 'document_link'])
-            ->take($take)
             ->skip($skip)
+            ->take($take)
             ->toArray();
         if (count($items) > 0) {
             $count = self::all()->count();
