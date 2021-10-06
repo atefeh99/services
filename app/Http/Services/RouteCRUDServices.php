@@ -30,9 +30,9 @@ class RouteCRUDServices
 
     }
 
-    public static function showAll()
+    public static function showAll($take, $skip)
     {
-        return Route::showAll();
+        return Route::showAll($take, $skip);
     }
 
 
