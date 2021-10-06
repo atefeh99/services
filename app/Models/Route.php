@@ -65,12 +65,16 @@ class Route extends Model
         $item->delete();
     }
 
-    public static function showAll()
+    public static function showAll($take, $skip)
     {
-        $items = self::all(['id', 'uri', 'description','fa_name','document_link'])->toArray();
+        $items = self::all(['id', 'uri', 'description', 'fa_name', 'document_link'])
+            ->take($take)
+            ->skip($skip)
+            ->toArray();
         if (count($items) > 0) {
-           return $items;
-        }else{
+            $count = self::all()->count();
+            return ['items'=>$items,'count'=>$count];
+        } else {
             throw new ModelNotFoundException();
         }
     }
