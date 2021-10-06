@@ -55,7 +55,7 @@ class ApiController extends Controller
             ->setStatusCode(Response::HTTP_OK)
             ->respond([
                     'odata.count' => $count,
-                    'value' => $response
+                    'value' => array_values($response)
                 ]
             );
     }

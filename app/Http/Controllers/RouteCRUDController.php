@@ -35,7 +35,7 @@ class RouteCRUDController extends ApiController
 
         if (isset($odata_query['top'])) {
             $validate = Validator::make(['top' => $odata_query['top']], [
-                'top' => 'integer|required|lte:20'
+                'top' => 'integer|required'
             ]);
             if ($validate->fails()) {
                 return $this->respondInvalidParams('1022', $validate->errors(), 'bad request');
