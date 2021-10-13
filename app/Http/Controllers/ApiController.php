@@ -32,8 +32,7 @@ class ApiController extends Controller
      */
     public function respondItemResult($data)
     {
-        array_walk_recursive($data, function(&$value)
-        {
+        array_walk_recursive($data, function (&$value) {
             $value = is_string($value) ? rtrim($value) : $value;
         });
         return $this
@@ -49,7 +48,7 @@ class ApiController extends Controller
      * @param $total_count
      * @return mixed
      */
-    public function respondArray($response,$count)
+    public function respondArray($response, $count)
     {
         return $this
             ->setStatusCode(Response::HTTP_OK)
@@ -57,6 +56,14 @@ class ApiController extends Controller
                     'odata.count' => $count,
                     'value' => array_values($response)
                 ]
+            );
+    }
+
+    public function respondArrayResult($response)
+    {
+        return $this
+            ->setStatusCode(Response::HTTP_OK)
+            ->respond($response
             );
     }
 //    public function respondArrayResult(
@@ -121,7 +128,7 @@ class ApiController extends Controller
     public function respondInvalidParams($code, $fields, $message = '')
     {
         if (!$message) {
-            $message = trans('messages.custom.'.Response::HTTP_BAD_REQUEST);
+            $message = trans('messages.custom.' . Response::HTTP_BAD_REQUEST);
         }
 
         return $this
@@ -153,7 +160,7 @@ class ApiController extends Controller
     public function respondSuccessCreate($returnData, $message = '')
     {
         if (!$message) {
-            $message = trans('messages.custom.'.Response::HTTP_CREATED);
+            $message = trans('messages.custom.' . Response::HTTP_CREATED);
         }
 
         return $this
@@ -257,7 +264,7 @@ class ApiController extends Controller
         return $this->respond([
             'status' => $this->getStatusCode(),
             'message' => $this->getMessage(),
-            'code'  => $this->getCode()
+            'code' => $this->getCode()
         ]);
     }
 
@@ -294,7 +301,7 @@ class ApiController extends Controller
             'status' => $this->getStatusCode(),
             'message' => $this->getMessage(),
             'fields' => $fields,
-            'code'  => $this->getCode()
+            'code' => $this->getCode()
         ]);
     }
 

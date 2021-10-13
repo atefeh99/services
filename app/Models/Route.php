@@ -67,7 +67,6 @@ class Route extends Model
 
     public static function showAll($take, $skip)
     {
-
         $count = self::all()->count();
         if ($skip>$count){
             throw new ModelNotFoundException();

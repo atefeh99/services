@@ -135,7 +135,7 @@ class GnafController extends ApiController
 //        dd($inputm[$inp],$input, $output, $inputval, $out_fileds);
         $response = Gnafservices::serach($inputm[$inp],$input, $output, $inputval, $out_fileds);
 
-        return $this->respondArray($response);
+        return $this->respondArrayResult($response);
     }
 
 
