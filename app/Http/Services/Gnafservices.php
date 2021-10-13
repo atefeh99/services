@@ -174,7 +174,7 @@ class Gnafservices
             'plate_no',
             'floorno',
             'unit',
-//            'building_name'
+            'building_name'
         ],
         'AddressAndTelephones' => [
             'statename',
