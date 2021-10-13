@@ -256,6 +256,7 @@ class Gnafservices
             $result = Post::searchInArray($input, $query_field, $out_fields);
         } else {
             $result = Post::search($input, $query_field, $out_fields);
+//            dd($result);
         }
         $data = array();
         $area_code = '';
