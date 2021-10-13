@@ -69,6 +69,6 @@ class RouteCRUDController extends ApiController
     public function showAll()
     {
         $items = RouteCRUDServices::showAll();
-        return $this->respondArray($items,count($items));
+        return $this->respondArrayResult($items,count($items));
     }
 }

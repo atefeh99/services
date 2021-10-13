@@ -57,6 +57,15 @@ class ApiController extends Controller
                 $response
             ]);
     }
+    public function respondArrayResult($response,$count)
+    {
+        return $this
+            ->setStatusCode(Response::HTTP_OK)
+            ->respond([
+                'odata.count'=>$count,
+                'value'=>$response
+            ]);
+    }
 //    public function respondArrayResult(
 //        $res_code,
 //        $succ,
