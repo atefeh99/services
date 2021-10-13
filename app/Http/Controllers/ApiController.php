@@ -49,13 +49,15 @@ class ApiController extends Controller
      * @param $total_count
      * @return mixed
      */
-    public function respondArray($response)
+    public function respondArray($response,$count)
     {
         return $this
             ->setStatusCode(Response::HTTP_OK)
             ->respond([
-                $response
-            ]);
+                    'odata.count' => $count,
+                    'value' => array_values($response)
+                ]
+            );
     }
 //    public function respondArrayResult(
 //        $res_code,
