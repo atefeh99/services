@@ -18,7 +18,6 @@ class RequestRulesException
         $this->fields = $fields;
         $this->error_code = $error_code;
 //        self::setCode(Response::HTTP_NOT_FOUND);
-        self::setMessage(trans('messages.custom.'.Response::HTTP_BAD_REQUEST));
 
     }
 

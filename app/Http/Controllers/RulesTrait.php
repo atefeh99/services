@@ -10,6 +10,7 @@ use App\Http\Controllers\Task\TaskManagementController;
 use App\Http\Controllers\Task\CommentController;
 use Illuminate\Validation\Rule;
 
+
 trait RulesTrait
 {
 
@@ -46,7 +47,7 @@ trait RulesTrait
                         'Postcodes' => 'required|array',
                         'Postcodes.*'=> 'required|array',
                         'Postcodes.*.ClientRowID' => 'required|numeric',
-                        'Postcodes.*.PostCode'=> 'required',
+                        'Postcodes.*.PostCode'=> 'required|numeric',
                         'Signature'=> 'string'
                     ],
                     'telephone'=>[
@@ -99,8 +100,8 @@ trait RulesTrait
         }
 
         if ($validation->fails()) {
-            dd($validation->errors()->getMessages());
-//            throw new RequestRulesException($validation->errors()->getMessages(), $code);
+//            dd($validation->errors()->getMessages());
+            throw new RequestRulesException($validation->errors()->getMessages(), $code);
         }
 
 

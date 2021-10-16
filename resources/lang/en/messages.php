@@ -29,6 +29,10 @@ return [
             'query' => 'query exception',
             'expire'=>'your code has expired',
             'ResMsg'=> "ناموفق",
+            'msg_part1' => 'خطای سرویس دهنده',
+            'telMsg'=> ':تلفن در بانک کدپستی موجود نیست',
+            'postcodeMsg' => ': کدپستی در بانک کدپستی موجود نیست',
+            'positionMsg' => ':مختصاتی برای کد جغرافیایی یافت نشد'
         ],
         'success' => [
             'send'=>'send successfully',
