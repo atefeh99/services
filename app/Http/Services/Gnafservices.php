@@ -422,71 +422,73 @@ class Gnafservices
                         //loop through postalcode or telephones
                         foreach ($result as $k => $v) {
                             //loop through attributes
-                            $error_msg_part1 = trans('messages.custom.error.msg_part1');
-                            if ($output == 'Telephones' && !$v['tel']) {
-                                $error_msg_part2 = trans('messages.custom.error.telMsg');
-                                $data[$temp]['Succ'] = false;
-                                $data[$temp] += [
-                                    'Result' => null,
-                                    'Errors' => [
-                                        'ErrorCode' => 9040,
-                                        'ErrorMessage' => $error_msg_part1 . $error_msg_part2
-                                    ]
-                                ];
-                            } elseif ($output == 'BuildingUnits' && !$v['unit']) {
-                                $data[$temp]['Succ'] = false;
-                                $data[$temp] += [
-                                    'Result' => null,
-                                    'Errors' => [
-                                        'ErrorCode' => 9040,
-                                        'ErrorMessage' => $error_msg_part1
-                                    ]
-                                ];
-                            }  elseif ($output == 'Postcode' && !$v['postalcode']) {
-                                $data[$temp]['Succ'] = false;
-                                $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
+                            if ($k == $temp) {
+                                $error_msg_part1 = trans('messages.custom.error.msg_part1');
+                                if ($output == 'Telephones' && !$v['tel']) {
+                                    $error_msg_part2 = trans('messages.custom.error.telMsg');
+                                    $data[$temp]['Succ'] = false;
+                                    $data[$temp] += [
+                                        'Result' => null,
+                                        'Errors' => [
+                                            'ErrorCode' => 9040,
+                                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2
+                                        ]
+                                    ];
+                                } elseif ($output == 'BuildingUnits' && !$v['unit']) {
+                                    $data[$temp]['Succ'] = false;
+                                    $data[$temp] += [
+                                        'Result' => null,
+                                        'Errors' => [
+                                            'ErrorCode' => 9040,
+                                            'ErrorMessage' => $error_msg_part1
+                                        ]
+                                    ];
+                                } elseif ($output == 'Postcode' && !$v['postalcode']) {
+                                    $data[$temp]['Succ'] = false;
+                                    $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
 
-                                $data[$temp] += [
-                                    'Result' => null,
-                                    'Errors' => [
-                                        'ErrorCode' => 9040,
-                                        'ErrorMessage' => $error_msg_part1 . $error_msg_part2,
-                                    ]
-                                ];
-                            } elseif (( $output == 'position' || $output == 'EstimatedPosition' || $output == 'AccuratePosition')
-                                && (!$v['st_x'] || !$v['st_y'])) {
-                                $data[$temp]['Succ'] = false;
-                                $error_msg_part2 = trans('messages.custom.error.positionMsg');
+                                    $data[$temp] += [
+                                        'Result' => null,
+                                        'Errors' => [
+                                            'ErrorCode' => 9040,
+                                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2,
+                                        ]
+                                    ];
+                                } elseif (($output == 'position' || $output == 'EstimatedPosition' || $output == 'AccuratePosition')
+                                    && (!$v['st_x'] || !$v['st_y'])) {
+                                    $data[$temp]['Succ'] = false;
+                                    $error_msg_part2 = trans('messages.custom.error.positionMsg');
 
-                                $data[$temp] += [
-                                    'Result' => null,
-                                    'Errors' => [
-                                        'ErrorCode' => 9040,
-                                        'ErrorMessage' => $error_msg_part1 . $error_msg_part2,
-                                    ]
-                                ];
-                            } else {
-                                foreach ($v as $key => $value) {
-                                    //change the keys when we have result
-                                    $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
-                                    $attribute = $value;
+                                    $data[$temp] += [
+                                        'Result' => null,
+                                        'Errors' => [
+                                            'ErrorCode' => 9040,
+                                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2,
+                                        ]
+                                    ];
+                                } else {
+                                    foreach ($v as $key => $value) {
+                                        //change the keys when we have result
+                                        $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
+                                        $attribute = $value;
 //                                dd($attribute);
-                                    if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
-                                        $attribute = 'true';
+                                        if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
+                                            $attribute = 'true';
+                                        }
+                                        unset($result[$k][$key]);
+                                        $result[$k][$key1] = $attribute;
+
                                     }
-                                    unset($result[$k][$key]);
-                                    $result[$k][$key1] = $attribute;
-
+                                    $data[$temp]['Result'] = $result[$k];
+                                    $data[$temp]['Result'] += [
+                                        'TraceID' => "",
+                                        'ErrorCode' => 0,
+                                        'ErrorMessage' => null
+                                    ];
+                                    $data[$temp]['Errors'] = null;
                                 }
-                                $data[$temp]['Result'] = $result[$k];
-                                $data[$temp]['Result'] += [
-                                    'TraceID' => "",
-                                    'ErrorCode' => 0,
-                                    'ErrorMessage' => null
-                                ];
-                                $data[$temp]['Errors'] = null;
-                            }
 
+                            }
                         }
                     }
 
