@@ -116,11 +116,12 @@ class GnafController extends ApiController
             __FUNCTION__,
             3000);
         $inputval = $data[$inputmaps[$input]];
+
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
 //        $count = is_string($inputval) ? 1 : count($inputval);
-//        $result = [];
         $inp = $input;
-//        dd($inp);
+        $invalid_inputs = self::findInvalids($inputval, $inputm[$inp]);
+
         $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
@@ -130,12 +131,32 @@ class GnafController extends ApiController
 
             return $this->respondError("$output is not valid", 422, 10003);
         }
-        $out_fileds = Gnafservices::createDatabaseFields($inp,$output);
+        $out_fileds = Gnafservices::createDatabaseFields($inp, $output);
 
 //        dd($inputm[$inp],$input, $output, $inputval, $out_fileds);
-        $response = Gnafservices::serach($inputm[$inp],$input, $output, $inputval, $out_fileds);
+        $response = Gnafservices::serach($inputm[$inp], $input, $output, $inputval, $out_fileds, $invalid_inputs);
 
         return $this->respondArrayResult($response);
+    }
+
+    public function findInvalids($inputval, $inp)
+    {
+        $data = collect($inputval)->pluck($inp)->all();
+        if ($inp == 'PostCode') {
+            $invalids = [];
+            foreach ($data as $datum) {
+                $flag = preg_match('/^(?![02])(?!\d{1}[02])(?!\d{2}[02])(?!\d{3}[02])(?!\d{4}[025])(?!\d{5}0)(?!\d{6}0000)\d{10}$/m'
+                    , $datum
+                );
+                if ($flag == 0) {
+                    $invalids[] = $datum;
+                }
+            }
+            return $invalids;
+        } else {
+            //todo tel regex
+            return [];
+        }
     }
 
 

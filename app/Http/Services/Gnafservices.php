@@ -2,7 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Helpers\Constant;
+use App\Helpers\ServicesResponse;
 use App\Models\Post;
+use App\Exceptions\ServicesModelNotFoundException;
 
 class Gnafservices
 {
@@ -247,7 +250,7 @@ class Gnafservices
     public static $output_attrs = [];
 
 
-    public static function serach($inp, $input, $output, $values, $out_fields)
+    public static function serach($inp, $input, $output, $values, $out_fields, $invalid_inputs)
     {
         $query_field = collect($values)->pluck($inp)->all();
         $output_result = self::createResponseFields($input, $output);
@@ -386,173 +389,26 @@ class Gnafservices
 //        ];//pak shavad
 //        dd($result);
         if (isset($result)) {
-            //loop through postcodes or telephones
-            foreach ($values as $PorT) {
-//                dd($PorT);
-                //check if the postcode has data or not
-                $temp = $PorT[$inp];
-                $client_row_id = $PorT['ClientRowID'];
-                if (isset($PorT['AreaCode'])) {
-                    $area_code = $PorT['AreaCode'];
-                }
-                if (array_key_exists($temp, $result)) {
-                    $data[$temp] = [
-                        'ClientRowID' => $client_row_id,
-                    ];
-                    if ($input == "tel") {
-                        $data[$temp] += [
-                            'AreaCode' => $area_code];
-                    }
-                    $data[$temp] += [
-                        $inp => $temp,
-                        'Succ' => true,
-                    ];
-                    if ($output == "AddressString") {
-                        $result[$temp]['address'] = self::makeAddressString($result[$temp]);
-//                        dd($result[$temp]);
-                        $data[$temp]['Result'] = [
-                            'Value' => $result[$temp]['address'],
-                            "PostCode" => $temp,
-                            'TraceID' => "",
-                            'ErrorCode' => 0,
-                            'ErrorMessage' => null
-                        ];
-
-                    } else {
-                        //loop through postalcode or telephones
-                        foreach ($result as $k => $v) {
-                            //loop through attributes
-                            if ($k == $temp) {
-                                $error_msg_part1 = trans('messages.custom.error.msg_part1');
-                                if ($output == 'Telephones' && !$v['tel']) {
-                                    $error_msg_part2 = trans('messages.custom.error.telMsg');
-                                    $data[$temp]['Succ'] = false;
-                                    $data[$temp] += [
-                                        'Result' => null,
-                                        'Errors' => [
-                                            'ErrorCode' => 9040,
-                                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2
-                                        ]
-                                    ];
-                                } elseif ($output == 'BuildingUnits' && !$v['unit']) {
-                                    $data[$temp]['Succ'] = false;
-                                    $data[$temp] += [
-                                        'Result' => null,
-                                        'Errors' => [
-                                            'ErrorCode' => 9040,
-                                            'ErrorMessage' => $error_msg_part1
-                                        ]
-                                    ];
-                                } elseif ($output == 'Postcode' && !$v['postalcode']) {
-                                    $data[$temp]['Succ'] = false;
-                                    $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
-
-                                    $data[$temp] += [
-                                        'Result' => null,
-                                        'Errors' => [
-                                            'ErrorCode' => 9040,
-                                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2,
-                                        ]
-                                    ];
-                                } elseif (($output == 'position' || $output == 'EstimatedPosition' || $output == 'AccuratePosition')
-                                    && (!$v['st_x'] || !$v['st_y'])) {
-                                    $data[$temp]['Succ'] = false;
-                                    $error_msg_part2 = trans('messages.custom.error.positionMsg');
-
-                                    $data[$temp] += [
-                                        'Result' => null,
-                                        'Errors' => [
-                                            'ErrorCode' => 9040,
-                                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2,
-                                        ]
-                                    ];
-                                } else {
-                                    foreach ($v as $key => $value) {
-                                        //change the keys when we have result
-                                        $key1 = array_key_exists($key, $output_result) ? $output_result[$key] : $key;
-                                        $attribute = $value;
-//                                dd($attribute);
-                                        if ($output == "ValidatePostCode" || $output == "ValidateTelephone") {
-                                            $attribute = 'true';
-                                        }
-                                        unset($result[$k][$key]);
-                                        $result[$k][$key1] = $attribute;
-
-                                    }
-                                    $data[$temp]['Result'] = $result[$k];
-                                    $data[$temp]['Result'] += [
-                                        'TraceID' => "",
-                                        'ErrorCode' => 0,
-                                        'ErrorMessage' => null
-                                    ];
-                                    $data[$temp]['Errors'] = null;
-                                }
-
-                            }
-                        }
-                    }
-
-//no data for the specific postcode or tel
-                } else {
-                    $error_code = 9040;
-                    $error_msg_part1 = trans('messages.custom.error.msg_part1');
-                    $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
-                    $data[$temp] = [
-                        'ClientRowID' => $client_row_id,
-                    ];
-                    if ($input == "tel") {
-                        $error_msg_part2 = trans('messages.custom.error.telMsg');
-
-                        $data[$temp] += [
-                            'AreaCode' => $area_code];
-                    }
-                    $data[$temp] += [
-                        $inp => $PorT[$inp],
-                        'Succ' => false,
-                        'Result' => null,
-                        'Errors' => [
-                            'ErrorCode' => $error_code,
-                            'ErrorMessage' => $error_msg_part1 . $error_msg_part2
-                        ]
-                    ];
-
-                }
-            }
-            return [
-                "ResCode" => 0,
-                "ResMsg" => trans('messages.custom.success.ResMsg'),
-                "Data" => array_values($data)
-            ];
-            //if no data available for all postcodes
+            return ServicesResponse::makeResponse($result, $inp, $input, $output, $values, $output_result, $invalid_inputs);
+            //no result
         } else {
-
             foreach ($values as $PorT) {
-
+                $area_code = '';
                 $temp = $PorT[$inp];
                 $client_row_id = $PorT['ClientRowID'];
-                $data[$temp] = [
-                    'ClientRowID' => $client_row_id,
-                ];
                 if (isset($PorT['AreaCode'])) {
                     $area_code = $PorT['AreaCode'];
-                    $data[$temp] += [
-                        'AreaCode' => $area_code];
                 }
-                $data[$temp] += [
-                    $inp => $temp,
-                    'Succ' => false,
-                    'Result' => null,
-                    'Errors' => [
-                        'ErrorCode' => "",
-                        'ErrorMessage' => ""
-                    ]
-                ];
+                //toDo Exception models not found or invalid input
+                $data[$temp] = ServicesResponse::recordNotFound($client_row_id, $temp, $area_code, $input, $inp, $invalid_inputs);
             }
+
             return [
-                "ResCode" => 12,
+                "ResCode" => Constant::ERROR_RESPONSE_CODE,
                 "ResMsg" => trans('messages.custom.error.ResMsg'),
                 "Data" => array_values($data)
             ];
+//
         }
     }
 
@@ -575,7 +431,8 @@ class Gnafservices
 
     }
 
-    public static function createResponseFields($input, $name)
+    public
+    static function createResponseFields($input, $name)
     {
 //        dd($input,$name);
         $activity_code = str_contains($name, "ActivityCode");
@@ -592,7 +449,8 @@ class Gnafservices
 
     }
 
-    public static function makeAddressString($v)
+    public
+    static function makeAddressString($v)
     {
 //        dd($v);
         $result = "";

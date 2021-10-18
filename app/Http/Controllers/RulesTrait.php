@@ -47,7 +47,7 @@ trait RulesTrait
                         'Postcodes' => 'required|array',
                         'Postcodes.*'=> 'required|array',
                         'Postcodes.*.ClientRowID' => 'required|numeric',
-                        'Postcodes.*.PostCode'=> 'required|numeric',
+                        'Postcodes.*.PostCode'=> 'required',
                         'Signature'=> 'string'
                     ],
                     'telephone'=>[

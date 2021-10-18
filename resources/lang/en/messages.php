@@ -32,7 +32,8 @@ return [
             'msg_part1' => 'خطای سرویس دهنده',
             'telMsg'=> ':تلفن در بانک کدپستی موجود نیست',
             'postcodeMsg' => ': کدپستی در بانک کدپستی موجود نیست',
-            'positionMsg' => ':مختصاتی برای کد جغرافیایی یافت نشد'
+            'positionMsg' => ':مختصاتی برای کد جغرافیایی یافت نشد',
+            'invalidPostcode' => 'کد پستی نامعتبر است'
         ],
         'success' => [
             'send'=>'send successfully',
