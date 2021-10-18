@@ -50,17 +50,13 @@ class Handler extends ExceptionHandler
                 'status' => 200
             ];
             if ($e instanceof RequestRulesException) {
-
                 $return_object = [
-                    'data' => [
-                        'ErrorMessage' => $e->getMessage(),
-                        'ErrorCode' => $e->getErrorCode(),
-                        'ErrorFields'=>$e->getFields(),
-                        'TraceID'=>''
-                    ],
-                    'status' => Response::HTTP_BAD_REQUEST
+                    'ResCode'=>12,
+                    'ResMsg' => 'ناموفق',
+                    ''
+
                 ];
-//                dd($return_object);
+
 
             }elseif ($e instanceof ModelNotFoundException) {
                 $return_object = [
@@ -71,10 +67,11 @@ class Handler extends ExceptionHandler
                     ],
                     'status' => Response::HTTP_NOT_FOUND
                 ];
+                return response()
+                    ->json($return_object['data'], $return_object['status'])
+                    ->header('Access-Control-Allow-Origin', '*');
             }
-            return response()
-                ->json($return_object['data'], $return_object['status'])
-                ->header('Access-Control-Allow-Origin', '*');
+
         }
 
         return $response;
