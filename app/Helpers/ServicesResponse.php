@@ -121,8 +121,7 @@ class ServicesResponse
     }
 
 
-    public
-    static function succTrue($info, $client_row_id, $input, $area_code, $inp, $temp, $output, $output_result)
+    public static function succTrue($info, $client_row_id, $input, $area_code, $inp, $temp, $output, $output_result)
     {
         $record = [
             'ClientRowID' => $client_row_id,
@@ -165,8 +164,7 @@ class ServicesResponse
 
     }
 
-    public
-    static function makeAddressString($v)
+    public static function makeAddressString($v)
     {
 //        dd($v);
         $result = "";

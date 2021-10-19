@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Helpers\Constant;
 use App\Models\Post;
 use App\Http\Services\Gnafservices;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class GnafController extends ApiController
         ],
 
     ];
-    public $aliases = [
+    const ALIASES = [
         'location' => 'geom',
         'map' => 'static',
         'standard_address' => 'standard_address',
@@ -99,30 +100,25 @@ class GnafController extends ApiController
     ];
     public static $output_attrs = [];
 
+
+
+
     public function search($input, $output, Request $request)
     {
-//        dd('in controller');
-        $inputmaps = [
-            'Telephone' => 'Telephones',
-            'Postcode' => 'Postcodes'
-        ];
-        $inputm = [
-            'Telephone' => 'TelephoneNo',
-            'Postcode' => 'PostCode'
-        ];
 
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,
-            3000);
-        $inputval = $data[$inputmaps[$input]];
+            $input,
+        '');
+        $inputval = $data[Constant::INPUTMAPS[$input]];
 
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
 //        $count = is_string($inputval) ? 1 : count($inputval);
         $inp = $input;
-        $invalid_inputs = self::findInvalids($inputval, $inputm[$inp]);
+        $invalid_inputs = self::findInvalids($inputval, Constant::INPUTM[$inp]);
 
-        $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
+        $input = in_array($input, array_keys(self::ALIASES)) ? self::ALIASES[$input] : $input;
         $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
         if (!in_array($input, array_keys($this->can))) {
             return $this->respondError("$input is not valid", 422, 10002);
@@ -134,7 +130,7 @@ class GnafController extends ApiController
         $out_fileds = Gnafservices::createDatabaseFields($inp, $output);
 
 //        dd($inputm[$inp],$input, $output, $inputval, $out_fileds);
-        $response = Gnafservices::serach($inputm[$inp], $input, $output, $inputval, $out_fileds, $invalid_inputs);
+        $response = Gnafservices::serach(Constant::INPUTM[$inp], $input, $output, $inputval, $out_fileds, $invalid_inputs);
 
         return $this->respondArrayResult($response);
     }

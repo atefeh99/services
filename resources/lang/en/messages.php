@@ -33,7 +33,8 @@ return [
             'telMsg'=> ':تلفن در بانک کدپستی موجود نیست',
             'postcodeMsg' => ': کدپستی در بانک کدپستی موجود نیست',
             'positionMsg' => ':مختصاتی برای کد جغرافیایی یافت نشد',
-            'invalidPostcode' => 'کد پستی نامعتبر است'
+            'invalidPostcode' => 'کد پستی نامعتبر است',
+            '2115'=> 'خطا سیستمی ثبت درخواست'
         ],
         'success' => [
             'send'=>'send successfully',

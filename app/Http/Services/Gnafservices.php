@@ -5,7 +5,7 @@ namespace App\Http\Services;
 use App\Helpers\Constant;
 use App\Helpers\ServicesResponse;
 use App\Models\Post;
-use App\Exceptions\ServicesModelNotFoundException;
+use App\Exceptions\ServicesException;
 
 class Gnafservices
 {
@@ -431,8 +431,7 @@ class Gnafservices
 
     }
 
-    public
-    static function createResponseFields($input, $name)
+    public static function createResponseFields($input, $name)
     {
 //        dd($input,$name);
         $activity_code = str_contains($name, "ActivityCode");
@@ -447,118 +446,5 @@ class Gnafservices
 //        dd($input, $name);
         return $name;
 
-    }
-
-    public
-    static function makeAddressString($v)
-    {
-//        dd($v);
-        $result = "";
-        //state
-        if (array_key_exists('statename', $v) && $v['statename']) {
-            $result .= 'استان ';
-            $result .= $v['statename'];
-            $result .= '، ';
-        }
-        //town
-        if (array_key_exists('townname', $v) && $v['townname']) {
-            $result .= 'شهرستان ';
-            $result .= $v['townname'];
-            $result .= '، ';
-        }
-        //zone
-        if (array_key_exists('zonename', $v) && $v['zonename']) {
-            $result .= 'بخش ';
-            $result .= $v['zonename'];
-            $result .= '، ';
-        }
-        //location
-        if (array_key_exists('locationtype', $v)
-            && array_key_exists('locationname', $v)) {
-
-
-            if ($v['locationtype'] == 'شهر' &&
-                $v['locationname']) {
-
-                $result .= 'شهر ';
-                $result .= $v['locationname'];
-                $result .= '، ';
-            } elseif ($v['locationtype'] == 'روستا' &&
-                $v['locationname']) {
-
-                $result .= 'روستای ';
-                $result .= $v['locationname'];
-                $result .= '، ';
-            } elseif ($v['locationtype'] == 'آبادی' &&
-                $v['locationname']) {
-
-                $result .= 'آبادی ';
-                $result .= $v['locationname'];
-                $result .= '، ';
-            }
-        }
-//parish
-        if (array_key_exists('parish', $v)) {
-            if ($v['parish']) {
-                $result .= $v['parish'];
-                $result .= '، ';
-            }
-        }
-//preavenue avenue
-        if (
-            array_key_exists('preaventypename', $v)
-            && array_key_exists('preaven', $v)
-            && array_key_exists('avenue', $v)
-            && array_key_exists('avenuetypename', $v)
-        ) {
-            if ($v['preaventypename'] ||
-                $v['preaven']) {
-                $result .= $v['preaventypename'];
-                $result .= ' ';
-                $result .= $v['preaven'];
-                $result .= '، ';
-
-            }
-            if ($v['avenuetypename'] ||
-                $v['avenue']) {
-                $result .= $v['avenuetypename'];
-                $result .= ' ';
-                $result .= $v['avenue'];
-                $result .= '، ';
-
-            }
-
-        }
-//        plateno
-        if (array_key_exists('plate_no', $v)
-            && $v['plate_no']) {
-            $result .= 'پلاک ';
-            $result .= $v['plate_no'];
-            $result .= '، ';
-        }
-        //building_name
-        if (array_key_exists('building_name', $v)
-            && $v['building_name']) {
-            $result .= $v['building_name'];
-            $result .= '، ';
-        }
-//        floor
-        if (array_key_exists('floorno', $v)) {
-            $result .= 'طبقه ';
-            $result .= ((int)$v['floorno'] == 0) ?
-                'همکف' : $v['floorno'];
-            $result .= '، ';
-        }
-
-
-//        unit
-        if (array_key_exists('unit', $v)
-            && $v['unit']) {
-            $result .= 'واحد ';
-            $result .= $v['unit'];
-//            $result .= '، ';
-        }
-
-        return $result;
     }
 }
