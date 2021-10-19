@@ -10,23 +10,6 @@ use App\Exceptions\ServicesException;
 class Gnafservices
 {
 
-//        fields that is set as array in db!
-//    public static $farsi = [
-//        'statename' => 'استان',
-//        'townname' => 'شهرستان',
-//        'zonename' => 'بخش',
-//        'villagename' => 'دهستان',
-////        'locationtype' => 'شهر/روستا/آبادی',
-////        'locationname' => 'localityname',
-//        'parish' => 'محله',
-//        'preaven' => 'خیابان',
-//        'avenue' => 'خیابان',
-//        'plate_no' => 'پلاک',
-//        'floorno' => 'طبقه',
-////        'building_name' => 'building_name'
-//    ];
-
-
     public static $composite_response = [
         'Position' => [
             'st_x' => 'Latitude',
@@ -250,19 +233,19 @@ class Gnafservices
     public static $output_attrs = [];
 
 
-    public static function serach($inp, $input, $output, $values, $out_fields, $invalid_inputs)
+    public static function serach($input_alias, $output_alias, $values, $input,$invalid_values)
     {
-        $query_field = collect($values)->pluck($inp)->all();
-        $output_result = self::createResponseFields($input, $output);
-//        dd( $output);
-        if ($input == "tel") {
-            $result = Post::searchInArray($input, $query_field, $out_fields);
+
+        $a = collect($values)->pluck(Constant::INPUTM[$input])->all();
+        $query_field = array_diff($a,$invalid_values);
+        $out_fields = self::createDatabaseFields($input, $output_alias);
+        $output_result = self::createResponseFields($input, $output_alias);
+        if ($input_alias == "tel") {
+            $result = Post::searchInArray($input_alias, $query_field, $out_fields);
         } else {
-            $result = Post::search($input, $query_field, $out_fields);
-//            dd($result);
+            $result = Post::search($input_alias, $query_field, $out_fields);
         }
-        $data = array();
-        $area_code = '';
+
 //        $result = [
 //            '8000' => [
 //                'postalcode' => 'TypeCode2',
@@ -387,38 +370,19 @@ class Gnafservices
 //
 //            ]
 //        ];//pak shavad
-//        dd($result);
         if (isset($result)) {
-            return ServicesResponse::makeResponse($result, $inp, $input, $output, $values, $output_result, $invalid_inputs);
-            //no result
+            return ServicesResponse::makeResponse($input,$result, $input_alias, $output_alias, $values, $output_result, $invalid_values);
         } else {
-            foreach ($values as $PorT) {
-                $area_code = '';
-                $temp = $PorT[$inp];
-                $client_row_id = $PorT['ClientRowID'];
-                if (isset($PorT['AreaCode'])) {
-                    $area_code = $PorT['AreaCode'];
-                }
-                //toDo Exception models not found or invalid input
-                $data[$temp] = ServicesResponse::recordNotFound($client_row_id, $temp, $area_code, $input, $inp, $invalid_inputs);
-            }
-
-            return [
-                "ResCode" => Constant::ERROR_RESPONSE_CODE,
-                "ResMsg" => trans('messages.custom.error.ResMsg'),
-                "Data" => array_values($data)
-            ];
-//
+            throw new ServicesException($values,$input,$invalid_values);
         }
     }
 
 
     public static function createDatabaseFields($input, $name)
     {
-//        dd($input, $name);
         $activity_code = str_contains($name, "ActivityCode");
         $validate = str_contains($name, 'Validate');
-        $name = in_array($name, array_keys(self::$composite_database_fields)) ? self::$composite_database_fields[$name] : $name;
+        $name = array_key_exists($name,self::$composite_database_fields) ? self::$composite_database_fields[$name] : $name;
         if ($input == 'Postcode'
             && !$activity_code
             && !$validate) {

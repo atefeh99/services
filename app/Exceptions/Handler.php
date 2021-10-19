@@ -50,19 +50,36 @@ class Handler extends ExceptionHandler
 
         $debug = env('APP_DEBUG');
         if (!$debug) {
+            $return_object = [
+                'data' => [
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => trans('messages.custom.' . Response::HTTP_INTERNAL_SERVER_ERROR),
+                    'code' => 105
+                ],
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ];
 
-            if ($e instanceof RequestRulesException) {
+            if ($e instanceof ServicesException) {
                 $return_object = [
-                    'ResCode'=>$e->getResCode(),
+                    'ResCode' => $e->getResCode(),
                     'ResMsg' => $e->getResMessage(),
-                    'Data'=> $e->getData()
+                    'Data' => $e->getData()
 
                 ];
                 return response()
                     ->json($return_object)
                     ->header('Access-Control-Allow-Origin', '*');
-
-            }elseif ($e instanceof ModelNotFoundException) {
+            } elseif ($e instanceof RequestRulesException) {
+                $return_object = [
+                    'data' => [
+                        'status' => Response::HTTP_BAD_REQUEST,
+                        'message' => $e->getMessage(),
+                        'fields' => $e->getFields(),
+                        'code' => 104
+                    ],
+                    'status' => Response::HTTP_BAD_REQUEST
+                ];
+            } elseif ($e instanceof ModelNotFoundException) {
                 $return_object = [
                     'data' => [
                         'status' => Response::HTTP_NOT_FOUND,
@@ -71,16 +88,12 @@ class Handler extends ExceptionHandler
                     ],
                     'status' => Response::HTTP_NOT_FOUND
                 ];
-                return response()
-                    ->json($return_object['data'], $return_object['status'])
-                    ->header('Access-Control-Allow-Origin', '*');
+
             }
-
+            return response()
+                ->json($return_object['data'], $return_object['status'])
+                ->header('Access-Control-Allow-Origin', '*');
         }
-
         return $response;
     }
-
-
-
 }

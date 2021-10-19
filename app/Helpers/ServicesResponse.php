@@ -8,8 +8,10 @@ use App\Helpers\Constant;
 class ServicesResponse
 {
 
-    public static function makeResponse($info, $inp, $input, $output, $values, $output_result, $invalid_inputs)
+    public static function makeResponse($input, $info, $input_alias, $output_alias, $values, $output_result, $invalid_values)
     {
+//        dd($inp, $input);
+        $inp = Constant::INPUTM[$input];
         $data = array();
         //loop through postcodes or telephones
         foreach ($values as $PorT) {
@@ -21,30 +23,32 @@ class ServicesResponse
             }
             if (array_key_exists($temp, $info)) {
                 //there is record but column is null
-                if (($output == 'Telephones' && !$info[$temp]['tel'])
-                    || ($output == 'BuildingUnits' && !$info[$temp]['unit'])
-                    || ($output == 'Postcode' && !$info[$temp]['postalcode'])
-                    || (($output == 'position' || $output == 'EstimatedPosition' || $output == 'AccuratePosition')
+                if (($output_alias == 'Telephones' && !$info[$temp]['tel'])
+                    || ($output_alias == 'BuildingUnits' && !$info[$temp]['unit'])
+                    || ($output_alias == 'Postcode' && !$info[$temp]['postalcode'])
+                    || (($output_alias == 'position' || $output_alias == 'EstimatedPosition' || $output_alias == 'AccuratePosition')
                         && (!$info[$temp]['st_x'] || !$info[$temp]['st_y']))
                 ) {
                     $error_msg_part1 = trans('messages.custom.error.msg_part1');
                     $error_msg_part2 = '';
-                    if ($output == 'Telephones') {
+                    if ($output_alias == 'Telephones') {
                         $error_msg_part2 = trans('messages.custom.error.telMsg');
-                    } elseif ($output == 'Postcode') {
+                    } elseif ($output_alias == 'Postcode') {
                         $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
-                    } elseif ($output == 'position' || $output == 'EstimatedPosition' || $output == 'AccuratePosition') {
+                    } elseif ($output_alias == 'position' || $output_alias == 'EstimatedPosition' || $output_alias == 'AccuratePosition') {
                         $error_msg_part2 = trans('messages.custom.error.positionMsg');
+                    } elseif ($output_alias == 'BuildingUnits') {
+                        $error_msg_part2 = trans('messages.custom.error.unitMsg');
                     }
-                    $data[$temp] = self::succFalse($client_row_id, $input, $area_code, $inp, $temp, $error_msg_part1, $error_msg_part2);
+                    $data[$temp] = self::succFalse($client_row_id, $input, $area_code, $inp, $temp, $invalid_values, 9040, $error_msg_part1, $error_msg_part2);
                 } else {
-                    $data[$temp] = self::succTrue($info[$temp], $client_row_id, $input, $area_code, $inp, $temp, $output, $output_result);
+                    $data[$temp] = self::succTrue($info[$temp], $client_row_id, $input_alias, $area_code, $inp, $temp, $output_alias, $output_result);
                 }
 
 
 //no data for the specific postcode or tel
             } else {
-                $data[$temp] = self::recordNotFound($client_row_id, $temp, $area_code, $input, $inp, $invalid_inputs);
+                $data[$temp] = self::succFalse($client_row_id, $input, $area_code, $inp, $temp, $invalid_values);
             }
         }
         //todo get code msg data
@@ -56,31 +60,6 @@ class ServicesResponse
         ];
 
     }
-
-//no record in db
-    public static function recordNotFound($client_row_id, $temp, $area_code, $input, $inp, $invalid_inputs)
-    {
-        if (in_array($temp, $invalid_inputs)) {
-            $error_code = 1001;
-            $error_msg_part2 = '';
-            if ($input == 'postalcode') {
-                $error_msg_part1 = trans('messages.custom.error.invalidPostcode');
-            } else {
-                $error_msg_part1 = '';
-            }
-        } else {
-            $error_code = 9040;
-            $error_msg_part1 = trans('messages.custom.error.msg_part1');
-            if ($input == "tel") {
-                $error_msg_part2 = trans('messages.custom.error.telMsg');
-            } else {
-                $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
-            }
-        }
-
-        return self::succFalse($client_row_id, $input, $area_code, $inp, $temp, $error_msg_part1, $error_msg_part2, $error_code);
-    }
-
 
     public static function getCodeAndMsg($data)
     {
@@ -97,8 +76,32 @@ class ServicesResponse
         return ['code' => $code, 'msg' => $msg];
     }
 
-    public static function succFalse($client_row_id, $input, $area_code, $inp, $temp, $error_msg_part1, $error_msg_part2, $error_code = 9040)
+    public static function succFalse($client_row_id, $input, $area_code, $inp, $temp,
+                                     $invalid_values = null,
+                                     $error_code = null,
+                                     $error_msg_part1 = null,
+                                     $error_msg_part2 = null)
     {
+        if (isset($invalid_values) && in_array($temp, $invalid_values)) {
+            $error_code = 1001;
+            $error_msg_part2 = '';
+            if ($input == 'Postcode') {
+                $error_msg_part1 = trans('messages.custom.error.invalidPostcode');
+            } else {
+                $error_msg_part1 = '';
+            }
+        } elseif (!isset($error_code)) {
+
+            $error_code = 9040;
+            $error_msg_part1 = trans('messages.custom.error.msg_part1');
+            if ($input == "tel") {
+                $error_msg_part2 = trans('messages.custom.error.telMsg');
+            } else {
+                $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
+            }
+
+        }
+
         $record = [
             'ClientRowID' => $client_row_id,
         ];

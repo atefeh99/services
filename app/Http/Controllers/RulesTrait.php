@@ -103,11 +103,14 @@ trait RulesTrait
 
         if ($validation->fails()) {
             if (strpos($controller, 'GnafController') == true) {
+                $error_msg = trans('messages.custom.error.2115');
                 throw new ServicesException(
                     $data,
                     $input,
-                    trans('messages.custom.error.2115'),
-                    2115);
+                    null,
+                    2115,
+                    $error_msg,
+                    );
             } elseif (strpos($controller, 'RouteCRUDController') == true) {
                 throw new RequestRulesException($validation->errors()->getMessages(),$code);
             }
