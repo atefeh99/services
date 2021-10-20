@@ -397,12 +397,11 @@ class Gnafservices
 
     public static function createResponseFields($input, $name)
     {
-//        dd($input,$name);
         $activity_code = str_contains($name, "ActivityCode");
         $validate = str_contains($name, 'Validate');
 
         $name = in_array($name, array_keys(self::$composite_response)) ? self::$composite_response[$name] : $name;
-        if ($input == 'postalcode'
+        if ($input == 'Postcode'
             && !$activity_code
             && !$validate) {
             $name ['postalcode'] = 'PostCode';
