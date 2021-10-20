@@ -12,8 +12,8 @@ class Gnafservices
 
     public static $composite_response = [
         'Position' => [
-            'st_x' => 'Latitude',
-            'st_y' => 'Longitude'
+            'st_x' => 'Longitude',
+            'st_y' => 'Latitude'
         ]
         ,
         'Telephones' => [
@@ -104,12 +104,12 @@ class Gnafservices
 
         ],
         'AccuratePosition' => [
-            'st_x' => 'Lat',
-            'st_y' => 'Lon'
+            'st_x' => 'Lon',
+            'st_y' => 'Lat'
         ],
         'EstimatedPosition' => [
-            'st_x' => 'Lat',
-            'st_y' => 'Lon'
+            'st_x' => 'Lon',
+            'st_y' => 'Lat'
         ]
 
     ];
