@@ -29,8 +29,8 @@ class GnafController extends ApiController
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,
-            $input,
-            '');
+            null,
+            $input);
         $inputval = $data[Constant::INPUTMAPS[$input]];
 
         $inputval = is_string($inputval) ? [$inputval] : $inputval;

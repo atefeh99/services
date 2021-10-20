@@ -66,7 +66,7 @@ trait RulesTrait
         ];
     }
 
-    public static function checkRules($data, $function, $input,$code)
+    public static function checkRules($data, $function,$code=null, $input=null)
     {
         $controller = __CLASS__;
         if (strpos($controller, 'GnafController') == true) {

@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
                 ],
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR
             ];
-
+//dd(GetCallingMethodName($e));
             if ($e instanceof ServicesException) {
                 $return_object = [
                     'ResCode' => $e->getResCode(),
