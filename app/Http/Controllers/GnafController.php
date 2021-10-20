@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Helpers\Constant;
 use App\Models\Post;
 use App\Http\Services\Gnafservices;
 use Illuminate\Http\Request;
@@ -15,127 +16,60 @@ class GnafController extends ApiController
 {
     use RulesTrait;
 
-//        if change key of aliases, must be change swagger route!
-    public $can = [
-        'postalcode' => [
-            'Telephones',
-            'Postcode',
-            'Address',
-            'AddressAndTelephones',
-            'Workshop',
-            'Position',
-            'ValidatePostCode',
-            'ActivityCode',
-            'BuildingUnits',
-            'AddressString',
-            'AccuratePosition',
-            'EstimatedPosition'
-        ],
-        'tel' => [
-            'Postcode',
-            'Address',
-            'AddressAndPostcode',
-            'Workshop',
-            'Position',
-            'ValidateTelephone',
-            'ActivityCode'
-        ],
 
-    ];
-    public $aliases = [
-        'location' => 'geom',
-        'map' => 'static',
-        'standard_address' => 'standard_address',
-        'water' => 'water',
-        'gaz' => 'gaz',
-        'darai' => 'dara',
-        'Telephone' => 'tel',
-        'electricity' => 'elec',
-        'Postcode' => 'postalcode',
-        'postalcode' => 'Postcode',
-        'modernization' => 'nosazi',
-        'mobile' => 'mobile',
-        'parcel' => 'parcel',
-
-        'compact_address' => 'std_address',
-
-        'unit' => 'Units',
-        'conf_level' => 'conf_level',
-        'blockno' => 'blockno',
-
-        'building_type' => 'building_type',
-
-        'building' => 'building',
-
-        'activity_type' => 'activity',
-        'activity_name' => 'name',
-        'activity' => 'activity',
-
-
-    ];
-    public $outputcheck = [
-        'PostcodeByTelephone' => 'Postcode',
-        'AddressByTelephone' => 'Address',
-        'AddressByPostcode' => 'Address',
-        'AddressAndPostcodeByTelephone' => 'AddressAndPostcode',
-        'WorkshopByTelephone' => 'Workshop',
-        'PositionByTelephone' => 'Position',
-        'ValidateTelephone' => 'ValidateTelephone',
-        'ActivityCodeByTelephone' => 'ActivityCode',
-        'AddressStringByPostcode' => 'AddressString',
-        'TelephonesByPostcode' => 'Telephones',
-        'AddressAndTelephonesByPostcode' => 'AddressAndTelephones',
-        'PositionByPostcode' => 'Position',
-        'ActivityCodeByPostcode' => 'ActivityCode',
-        'WorkshopByPostcode' => 'Workshop',
-        'BuildingUnitsByPostcode' => 'BuildingUnits',
-        'GenerateCertificate' => 'GenerateCertificate',
-        'ValidatePostCode' => 'ValidatePostCode',
-        'AccuratePosition' => 'AccuratePosition',
-        'EstimatedPosition' => 'EstimatedPosition'
-    ];
     protected $casts = [
         'postalcode' => 'integer',
     ];
     public static $output_attrs = [];
 
+
     public function search($input, $output, Request $request)
     {
-//        dd('in controller');
-        $inputmaps = [
-            'Telephone' => 'Telephones',
-            'Postcode' => 'Postcodes'
-        ];
-        $inputm = [
-            'Telephone' => 'TelephoneNo',
-            'Postcode' => 'PostCode'
-        ];
 
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,
-            3000);
-        $inputval = $data[$inputmaps[$input]];
+            $input,
+            '');
+        $inputval = $data[Constant::INPUTMAPS[$input]];
+
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
 //        $count = is_string($inputval) ? 1 : count($inputval);
-//        $result = [];
         $inp = $input;
-//        dd($inp);
-        $input = in_array($input, array_keys($this->aliases)) ? $this->aliases[$input] : $input;
-        $output = in_array($output, array_keys($this->outputcheck)) ? $this->outputcheck[$output] : $output;
-        if (!in_array($input, array_keys($this->can))) {
-            return $this->respondError("$input is not valid", 422, 10002);
-        }
-        if ((in_array($input, array_keys($this->can)) && !in_array($output, $this->can[$input]))) {
+        $invalid_inputs = self::findInvalids($inputval, Constant::INPUTM[$inp]);
 
-            return $this->respondError("$output is not valid", 422, 10003);
+        $input_alias= in_array($input, array_keys(Constant::ALIASES)) ? Constant::ALIASES[$input] : $input;
+        $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
+        if (!array_key_exists($input_alias, Constant::CAN)) {
+            return $this->respondError("$input_alias is not valid", 422, 10002);
         }
-        $out_fileds = Gnafservices::createDatabaseFields($inp,$output);
+        if (!in_array($output_alias, Constant::CAN[$input_alias])) {
 
-//        dd($inputm[$inp],$input, $output, $inputval, $out_fileds);
-        $response = Gnafservices::serach($inputm[$inp],$input, $output, $inputval, $out_fileds);
+            return $this->respondError("$output_alias is not valid", 422, 10003);
+        }
+
+//        dd($input_alias, $output, $inputval, $inp, $invalid_inputs);
+        $response = Gnafservices::serach($input_alias, $output_alias, $inputval, $input, $invalid_inputs);
 
         return $this->respondArrayResult($response);
+    }
+
+    public function findInvalids($inputval, $inp)
+    {
+        $data = collect($inputval)->pluck($inp)->all();
+        if ($inp == 'PostCode') {
+            $invalids = [];
+            foreach ($data as $datum) {
+                $flag = preg_match(Constant::POSTCODE_PATTERN, $datum);
+                if ($flag == 0) {
+                    $invalids[] = $datum;
+                }
+            }
+            return $invalids;
+        } else {
+            //todo tel regex
+            return [];
+        }
     }
 
 

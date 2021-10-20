@@ -23,42 +23,63 @@ class Handler extends ExceptionHandler
      *
      * @var array
      */
-    protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
-    ];
+//    protected $dontFlash = [
+//        'current_password',
+//        'password',
+//        'password_confirmation',
+//    ];
 
     /**
      * Register the exception handling callbacks for the application.
      *
      * @return void
      */
-    public function register()
+    public function report(Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        $debug = env('APP_DEBUG');
+
+        if ($debug) {
+            return parent::report($exception);
+        }
     }
+
+
     public function render($request, Throwable $e)
     {
-
         $response = parent::render($request, $e);
-        if (env('APP_DEBUG')) {
+
+        $debug = env('APP_DEBUG');
+        if (!$debug) {
             $return_object = [
-                'data' => [],
-                'status' => 200
+                'data' => [
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => trans('messages.custom.' . Response::HTTP_INTERNAL_SERVER_ERROR),
+                    'code' => 105
+                ],
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
             ];
-            if ($e instanceof RequestRulesException) {
+
+            if ($e instanceof ServicesException) {
                 $return_object = [
-                    'ResCode'=>12,
-                    'ResMsg' => 'ناموفق',
-                    ''
+                    'ResCode' => $e->getResCode(),
+                    'ResMsg' => $e->getResMessage(),
+                    'Data' => $e->getData()
 
                 ];
-
-
-            }elseif ($e instanceof ModelNotFoundException) {
+                return response()
+                    ->json($return_object)
+                    ->header('Access-Control-Allow-Origin', '*');
+            } elseif ($e instanceof RequestRulesException) {
+                $return_object = [
+                    'data' => [
+                        'status' => Response::HTTP_BAD_REQUEST,
+                        'message' => $e->getMessage(),
+                        'fields' => $e->getFields(),
+                        'code' => 104
+                    ],
+                    'status' => Response::HTTP_BAD_REQUEST
+                ];
+            } elseif ($e instanceof ModelNotFoundException) {
                 $return_object = [
                     'data' => [
                         'status' => Response::HTTP_NOT_FOUND,
@@ -67,16 +88,12 @@ class Handler extends ExceptionHandler
                     ],
                     'status' => Response::HTTP_NOT_FOUND
                 ];
-                return response()
-                    ->json($return_object['data'], $return_object['status'])
-                    ->header('Access-Control-Allow-Origin', '*');
+
             }
-
+            return response()
+                ->json($return_object['data'], $return_object['status'])
+                ->header('Access-Control-Allow-Origin', '*');
         }
-
         return $response;
     }
-
-
-
 }

@@ -27,15 +27,18 @@ return [
             'model_not_found' => 'requested :model not found',
             'unauthorized' => 'unauthorized',
             'query' => 'query exception',
-            'expire'=>'your code has expired',
-            'ResMsg'=> "ناموفق",
+            'expire' => 'your code has expired',
+            'ResMsg' => "ناموفق",
             'msg_part1' => 'خطای سرویس دهنده',
-            'telMsg'=> ':تلفن در بانک کدپستی موجود نیست',
+            'telMsg' => ':تلفن در بانک کدپستی موجود نیست',
             'postcodeMsg' => ': کدپستی در بانک کدپستی موجود نیست',
-            'positionMsg' => ':مختصاتی برای کد جغرافیایی یافت نشد'
+            'positionMsg' => ':مختصاتی برای کد جغرافیایی یافت نشد',
+            'invalidPostcode' => 'کد پستی نامعتبر است',
+            '2115' => 'خطا سیستمی ثبت درخواست',
+            'unitMsg' => ': واحد دیگری برای این کد پستی موجود نیست'
         ],
         'success' => [
-            'send'=>'send successfully',
+            'send' => 'send successfully',
             'update' => 'updated successfully',
             'create' => 'successfully created',
             'delete' => 'successfully deleted',
@@ -43,8 +46,8 @@ return [
             'ok_validation' => 'your account has been successfully validated',
             'forgot_password' => 'please check your email to continue!',
             'unsubscribe' => 'you have unsubscribed successfully',
-            'avaliablecode'=>'your code is available',
-            'ResMsg'=> "موفق",
+            'avaliablecode' => 'your code is available',
+            'ResMsg' => "موفق",
         ],
 
     ]

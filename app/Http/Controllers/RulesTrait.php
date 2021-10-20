@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ServicesException;
 use App\Exceptions\UnauthorizedUserException;
+use App\Helpers\Constant;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\RequestRulesException;
 use App\Http\Controllers\Process\SynchronizationController;
@@ -42,29 +44,29 @@ trait RulesTrait
             ],
             GnafController::class => [
                 'search' => [
-                    'postcode'=>[
-                        'ClientBatchID'=> 'numeric|required',
+                    'postcode' => [
+                        'ClientBatchID' => 'numeric|required',
                         'Postcodes' => 'required|array',
-                        'Postcodes.*'=> 'required|array',
+                        'Postcodes.*' => 'required|array',
                         'Postcodes.*.ClientRowID' => 'required|numeric',
-                        'Postcodes.*.PostCode'=> 'required|numeric',
-                        'Signature'=> 'string'
+                        'Postcodes.*.PostCode' => 'required',
+                        'Signature' => 'string'
                     ],
-                    'telephone'=>[
-                        'ClientBatchID'=> 'numeric|required',
+                    'telephone' => [
+                        'ClientBatchID' => 'numeric|required',
                         'Telephones' => 'required|array',
-                        'Telephones.*'=> 'required|array',
+                        'Telephones.*' => 'required|array',
                         'Telephones.*.ClientRowID' => 'required|numeric',
-                        'Telephones.*.TelephoneNo'=> 'required',
-                        'Telephones.*.AreaCode'=> 'required',
-                        'Signature'=> 'string'
+                        'Telephones.*.TelephoneNo' => 'required',
+                        'Telephones.*.AreaCode' => 'required',
+                        'Signature' => 'string'
                     ]
                 ]
             ]
         ];
     }
 
-    public static function checkRules($data, $function, $code)
+    public static function checkRules($data, $function, $input,$code)
     {
         $controller = __CLASS__;
         if (strpos($controller, 'GnafController') == true) {
@@ -100,8 +102,18 @@ trait RulesTrait
         }
 
         if ($validation->fails()) {
-            dd($validation->errors()->getMessages());
-//            throw new RequestRulesException($validation->errors()->getMessages(), $code);
+            if (strpos($controller, 'GnafController') == true) {
+                $error_msg = trans('messages.custom.error.2115');
+                throw new ServicesException(
+                    $data,
+                    $input,
+                    null,
+                    2115,
+                    $error_msg,
+                    );
+            } elseif (strpos($controller, 'RouteCRUDController') == true) {
+                throw new RequestRulesException($validation->errors()->getMessages(),$code);
+            }
         }
 
 

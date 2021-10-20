@@ -151,9 +151,6 @@ class Post extends Model
 
     public static function search($input, $values, $out_fields)
     {
-//        dd($out_fields);
-
-
         if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" || $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))") {
             $i = 0;
             $count = count($out_fields);
@@ -165,7 +162,6 @@ class Post extends Model
                 }
 
             }
-
             $result = self::whereIn($input, $values)
                 ->get(DB::raw($temp))
                 ->unique(function ($item) use ($out_fields) {
@@ -177,7 +173,6 @@ class Post extends Model
                 })
                 ->keyby($input)
                 ->toArray();
-//            dd($result);
         } else {
             $result = self::whereIn($input, $values)
                 ->get($out_fields)
