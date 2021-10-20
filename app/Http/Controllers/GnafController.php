@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Exceptions\ServicesException;
 use App\Helpers\Constant;
 use App\Models\Post;
 use App\Http\Services\Gnafservices;
@@ -31,21 +32,36 @@ class GnafController extends ApiController
             __FUNCTION__,
             null,
             $input);
-        $inputval = $data[Constant::INPUTMAPS[$input]];
+        $error_msg1 = trans('messages.custom.error.2117');
+//dd(Constant::INPUTMAPS[$input]);
+//dd(isset($data[Constant::INPUTMAPS[$input]]));
+        //zamani ke dar url darkhast eshtebah bashad
+
+        if (isset($data[Constant::INPUTMAPS[$input]])) {
+            $inputval = $data[Constant::INPUTMAPS[$input]];
+        } elseif ($input == 'Telephone') {
+            $info = $data[Constant::INPUTMAPS['Postcode']];
+            throw new ServicesException($info, 'Postcode', null, 2117, $error_msg1,null);
+        }elseif ($input == 'Postcode') {
+            $info = $data[Constant::INPUTMAPS['Telephone']];
+            throw new ServicesException($info, 'Telephone', null, 2117, $error_msg1,null);
+        }
 
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
 //        $count = is_string($inputval) ? 1 : count($inputval);
         $inp = $input;
         $invalid_inputs = self::findInvalids($inputval, Constant::INPUTM[$inp]);
-
-        $input_alias= in_array($input, array_keys(Constant::ALIASES)) ? Constant::ALIASES[$input] : $input;
+        $input_alias = in_array($input, array_keys(Constant::ALIASES)) ? Constant::ALIASES[$input] : $input;
         $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
+        $error_msg1 = trans('messages.custom.error.2117');
         if (!array_key_exists($input_alias, Constant::CAN)) {
-            return $this->respondError("$input_alias is not valid", 422, 10002);
+//            return $this->respondError("$input_alias is not valid", 422, 10002);
+            throw new ServicesException($inputval, $input, null, 2117, $error_msg1);
         }
         if (!in_array($output_alias, Constant::CAN[$input_alias])) {
 
-            return $this->respondError("$output_alias is not valid", 422, 10003);
+//            return $this->respondError("$output_alias is not valid", 422, 10003);
+            throw new ServicesException($inputval, $input, null, 2118, $error_msg1);
         }
 
 //        dd($input_alias, $output, $inputval, $inp, $invalid_inputs);
