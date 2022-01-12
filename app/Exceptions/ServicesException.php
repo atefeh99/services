@@ -18,7 +18,6 @@ class ServicesException extends Exception
         parent::__construct();
         $this->res_code = Constant::ERROR_RESPONSE_CODE;
         $this->res_message = trans('messages.custom.error.ResMsg');
-//        dd($info, $input, $invalid_inputs, $error_code, $error_msg);
         $this->data = self::setData($info, $input, $invalid_inputs, $error_code, $error_msg1, $error_msg2);
 
     }
@@ -36,12 +35,16 @@ class ServicesException extends Exception
             if (isset($i[$PorT])) {
                 $temp = $i[$PorT];
             }
-            if (isset($invalid_inputs)) {
+            if (in_array($temp,$invalid_inputs)) {
                 $data[$temp] = ServicesResponse::succFalse($client_row_id, $input, $area_code,
                     $PorT, $temp, $invalid_inputs);
             } elseif ((isset($error_msg1) || isset($error_msg2)) && isset($error_code)) {
                 $data[$temp] = ServicesResponse::succFalse($i['ClientRowID'], $input, $area_code,
                     $PorT, $temp, null, $error_code, $error_msg1, $error_msg2);
+            }else{
+                //if query result is null
+                $data[$temp] = ServicesResponse::succFalse($client_row_id, $input, $area_code,
+                    $PorT, $temp,null);
             }
         }
         return $data;

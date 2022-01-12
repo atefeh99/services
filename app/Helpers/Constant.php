@@ -19,33 +19,33 @@ class Constant
     ];
 
     const ALIASES = [
-        'location' => 'geom',
-        'map' => 'static',
-        'standard_address' => 'standard_address',
-        'water' => 'water',
-        'gaz' => 'gaz',
-        'darai' => 'dara',
-        'Telephone' => 'tel',
-        'electricity' => 'elec',
+//        'location' => 'geom',
+//        'map' => 'static',
+//        'standard_address' => 'standard_address',
+//        'water' => 'water',
+//        'gaz' => 'gaz',
+//        'darai' => 'dara',
+        'Telephone' => 'tels',
+//        'electricity' => 'elec',
         'Postcode' => 'postalcode',
         'postalcode' => 'Postcode',
-        'modernization' => 'nosazi',
-        'mobile' => 'mobile',
-        'parcel' => 'parcel',
+//        'modernization' => 'nosazi',
+//        'mobile' => 'mobile',
+//        'parcel' => 'parcel',
+//
+//        'compact_address' => 'std_address',
+//
+//        'unit' => 'Units',
+//        'conf_level' => 'conf_level',
+//        'blockno' => 'blockno',
+//
+//        'building_type' => 'building_type',
+//
+//        'building' => 'building',
 
-        'compact_address' => 'std_address',
-
-        'unit' => 'Units',
-        'conf_level' => 'conf_level',
-        'blockno' => 'blockno',
-
-        'building_type' => 'building_type',
-
-        'building' => 'building',
-
-        'activity_type' => 'activity',
-        'activity_name' => 'name',
-        'activity' => 'activity',
+//        'activity_type' => 'activity',
+//        'activity_name' => 'name',
+//        'activity' => 'activity',
 
 
     ];
@@ -85,9 +85,10 @@ class Constant
             'BuildingUnits',
             'AddressString',
             'AccuratePosition',
-            'EstimatedPosition'
+            'EstimatedPosition',
+            'GenerateCertificate'
         ],
-        'tel' => [
+        'tels' => [
             'Postcode',
             'Address',
             'AddressAndPostcode',

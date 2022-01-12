@@ -6,6 +6,7 @@ use App\Helpers\Constant;
 use App\Helpers\ServicesResponse;
 use App\Models\Post;
 use App\Exceptions\ServicesException;
+use App\Modules\GavahiPdf;
 
 class Gnafservices
 {
@@ -17,7 +18,7 @@ class Gnafservices
         ]
         ,
         'Telephones' => [
-            'tel' => 'SubscriberNumber',
+            'tels' => 'SubscriberNumber',
             'areacode' => 'AreaCode'
         ],
         'Postcode' => [
@@ -30,7 +31,7 @@ class Gnafservices
             'villagename' => 'Village',
             'locationtype' => 'LocalityType',
             'locationname' => 'LocalityName',
-//            'localitycode'=>'LocalityCode',
+            'population_point_id' => 'LocalityCode',
             'parish' => 'SubLocality',
             'preaven' => 'Street2',
             'avenue' => 'Street',
@@ -48,7 +49,7 @@ class Gnafservices
             'villagename' => 'Village',
             'locationtype' => 'LocalityType',
             'locationname' => 'LocalityName',
-//            'localitycode'=>'LocalityCode',
+            'population_point_id' => 'LocalityCode',
             'parish' => 'SubLocality',
             'avenue' => 'Street',
             'preaven' => 'Street2',
@@ -57,19 +58,18 @@ class Gnafservices
             'unit' => 'SideFloor',
             'building_name' => 'BuildingName',
 //            'description'=>'Description',
-//        'areacode'=>'PrePhone',
-//            'tel' => 'TelephoneNo'
+            'tels' => 'TelephoneNo'
 
         ],
         'AddressAndPostcode' => [
-            'postalcode' => 'Postcode',
+            'postalcode' => 'PostCode',
             'statename' => 'Province',
             'townname' => 'TownShip',
             'zonename' => 'Zone',
             'villagename' => 'Village',
             'locationtype' => 'LocalityType',
             'locationname' => 'LocalityName',
-//            'localitycode'=>'LocalityCode',
+            'population_point_id' => 'LocalityCode',
             'parish' => 'SubLocality',
             'avenue' => 'Street',
             'preaven' => 'Street2',
@@ -78,15 +78,13 @@ class Gnafservices
             'unit' => 'SideFloor',
             'building_name' => 'BuildingName',
 //            'description'=>'Description',
-            //        'areacode'=>'PrePhone',
-//            'tel' => 'TelephoneNo'
         ],
         'Workshop' => [
             'activity_name' => 'Name',
             'activity_type' => 'Activity',
         ],
         'ValidateTelephone' => [
-            'tel' => 'Value'
+            'tels' => 'Value'
         ],
         'ValidatePostCode' => [
             'postalcode' => 'Value'
@@ -98,7 +96,7 @@ class Gnafservices
             'address' => 'Value'
         ],
         'ActivityCode' => [
-            'activity_type1' => 'TypeCode',
+            'activity_type' => 'TypeCode',
             'activity_type2' => 'TypeCode2',
             'activity_type3' => 'TypeCode3'
 
@@ -110,40 +108,66 @@ class Gnafservices
         'EstimatedPosition' => [
             'st_x' => 'Lon',
             'st_y' => 'Lat'
+        ],
+        'GenerateCertificate' => [
+
+            'statename' => 'Province',
+            'townname' => 'TownShip',
+            'zonename' => 'Zone',
+            'villagename' => 'Village',
+            'locationtype' => 'LocalityType',
+            'locationname' => 'LocalityName',
+            'population_point_id' => 'LocalityCode',
+            'parish' => 'SubLocality',
+            'avenue' => 'Street',
+            'preaven' => 'Street2',
+            'plate_no' => 'HouseNumber',
+            'floorno' => 'Floor',
+            'unit' => 'SideFloor',
+            'CertificateUrl' => 'CertificateUrl',
+            'CertificateNo' => 'CertificateNo',
+            //            'description'=>'Description',
+
+
         ]
 
     ];
     public static $composite_database_fields = [
-        'Position' => ['ST_X(geom),ST_Y(geom)']
+        'Position' => [
+            'ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))',
+            'province_id',
+            'tels'
+
+        ]
         ,
         'Telephones' => [
-            'tel',
-            'areacode'
+            'tels',
+            'province_id',
         ],
         'Postcode' => [
-            'postalcode'
+            'postalcode',
+            'province_id',
+            'tels'
         ],
         'Address' => [
             'statename',
             'townname',
             'zonename',
             'villagename',
-            //added
             'locationtype',
             'locationname',
-//            'localitycode',
-
-
-            //till here
+            'population_point_id',
             'parish',
-
             'avenue',
             'preaven',
             'plate_no',
             'floorno',
             'unit',
-            'building_name'
+            'building_name',
 //            'description',
+            'province_id',
+            'tels'
+
         ],
         'AddressString' => [
             'statename',
@@ -160,7 +184,9 @@ class Gnafservices
             'plate_no',
             'floorno',
             'unit',
-            'building_name'
+            'building_name',
+            'province_id'
+
         ],
         'AddressAndTelephones' => [
             'statename',
@@ -169,8 +195,7 @@ class Gnafservices
             'villagename',
             'locationtype',
             'locationname',
-//            'localitycode',
-
+            'population_point_id',
             'parish',
             'avenue',
             'preaven',
@@ -178,10 +203,10 @@ class Gnafservices
             'floorno',
             'unit',
             'building_name',
+            'province_id',
             //'description'
+            'tels',
 
-//            'areacode'
-//            'tel'
         ],
         'AddressAndPostcode' => [
             'postalcode',
@@ -191,7 +216,7 @@ class Gnafservices
             'villagename',
             'locationtype',
             'locationname',
-//            'localitycode',
+            'population_point_id',
             'parish',
             'avenue',
             'preaven',
@@ -199,181 +224,109 @@ class Gnafservices
             'floorno',
             'unit',
             'building_name',
+            'province_id',
 //            'description',
-//        'areacode'
-//        'tel',
+        'tels',
 
         ],
         'Workshop' => [
             'activity_name',
-            'activity_type'
+            'activity_type',
+            'province_id',
+            'tels'
+
         ],
         'ValidateTelephone' => [
-            'tel'
+            'tels',
+            'province_id'
+
         ],
         'ValidatePostCode' => [
-            'postalcode'
+            'postalcode',
+            'province_id'
+
         ],
         'BuildingUnits' => [
-            'unit'
+            'unit',
+            'province_id'
+
         ],
         'ActivityCode' => [
-            'activity_type1',
-            'activity_type2',
-            'activity_type3',
+            'activity_type',
+//            'activity_type2',
+//            'activity_type3',
+            'province_id',
+            'tels'
+
 
         ],
         'AccuratePosition' => [
-            'ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))'
+            'ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))',
+            'province_id'
+
         ],
         'EstimatedPosition' => [
-            'ST_X(geom),ST_Y(geom)'
+            'ST_X(geom),ST_Y(geom)',
+            'province_id'
+
+        ],
+        'GenerateCertificate' => [
+            'statename',
+            'townname',
+            'zonename',
+            'villagename',
+            'locationtype',
+            'locationname',
+            'population_point_id',
+            'parish',
+            'preaven',
+            'avenue',
+            'plate_no',
+            'floorno',
+            'unit',
+            'province_id'
+            //description
+
         ]
     ];
     public static $output_attrs = [];
 
 
-    public static function serach($input_alias, $output_alias, $values, $input,$invalid_values)
+    public static function serach($input_alias, $output_alias, $values, $input, $invalid_values, $scopes)
     {
-
         $a = collect($values)->pluck(Constant::INPUTM[$input])->all();
-        $query_field = array_diff($a,$invalid_values);
+        $query_field = array_diff($a, $invalid_values);
         $out_fields = self::createDatabaseFields($input, $output_alias);
         $output_result = self::createResponseFields($input, $output_alias);
-        if ($input_alias == "tel") {
-            $result = Post::searchInArray($input_alias, $query_field, $out_fields);
+//dd($input_alias, $output_alias, $values, $input, $invalid_values, $scopes);
+        $action_areas = null;
+        if ($scopes) {
+            $action_areas = $scopes['action_areas'];
+        }
+        if ($input_alias == "tels") {
+            $result = Post::searchInArray($input_alias, $query_field, $out_fields, $action_areas);
+//            dd($result);
         } else {
-            $result = Post::search($input_alias, $query_field, $out_fields);
+            $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
+        }
+        if ($output_alias == 'GenerateCertificate') {
+            $gavahi_info = GavahiPdf::getLinkAndBarcode($query_field, $values, $input, $invalid_values);
+            if ($gavahi_info['link']) {
+                foreach ($result as $k => $r) {
+                    $result[$k]['CertificateUrl'] = $gavahi_info['link'];
+                    $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
+                }
+            } else {
+                $msg = trans('messages.custom.error.msg_part1');
+                throw new ServicesException($values, $input, $invalid_values, 9070, $msg, null);
+            }
         }
 
-//        $result = [
-//            '8000' => [
-//                'postalcode' => 'TypeCode2',
-//               ],
-//            '883' => [
-//                'postalcode' => 'TypujlCode2',
-//            ],
-//
-//
-//        ];
-//        $result = [
-//            '8000013786' => [
-//                'unit' => 'tt',
-//                'postalcode' => 'TypeCode2',
-//               ],
-//
-////        ];
-//        $result = [
-//            '1' => [
-//                'activity_type1' => 'TypeCode',
-//                'activity_type2' => 'TypeCode2',
-//                'activity_type3' => 'TypeCode3']
-//        ];
-//        $result = [
-//            '8913613747' => [
-//                'postalcode' => '8913613747',
-//                'tel' => 'dcdsc',
-//                'areacode' => 'dsc',
-//            ]
-//        ];
-//        $result = [
-//            '1' => [
-//                'tel' => 'ph',
-//
-//            ],
-//            '222' => [
-//                'tel' => 'hh',
-//
-//            ],
-//
-//        ];
-//        $result = [
-//            '222' => [
-//                'st_x'=>1,
-//                'st_y'=>'lll',
-//
-//            ],
-//            '1' => [
-//                'st_x'=>1,
-//                'st_y'=>'lll',
-//
-//            ]
-//        ];
-//        $result = [
-//            '222' => [
-//                'activity_type'=>1,
-//                'activity_name'=>'lll',
-//
-//            ],
-//            '1' => [
-//                'activity_type'=>1,
-//                'activity_name'=>'lll',
-//
-//            ]
-//        ];
-//        $result = [
-//            '222' => [
-//                'activity_type1'=>1,
-//                'activity_type2'=>1,
-//                'activity_type3'=>1,
-//
-//            ],
-//            '1' => [
-//                'activity_type1'=>1,
-//                'activity_type2'=>1,
-//                'activity_type3'=>1,
-//
-//            ]
-//        ];
-//        $result = [
-//            '8000' => [
-//                                'postalcode' => 'TypeCode2',
-//
-//                'statename' => 'Province',
-//                'townname' => 'TownShip',
-//                'zonename' => 'Zone',
-//                'villagename' => 'Village',
-//                'locationtype' => 'LocalityType',
-//                'locationname' => 'LocalityName',
-////            'localitycode'=>'LocalityCode',
-//                'parish' => 'SubLocality',
-//                'avenue' => 'Street',
-//                'preaven' => 'Street2',
-//                'plate_no' => 'HouseNumber',
-//                'floorno' => 'Floor',
-//                'unit' => 'SideFloor',
-//                'building_name' => 'BuildingName',
-////            'description'=>'Description',
-////        'areacode'=>'PrePhone',
-////            'tel' => 'TelephoneNo'
-//            ],
-//            '883' => [
-//                                'postalcode' => 'TypeCode2',
-//
-//                'statename' => 'Province',
-//                'townname' => 'TownShip',
-//                'zonename' => 'Zone',
-//                'villagename' => 'Village',
-//                'locationtype' => 'LocalityType',
-//                'locationname' => 'LocalityName',
-////            'localitycode'=>'LocalityCode',
-//                'parish' => 'SubLocality',
-//                'avenue' => 'Street',
-//                'preaven' => 'Street2',
-//                'plate_no' => 'HouseNumber',
-//                'floorno' => 'Floor',
-//                'unit' => 'SideFloor',
-//                'building_name' => 'BuildingName',
-////            'description'=>'Description',
-////        'areacode'=>'PrePhone',
-////            'tel' => 'TelephoneNo'
-//
-//            ]
-//        ];//pak shavad
         if (isset($result)) {
-            return ServicesResponse::makeResponse($input,$result, $input_alias, $output_alias, $values, $output_result, $invalid_values);
+
+            return ServicesResponse::makeResponse($input, $result, $input_alias, $output_alias, $values, $output_result, $invalid_values);
         } else {
-            throw new ServicesException($values,$input,$invalid_values);
+            throw new ServicesException($values, $input, $invalid_values);
         }
     }
 
@@ -382,14 +335,13 @@ class Gnafservices
     {
         $activity_code = str_contains($name, "ActivityCode");
         $validate = str_contains($name, 'Validate');
-        $name = array_key_exists($name,self::$composite_database_fields) ? self::$composite_database_fields[$name] : $name;
+        $name = array_key_exists($name, self::$composite_database_fields) ? self::$composite_database_fields[$name] : $name;
         if ($input == 'Postcode'
-            && !$activity_code
+//            && !$activity_code
             && !$validate) {
             $name [] = 'postalcode';
 
         }
-//        dd($name);
 
         return $name;
 
