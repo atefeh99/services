@@ -11,6 +11,7 @@ class Scopes
     {
 
         $action_areas = static::getActionArea($x_scopes);
+        $scopes = [];
         foreach ($action_areas as $action_area) {
             if (static::ActionIsValid($action_area)) {
                 $explode = explode('.', $action_area);

@@ -8,7 +8,7 @@ use GuzzleHttp\RequestOptions;
 
 class GavahiPdf
 {
-    public static function getLinkAndBarcode($postalcodes, $values = null, $input = null, $invalid_values = null)
+    public static function getLinkAndBarcode($postalcodes,$user_id, $values = null, $input = null, $invalid_values = null)
     {
         $params['postalcode'] = $postalcodes;
         $error_msg_part1 = trans('messages.custom.error.msg_part1');
@@ -21,7 +21,7 @@ class GavahiPdf
                 [
                     RequestOptions::HEADERS => [
                         'Content-Type' => ' application/json',
-//                        'x-user-id' => '1234'
+                        'x-user-id' => $user_id
                     ],
                     RequestOptions::JSON => $params,
                     RequestOptions::QUERY => ['geo' => 0]
