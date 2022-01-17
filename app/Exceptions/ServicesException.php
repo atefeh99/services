@@ -47,9 +47,9 @@ class ServicesException extends Exception
             }
             if (isset($i[$PorT])) {
                 $temp = $i[$PorT];
-            } elseif ($i['TransactionID']) {
+            } elseif (isset($i['TransactionID'])) {
                 $temp = $i['TransactionID'];
-            } elseif ($i['FollowUpCode']) {
+            } elseif (isset($i['FollowUpCode'])) {
                 $temp = $i['FollowUpCode'];
             } else {
                 $temp = $i['PostalCode'];
