@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\RequestRulesException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -34,7 +35,8 @@ class Post extends Model
         'pelak',
         'floorno',
         'building_name',
-        'parcel'
+        'parcel',
+        'province_id',
     ];
 
     protected $postgisFields = [
@@ -99,13 +101,85 @@ class Post extends Model
         'unit',
         'postalcode'
     ];
+    protected $appends = [
+        'areacode'
+    ];
+    protected $hidden = [
+        'province_id'
+    ];
 
-    public static function searchInArray($input, $value, $out_fields)
+    public static function searchInArray($input, $value, $out_fields, $scopes)
     {
-//        dd($input, $value, $out_fields);
-
 //toDo if statement should be correct
-        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" /*|| $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))"*/) {
+        $result = self::query();
+        if (in_array("ST_X(geom),ST_Y(geom)",$out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))",$out_fields)) {
+            $i = 0;
+            $count = count($out_fields);
+            $temp = "";
+            foreach ($out_fields as $field) {
+                $temp .= $field;
+                if (++$i !== $count) {
+                    $temp .= ',';
+                }
+            }
+            $result = $result->where(function ($query) use ($value) {
+                foreach ($value as $item) {
+                    $query = $query->orWhereRaw("tels @> '[\"$item\"]'");
+                }
+                return $query;
+            });
+//            $result = Post::whereRaw("$input @> array[?]", [$value]);
+            if (!empty($scopes)) {
+                $result = $result->actionArea($scopes);
+            }
+            $result = $result->get(DB::raw($temp))
+                ->toArray();
+//            dd($result);
+
+
+        } else {
+            try {
+                $result = $result->where(function ($query) use ($value) {
+                    foreach ($value as $item) {
+                        $query = $query->orWhereRaw("tels @> '[\"$item\"]'");
+                    }
+                    return $query;
+                });
+                if (!empty($scopes)) {
+                    $result = $result->actionArea($scopes);
+                }
+//                dd($result->toSql());
+                $result = $result->get($out_fields)
+                    ->toArray();
+//                dd($result);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        }
+        $f = [];
+//        dd($result);
+        foreach ($value as $item) {
+            foreach ($result as $r) {
+                foreach ($r['tels'] as $tel) {
+                    if ($tel == $item) {
+                        $f[$item] = $r;
+                    }
+                }
+            }
+        }
+        if (count($f) > 0) {
+//            dd($f);
+            return $f;
+        } else {
+            return null;
+        }
+
+    }
+
+    public static function search($input, $values, $out_fields, $scopes)
+    {
+        if (in_array("ST_X(geom),ST_Y(geom)",$out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))",$out_fields)) {
             $i = 0;
             $count = count($out_fields);
             $temp = "";
@@ -116,30 +190,27 @@ class Post extends Model
                 }
 
             }
+            $result = self::whereIn($input, $values);
+            if (!empty($scopes)) {
+                $result = $result->actionArea($scopes);
+            }
+            $result = $result->get(DB::raw($temp))
+                ->keyby($input)
+                ->toArray();
 
-            $result = Post::whereRaw("$input @> array[?]", [$value])
-                ->get($temp)
-                ->unique(function ($item) use ($out_fields) {
-                    $temp = "";
-                    foreach ($out_fields as $out_field) {
-                        $temp .= $item[$out_field];
-                    }
-                    return $temp;
-                })
-                ->keyby($input)
-                ->toArray();
         } else {
-            $result = Post::whereRaw("$input @> array[?]", [$value])
-                ->get($out_fields)
-                ->unique(function ($item) use ($out_fields) {
-                    $temp = "";
-                    foreach ($out_fields as $out_field) {
-                        $temp .= $item[$out_field];
-                    }
-                    return $temp;
-                })
-                ->keyby($input)
-                ->toArray();
+            try {
+                $result = self::whereIn($input, $values);
+                if (!empty($scopes)) {
+                    $result = $result->actionArea($scopes);
+                }
+                $result = $result->get($out_fields)
+                    ->keyby($input)
+                    ->toArray();
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+
+            }
         }
         if (count($result) > 0) {
             return $result;
@@ -149,51 +220,48 @@ class Post extends Model
 
     }
 
-    public static function search($input, $values, $out_fields)
+    public function scopeActionArea($query, $scopes)
     {
-        if ($out_fields[0] == "ST_X(geom),ST_Y(geom)" || $out_fields[0] == "ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))") {
-            $i = 0;
-            $count = count($out_fields);
-            $temp = "";
-            foreach ($out_fields as $field) {
-                $temp .= $field;
-                if (++$i !== $count) {
-                    $temp .= ',';
-                }
-
-            }
-            $result = self::whereIn($input, $values)
-                ->get(DB::raw($temp))
-                ->unique(function ($item) use ($out_fields) {
-                    $temp = "";
-                    foreach ($out_fields as $out_field) {
-                        $temp .= $item[$out_field];
-                    }
-                    return $temp;
-                })
-                ->keyby($input)
-                ->toArray();
-        } else {
-            $result = self::whereIn($input, $values)
-                ->get($out_fields)
-                ->unique(function ($item) use ($out_fields) {
-                    $temp = "";
-                    foreach ($out_fields as $out_field) {
-                        $temp .= $item[$out_field];
-                    }
-                    return $temp;
-                })
-                ->keyby($input)
-                ->toArray();
-
-//            dd($result);
+        if (array_key_exists('province', $scopes)) {
+            $query->whereIn('province_id', $scopes['province']);
         }
-        if (count($result) > 0) {
-            return $result;
-        } else {
+
+        return $query;
+    }
+
+    public function getTelsAttribute()
+    {
+
+        if ($this->attributes['tels'] == "[null]" || !$this->attributes['tels'])
             return null;
-        }
 
+        return json_decode($this->attributes['tels'], true);
+    }
+
+    public function getAreacodeAttribute()
+    {
+        $value = Cache::rememberForever($this->province_id . '_phone_code', function () {
+            return Province::where('id', $this->province_id)->first();
+        });
+        return $value->phone_code;
+    }
+
+    public function getAvenueAttribute()
+    {
+        return $this->attributes['avenuetypename'] . ' ' . $this->attributes['avenue'];
+    }
+
+    public function getPreavenAttribute()
+    {
+        return $this->attributes['preaventypename'] . ' ' . $this->attributes['preaven'];
+    }
+
+    public function getFloornoAttribute()
+    {
+        if ($this->attributes['floorno'] == 0) {
+            return 'همکف';
+        }
+        return $this->attributes['floorno'];
     }
 
 

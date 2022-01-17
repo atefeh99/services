@@ -64,6 +64,8 @@ class Handler extends ExceptionHandler
             ];
 
             if ($e instanceof ServicesException) {
+//                dd($return_object);
+
                 $return_object = [
                     'ResCode' => $e->getResCode(),
                     'ResMsg' => $e->getResMessage(),

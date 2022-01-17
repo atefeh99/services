@@ -36,9 +36,12 @@ return [
             'invalidPostcode' => 'کد پستی نامعتبر است',
             '2115' => 'خطا سیستمی ثبت درخواست',
             'unitMsg' => ': واحد دیگری برای این کد پستی موجود نیست',
-            '9070'=> ':یک خطای غیر منتظره اتفاق افتاده است',
-            '2117'=> 'خطای سیستمی فراخوانی سرویس',
-
+            '9070' => ':یک خطای غیر منتظره اتفاق افتاده است',
+            '2117' => 'خطای سیستمی فراخوانی سرویس',
+            'activitycodeMsg' => ': کدفعالیت در بانک کدپستی موجود نیست',
+            'transaction_part1' => 'تراکنش مالی با شماره ی ',
+            'transaction_part2' => 'ناموفق می باشد',
+            'transaction_not_found' => 'تراکنش مالی یافت نشد'
         ],
         'success' => [
             'send' => 'send successfully',
@@ -51,6 +54,8 @@ return [
             'unsubscribe' => 'you have unsubscribed successfully',
             'avaliablecode' => 'your code is available',
             'ResMsg' => "موفق",
+            "in_progress" => "در حال انجام",
+            "todo" => "درنوبت"
         ],
 
     ]

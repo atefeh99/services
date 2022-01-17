@@ -63,8 +63,7 @@ class ApiController extends Controller
     {
         return $this
             ->setStatusCode(Response::HTTP_OK)
-            ->respond($response
-            );
+            ->respond($response);
     }
 //    public function respondArrayResult(
 //        $res_code,
