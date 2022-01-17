@@ -69,7 +69,9 @@ class Constant
         'GenerateCertificate' => 'GenerateCertificate',
         'ValidatePostCode' => 'ValidatePostCode',
         'AccuratePosition' => 'AccuratePosition',
-        'EstimatedPosition' => 'EstimatedPosition'
+        'EstimatedPosition' => 'EstimatedPosition',
+        'ReqStatus' => 'ReqStatus',
+        'GenerateCertificateByTxn'=> 'GenerateCertificateByTxn'
     ];
 
     const CAN = [
@@ -86,7 +88,8 @@ class Constant
             'AddressString',
             'AccuratePosition',
             'EstimatedPosition',
-            'GenerateCertificate'
+            'GenerateCertificate',
+            'ReqStatus'
         ],
         'tels' => [
             'Postcode',
@@ -101,7 +104,6 @@ class Constant
     ];
 
     const POSTCODE_PATTERN = '/^(?![02])(?!\d{1}[02])(?!\d{2}[02])(?!\d{3}[02])(?!\d{4}[025])(?!\d{5}0)(?!\d{6}0000)\d{10}$/m';
-
 
 
 }

@@ -41,35 +41,24 @@ class ServicesResponse
                         $error_msg_part2 = trans('messages.custom.error.telMsg');
                     } elseif ($output_alias == 'Postcode') {
                         $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
-                    } elseif ($output_alias == 'position' || $output_alias == 'EstimatedPosition' || $output_alias == 'AccuratePosition') {
+                    } elseif ($output_alias == 'Position' || $output_alias == 'EstimatedPosition' || $output_alias == 'AccuratePosition') {
                         $error_msg_part2 = trans('messages.custom.error.positionMsg');
                     } elseif ($output_alias == 'BuildingUnits') {
                         $error_msg_part2 = trans('messages.custom.error.unitMsg');
                     } elseif ($output_alias == 'ActivityCode') {
                         $error_msg_part2 = trans('messages.custom.error.activitycodeMsg');
                     }
-//                    dd($input_alias);
-                    $data[$temp] = self::succFalse($client_row_id, $input, $area_code, $inp, $temp, $invalid_values, 9040, $error_msg_part1, $error_msg_part2);
+                    $data[$temp] = self::succFalse($input, $area_code, $inp, $temp, $invalid_values, 9040, $error_msg_part1, $error_msg_part2, $client_row_id);
                 } else {
-//                    dd($input_alias);
-
                     $data[$temp] = self::succTrue($info[$temp], $client_row_id, $input, $area_code, $inp, $temp, $output_alias, $output_result);
-//                    if ($temp == '8943173813') {
-//                        dd($data[$temp]);
-//                    }
                 }
 
 
 //no data for the specific postcode or tel
             } else {
-//                dd($input_alias);
-
-                $data[$temp] = self::succFalse($client_row_id, $input, $area_code, $inp, $temp, $invalid_values);
+                $data[$temp] = self::succFalse($input, $area_code, $inp, $temp, $invalid_values, null, null, null, $client_row_id);
             }
-//            if ($temp == '8943173813') {
-//                dd($data[$temp]);
-//
-//            }
+
         }
         //todo get code msg data
         $code_and_message = self::getCodeAndMsg($data);
@@ -79,6 +68,15 @@ class ServicesResponse
             "Data" => array_values($data)
         ];
 
+    }
+
+    public static function makeResponse2($code, $message, $data)
+    {
+        return [
+            "ResCode" => $code,
+            "ResMsg" => $message,
+            "Data" => $data
+        ];
     }
 
     public static function getCodeAndMsg($data)
@@ -96,13 +94,14 @@ class ServicesResponse
         return ['code' => $code, 'msg' => $msg];
     }
 
-    public static function succFalse($client_row_id, $input, $area_code, $inp, $temp,
+    public static function succFalse($input, $area_code, $inp, $temp,
                                      $invalid_values = null,
                                      $error_code = null,
                                      $error_msg_part1 = null,
-                                     $error_msg_part2 = null)
+                                     $error_msg_part2 = null,
+                                     $client_row_id = null)
     {
-//        dd($input);
+        $record = [];
 
         if (isset($invalid_values) && in_array($temp, $invalid_values)) {
             $error_code = 1001;
@@ -122,10 +121,11 @@ class ServicesResponse
             }
 
         }
-
-        $record = [
-            'ClientRowID' => $client_row_id,
-        ];
+        if (!empty($client_row_id)) {
+            $record = [
+                'ClientRowID' => $client_row_id,
+            ];
+        }
         if ($input == "Telephone") {
 
             $record += [
@@ -263,16 +263,16 @@ class ServicesResponse
         ) {
             if ($v['preaventypename'] ||
                 $v['preaven']) {
-                $result .= $v['preaventypename'];
-                $result .= ' ';
+//                $result .= $v['preaventypename'];
+//                $result .= ' ';
                 $result .= $v['preaven'];
                 $result .= '، ';
 
             }
             if ($v['avenuetypename'] ||
                 $v['avenue']) {
-                $result .= $v['avenuetypename'];
-                $result .= ' ';
+//                $result .= $v['avenuetypename'];
+//                $result .= ' ';
                 $result .= $v['avenue'];
                 $result .= '، ';
 

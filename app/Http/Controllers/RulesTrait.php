@@ -61,17 +61,62 @@ trait RulesTrait
                         'Telephones.*.AreaCode' => 'required',
                         'Signature' => 'string'
                     ]
+                ],
+                'reqStatus' => [
+                    'postcode' => [
+                        'NationalCode' => 'required|numeric',
+                        'PostalCode' => 'required|numeric'
+                    ]
+                ],
+                'requestPostCode' => [
+                    'postcode' => [
+                        'TransactionID' => 'integer|required',
+                        'ClientRowID' => 'integer|required',
+                        'localityCode' => 'integer|required',
+                        'unit' => 'integer',
+                        'landUse' => 'integer|required',
+                        'firstName' => 'string|required',
+                        'lastName' => 'string|required',
+                        'mobileNo' => 'numeric|required',
+                        'prePhoneNo' => 'numeric|required',
+                        'phoneNo' => 'numeric|required',
+                        'email' => 'string|required',
+                        'nearestPostCode' => 'string|required',
+                        'address' => 'string|required',
+                        'houseNo' => 'string|required',
+                        'floorNo' => 'integer|required',
+                        'sideFloor' => 'string|required',
+                        'lat' => 'numeric|required',
+                        'lon' => 'numeric|required',
+                        'Signature' => 'string'
+                    ]
+                ],
+                'trackRequest' => [
+                    'postcode' => [
+                        'ClientRowID' => 'integer|required',
+                        'FollowUpCode' => 'string|required',
+                        'signature' => 'string'
+                    ]
+                ],
+                'generateCertificateByTxn' => [
+                    'postcode' => [
+                        'TransactionID' => 'integer|required',
+                        'ClientRowID' => 'integer|required',
+                        'PostCode' => 'string|required',
+                        'signature' => 'string'
+                    ]
                 ]
             ]
         ];
     }
 
-    public static function checkRules($data, $function,$code=null, $input=null)
+    public static function checkRules($data, $function, $code = null, $input = null)
     {
         $controller = __CLASS__;
+
         if (strpos($controller, 'GnafController') == true) {
             $category = '';
-            if (array_key_exists('Postcodes', $data)) {
+            if (array_key_exists('Postcodes', $data) || array_key_exists('PostalCode', $data) || $input == 'Postcode') {
                 $category = 'postcode';
             } elseif (array_key_exists('Telephones', $data)) {
                 $category = 'telephone';
@@ -86,6 +131,10 @@ trait RulesTrait
                     $data,
                     self::rules()[$controller][$function][$category]
                 );
+                if ($validation->fails() && $function == 'requestPostCode') {
+                    $data = array($data);
+
+                }
             }
         } else {
             if (is_object($data)) {
@@ -94,6 +143,7 @@ trait RulesTrait
                     self::rules()[$controller][$function]
                 );
             } else {
+
                 $validation = Validator::make(
                     $data,
                     self::rules()[$controller][$function]
@@ -104,18 +154,18 @@ trait RulesTrait
         if ($validation->fails()) {
             if (strpos($controller, 'GnafController') == true) {
                 $error_msg = trans('messages.custom.error.2115');
+
                 throw new ServicesException(
                     $data,
                     $input,
                     null,
                     2115,
                     $error_msg,
-                    );
+                );
             } elseif (strpos($controller, 'RouteCRUDController') == true) {
-                throw new RequestRulesException($validation->errors()->getMessages(),$code);
+                throw new RequestRulesException($validation->errors()->getMessages(), $code);
             }
         }
-
 
         return $validation->validated();
     }

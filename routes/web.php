@@ -17,7 +17,10 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 $router->group(['prefix' => '/api/v0'], function () use ($router) {
-    $router->post("/PostCode/ReqStatus", "GnafController@reqStatus");
+    $router->post("/Postcode/ReqStatus", "GnafController@reqStatus");
+    $router->post("/Postcode/RequestPostCode", "GnafController@requestPostCode");
+    $router->post("Postcode/TrackRequest", "GnafController@trackRequest");
+    $router->post("Postcode/GenerateCertificateByTxn","GnafController@generateCertificateByTxn");
     $router->post("/{input}/{output}", "GnafController@search");
 
 

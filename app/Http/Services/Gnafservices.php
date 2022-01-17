@@ -7,6 +7,9 @@ use App\Helpers\ServicesResponse;
 use App\Models\Post;
 use App\Exceptions\ServicesException;
 use App\Modules\GavahiPdf;
+use App\Modules\Payment;
+use App\Modules\TaskManager;
+use Illuminate\Support\Facades\Log;
 
 class Gnafservices
 {
@@ -126,10 +129,43 @@ class Gnafservices
             'unit' => 'SideFloor',
             'CertificateUrl' => 'CertificateUrl',
             'CertificateNo' => 'CertificateNo',
+            'building_name' => 'BuildingName'
+
             //            'description'=>'Description',
 
 
+        ],
+        'ReqStatus' => [
+            'nationalcode' => 'NationalCode',
+            'postalcode' => 'PostalCode',
+            'statename' => 'Province',
+            'townname' => 'City',
+            'address' => 'Address',
+            'tels' => 'Mob',
+            'AcceptDateTime' => 'AcceptDateTime',
+            'st_x' => 'Lon',
+            'st_y' => 'Lat'
+        ],
+        'GenerateCertificateByTxn' => [
+
+            'statename' => 'Province',
+            'townname' => 'TownShip',
+            'zonename' => 'Zone',
+            'villagename' => 'Village',
+            'locationtype' => 'LocalityType',
+            'locationname' => 'LocalityName',
+            'population_point_id' => 'LocalityCode',
+            'parish' => 'SubLocality',
+            'avenue' => 'Street',
+            'preaven' => 'Street2',
+            'plate_no' => 'HouseNumber',
+            'floorno' => 'Floor',
+            'unit' => 'SideFloor',
+            'CertificateUrl' => 'CertificateUrl',
+            'CertificateNo' => 'CertificateNo',
+            'building_name' => 'BuildingName'
         ]
+
 
     ];
     public static $composite_database_fields = [
@@ -158,6 +194,8 @@ class Gnafservices
             'locationname',
             'population_point_id',
             'parish',
+            'avenuetypename',
+            'preaventypename',
             'avenue',
             'preaven',
             'plate_no',
@@ -197,6 +235,8 @@ class Gnafservices
             'locationname',
             'population_point_id',
             'parish',
+            'avenuetypename',
+            'preaventypename',
             'avenue',
             'preaven',
             'plate_no',
@@ -218,7 +258,9 @@ class Gnafservices
             'locationname',
             'population_point_id',
             'parish',
+            'avenuetypename',
             'avenue',
+            'preaventypename',
             'preaven',
             'plate_no',
             'floorno',
@@ -226,7 +268,7 @@ class Gnafservices
             'building_name',
             'province_id',
 //            'description',
-        'tels',
+            'tels',
 
         ],
         'Workshop' => [
@@ -279,15 +321,50 @@ class Gnafservices
             'locationname',
             'population_point_id',
             'parish',
+            'avenuetypename',
+            'preaventypename',
             'preaven',
             'avenue',
             'plate_no',
             'floorno',
             'unit',
-            'province_id'
+            'province_id',
+            'building_name'
+
             //description
 
-        ]
+        ],
+        'ReqStatus' => [
+            'nationalcode',
+            'postalcode',
+            'statename',
+            'townname',
+            'address',
+            'tels',
+            'AcceptDateTime',
+            'ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))'
+        ],
+        'GenerateCertificateByTxn' => [
+            'statename',
+            'townname',
+            'zonename',
+            'villagename',
+            'locationtype',
+            'locationname',
+            'population_point_id',
+            'parish',
+            'avenuetypename',
+            'preaventypename',
+            'preaven',
+            'avenue',
+            'plate_no',
+            'floorno',
+            'unit',
+            'province_id',
+            'building_name'
+            //description
+
+        ],
     ];
     public static $output_attrs = [];
 
@@ -298,7 +375,6 @@ class Gnafservices
         $query_field = array_diff($a, $invalid_values);
         $out_fields = self::createDatabaseFields($input, $output_alias);
         $output_result = self::createResponseFields($input, $output_alias);
-//dd($input_alias, $output_alias, $values, $input, $invalid_values, $scopes);
         $action_areas = null;
         if ($scopes) {
             $action_areas = $scopes['action_areas'];
@@ -306,19 +382,16 @@ class Gnafservices
         if ($input_alias == "tels") {
             $result = Post::searchInArray($input_alias, $query_field, $out_fields, $action_areas);
 //            dd($result);
-        } else {
+        } elseif ($input_alias == "postalcode" && $output_alias == 'ReqStatus') {
+            //todo call the model related to address verification
+        } elseif ($input_alias == "postalcode") {
             $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
         }
         if ($output_alias == 'GenerateCertificate') {
             $gavahi_info = GavahiPdf::getLinkAndBarcode($query_field, $values, $input, $invalid_values);
-            if ($gavahi_info['link']) {
-                foreach ($result as $k => $r) {
-                    $result[$k]['CertificateUrl'] = $gavahi_info['link'];
-                    $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
-                }
-            } else {
-                $msg = trans('messages.custom.error.msg_part1');
-                throw new ServicesException($values, $input, $invalid_values, 9070, $msg, null);
+            foreach ($result as $k => $r) {
+                $result[$k]['CertificateUrl'] = $gavahi_info['link'];
+                $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
             }
         }
 
@@ -342,7 +415,6 @@ class Gnafservices
             $name [] = 'postalcode';
 
         }
-
         return $name;
 
     }
@@ -360,6 +432,131 @@ class Gnafservices
         }
 //        dd($input, $name);
         return $name;
+
+    }
+
+    public static function requestPostCode($data, $scopes, $user_id, $input)
+    {
+        $values[0] = [
+            'ClientRowID' => $data['ClientRowID'],
+            'TransactionID' => $data['TransactionID']
+        ];
+        $tracking_code = Payment::getTrackingCode($data['TransactionID'], $values, $input);
+        $task_manager_params = self::createTaskManagerParams($data, $scopes, $tracking_code, $user_id);
+        $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input);
+        if ($status['message'] == 'successfully created') {
+            $msg = trans('messages.custom.success.ResMsg');
+            $res_data = [
+                "FollowUpCode" => $tracking_code,
+                "Succ" => true,
+                "Errors" => null
+            ];
+            return ServicesResponse::makeResponse2(0, $msg, $res_data);
+
+        } else {
+            $msg = trans('messages.custom.error.transaction_part1') . $data['TransactionID'] . trans('messages.custom.error.transaction_part2');
+            throw new ServicesException(null,null,[],null,null,null,-35, $msg, 'empty');
+        }
+    }
+
+    public static function createTaskManagerParams($data, $scopes, $tracking_code, $reporter_id)
+    {
+        $params ["task_type_id"] = 6;
+        $params["reporter"] = $reporter_id;
+        if (array_key_exists('province', $scopes['action_areas'])) {
+            $params["action_area"]["province"]["id"] = $scopes['action_areas']['province'][0];
+        }
+        if (array_key_exists('city', $scopes['action_areas'])) {
+            $params["action_area"]["city"]["id"] = $scopes['action_areas']['city'][0];
+        }
+        if (array_key_exists('county', $scopes['action_areas'])) {
+            $params["action_area"]["county"]["id"] = $scopes['action_areas']['county'][0];
+        }
+
+        $params["unique_features"] = [
+            "name" => $data['firstName'],
+            "surname" => $data['lastName'],
+            "user_mobile" => $data['mobileNo'],
+            "phone_number" => $data["prePhoneNo"] . $data["phoneNo"],
+            "detailed_address" => $data['address'],
+            "detailed_address_geom" => [
+                $data['lon'],
+                $data['lat']
+            ],
+            "tracking_number" => $tracking_code,
+            "nearest_postcode" => $data['nearestPostCode'],
+            "units" => [
+                [
+                    "floor" => $data['floorNo'],
+                    "unit" => $data['sideFloor'],
+                    "activityType" => $data['landUse']
+                ]
+            ],
+            "population_point_id" => $data['localityCode'],
+            "email" => $data['email'],
+            "plate_no" => $data['houseNo'],
+            "province" => array_key_exists('unit', $data) ? $data['unit'] : null
+        ];
+        return $params;
+    }
+
+    public static function trackRequest($data,$input)
+    {
+        $code = 0;
+        $msg = trans('messages.custom.success.ResMsg');
+        $values[0] = [
+            'ClientRowID' => $data['ClientRowID'],
+            'FollowUpCode' => $data['FollowUpCode']
+        ];
+        $task = TaskManager::getTask($data['FollowUpCode'],$values,$input);
+        $postalcode = $task['value'][0]['unique_features']['units'][0]['postcode'];
+        $state = $task['value'][0]['state'];
+
+        $res_data = [
+            "FollowUpCode" => $data['FollowUpCode'],
+            "StatusCode" => $state,
+            "Succ" => true,
+            "Errors" => null
+        ];
+        if ($state == 'done') {
+            $res_data["PostCode"] = $postalcode;
+        } elseif ($state == 'failed') {
+            $code = 12;
+            $msg = trans('messages.custom.error.ResMsg');
+            $res_data = null;
+        }
+        return ServicesResponse::makeResponse2($code, $msg, $res_data);
+    }
+
+    public static function generateCertificateByTxn($data, $input, $invalid_values, $output_alias, $scopes, $input_alias)
+    {
+        $values[0] = [
+            "ClientRowID" => $data['ClientRowID'],
+            "PostCode" => $data['PostCode']
+        ];
+        $tracking_code = Payment::getTrackingCode($data['TransactionID'],$values,$input);
+
+        $postcodes[0] = $data['PostCode'];
+        $action_areas = null;
+        if ($scopes) {
+            $action_areas = $scopes['action_areas'];
+        }
+        $out_fields = self::createDatabaseFields($input, $output_alias);
+        $a = collect($values)->pluck(Constant::INPUTM[$input])->all();
+        $query_field = array_diff($a, $invalid_values);
+
+        if (!empty($tracking_code)) {
+            $gavahi_info = GavahiPdf::getLinkAndBarcode($postcodes, $values, $input, $invalid_values);
+            $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
+            $result[$data['PostCode']]['CertificateUrl'] = $gavahi_info['link'];
+            $result[$data['PostCode']]['CertificateNo'] = $gavahi_info['extra_info'][$data['PostCode']]['barcode'];
+            $output_result = self::createResponseFields($input, $output_alias);
+            return ServicesResponse::makeResponse($input, $result, null, $output_alias, $values, $output_result, $invalid_values);
+
+        } else {
+            //throw exception??
+            Log::error('tacking code null');
+        }
 
     }
 }
