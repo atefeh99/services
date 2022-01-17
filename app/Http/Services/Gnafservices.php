@@ -464,6 +464,7 @@ class Gnafservices
     {
         $params ["task_type_id"] = 6;
         $params["reporter"] = $reporter_id;
+
         if (array_key_exists('province', $scopes['action_areas'])) {
             $params["action_area"]["province"]["id"] = $scopes['action_areas']['province'][0];
         }
