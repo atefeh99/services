@@ -369,7 +369,7 @@ class Gnafservices
     public static $output_attrs = [];
 
 
-    public static function serach($input_alias, $output_alias, $values, $input, $invalid_values, $scopes,$user_id)
+    public static function serach($input_alias, $output_alias, $values, $input, $invalid_values, $scopes, $user_id)
     {
         $result = [];
         $a = collect($values)->pluck(Constant::INPUTM[$input])->all();
@@ -389,7 +389,7 @@ class Gnafservices
             $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
         }
         if ($output_alias == 'GenerateCertificate') {
-            $gavahi_info = GavahiPdf::getLinkAndBarcode($query_field, $user_id, $values, $input, $invalid_values);
+            $gavahi_info = GavahiPdf::getLinkAndBarcode($query_field, $user_id, null, $values, $input, $invalid_values);
             foreach ($result as $k => $r) {
                 $result[$k]['CertificateUrl'] = $gavahi_info['link'];
                 $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
@@ -444,7 +444,7 @@ class Gnafservices
         ];
         $tracking_code = Payment::getTrackingCode($data['TransactionID'], $values, $input);
         $task_manager_params = self::createTaskManagerParams($data, $scopes, $tracking_code, $user_id);
-        $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input,$user_id);
+        $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input, $user_id);
         if ($status['message'] == 'successfully created') {
             $msg = trans('messages.custom.success.ResMsg');
             $res_data = [
@@ -503,7 +503,7 @@ class Gnafservices
         return $params;
     }
 
-    public static function trackRequest($data, $input,$user_id)
+    public static function trackRequest($data, $input, $user_id)
     {
         $code = 0;
         $msg = trans('messages.custom.success.ResMsg');
@@ -511,7 +511,7 @@ class Gnafservices
             'ClientRowID' => $data['ClientRowID'],
             'FollowUpCode' => $data['FollowUpCode']
         ];
-        $task = TaskManager::getTask($data['FollowUpCode'], $values, $input,$user_id);
+        $task = TaskManager::getTask($data['FollowUpCode'], $values, $input, $user_id);
         $state = $task['value'][0]['state'];
 
         $res_data = [
@@ -530,7 +530,7 @@ class Gnafservices
         return ServicesResponse::makeResponse2($code, $msg, $res_data);
     }
 
-    public static function generateCertificateByTxn($data,$user_id, $input, $invalid_values, $output_alias, $scopes, $input_alias)
+    public static function generateCertificateByTxn($data, $user_id, $input, $invalid_values, $output_alias, $scopes, $input_alias)
     {
         $values[0] = [
             "ClientRowID" => $data['ClientRowID'],
@@ -548,7 +548,7 @@ class Gnafservices
         $query_field = array_diff($a, $invalid_values);
 
         if (!empty($tracking_code)) {
-            $gavahi_info = GavahiPdf::getLinkAndBarcode($postcodes, $user_id ,$values, $input, $invalid_values);
+            $gavahi_info = GavahiPdf::getLinkAndBarcode($postcodes, $user_id, $tracking_code, $values, $input, $invalid_values);
             $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
             $result[$data['PostCode']]['CertificateUrl'] = $gavahi_info['link'];
             $result[$data['PostCode']]['CertificateNo'] = $gavahi_info['extra_info'][$data['PostCode']]['barcode'];
