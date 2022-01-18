@@ -512,7 +512,6 @@ class Gnafservices
             'FollowUpCode' => $data['FollowUpCode']
         ];
         $task = TaskManager::getTask($data['FollowUpCode'], $values, $input,$user_id);
-        $postalcode = $task['value'][0]['unique_features']['units'][0]['postcode'];
         $state = $task['value'][0]['state'];
 
         $res_data = [
@@ -522,7 +521,7 @@ class Gnafservices
             "Errors" => null
         ];
         if ($state == 'done') {
-            $res_data["PostCode"] = $postalcode;
+            $res_data["PostCode"] = $task['value'][0]['unique_features']['units'][0]['postcode'];;
         } elseif ($state == 'failed') {
             $code = 12;
             $msg = trans('messages.custom.error.ResMsg');
