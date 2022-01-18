@@ -65,7 +65,7 @@ class GnafController extends ApiController
             __FUNCTION__,
             null,
             $input);
-        $result = Gnafservices::trackRequest($data,$input);
+        $result = Gnafservices::trackRequest($data,$input,$user_id);
         return $this->respondArrayResult($result);
     }
 
@@ -87,6 +87,7 @@ class GnafController extends ApiController
         if (!empty($request->header("x-scopes"))) {
             $scopes = Scopes::getScopes($request->header("x-scopes"));
         }
+
         $result = Gnafservices::requestPostCode($data, $scopes, $user_id,$input);
         return $this->respondArrayResult($result);
     }

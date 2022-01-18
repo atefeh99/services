@@ -23,8 +23,8 @@ class Payment
                     RequestOptions::HEADERS => [
                         'Content-Type' => ' application/json',
                         'x-scopes' => 'admin',
-//                        'x-api-key' => env('GNAF_API_KEY'),
-//                        'token' => env('GNAF_TOKEN'),
+                        'x-api-key' => env('GNAF_API_KEY'),
+                        'token' => env('GNAF_TOKEN'),
 
                     ],
                     RequestOptions::QUERY => ['$filter' => 'payment_ref_num eq ' . $transaction_id]
@@ -50,6 +50,7 @@ class Payment
         }
 
         $body = json_decode($resp->getBody()->getContents(), true);
+
         if (array_key_exists('tracking_code', $body['value'][0]) && !empty($body['value'][0]['tracking_code'])) {
             return $body['value'][0]['tracking_code'];
         } else {
