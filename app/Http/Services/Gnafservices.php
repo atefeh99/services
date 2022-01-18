@@ -444,7 +444,7 @@ class Gnafservices
         ];
         $tracking_code = Payment::getTrackingCode($data['TransactionID'], $values, $input);
         $task_manager_params = self::createTaskManagerParams($data, $scopes, $tracking_code, $user_id);
-        $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input);
+        $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input,$user_id);
         if ($status['message'] == 'successfully created') {
             $msg = trans('messages.custom.success.ResMsg');
             $res_data = [
@@ -464,7 +464,6 @@ class Gnafservices
     {
         $params ["task_type_id"] = 6;
         $params["reporter"] = $reporter_id;
-        dd($scopes);
         if (array_key_exists('province', $scopes['action_areas'])) {
             $params["action_area"]["province"]["id"] = $scopes['action_areas']['province'][0];
         }
@@ -499,10 +498,12 @@ class Gnafservices
             "plate_no" => $data['houseNo'],
             "province" => array_key_exists('unit', $data) ? $data['unit'] : null
         ];
+        Log::info(print_r($scopes, TRUE));
+        Log::info(print_r($params, TRUE));
         return $params;
     }
 
-    public static function trackRequest($data, $input)
+    public static function trackRequest($data, $input,$user_id)
     {
         $code = 0;
         $msg = trans('messages.custom.success.ResMsg');
@@ -510,7 +511,7 @@ class Gnafservices
             'ClientRowID' => $data['ClientRowID'],
             'FollowUpCode' => $data['FollowUpCode']
         ];
-        $task = TaskManager::getTask($data['FollowUpCode'], $values, $input);
+        $task = TaskManager::getTask($data['FollowUpCode'], $values, $input,$user_id);
         $postalcode = $task['value'][0]['unique_features']['units'][0]['postcode'];
         $state = $task['value'][0]['state'];
 

@@ -50,6 +50,7 @@ class Payment
         }
 
         $body = json_decode($resp->getBody()->getContents(), true);
+
         if (array_key_exists('tracking_code', $body['value'][0]) && !empty($body['value'][0]['tracking_code'])) {
             return $body['value'][0]['tracking_code'];
         } else {
