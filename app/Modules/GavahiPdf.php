@@ -8,9 +8,11 @@ use GuzzleHttp\RequestOptions;
 
 class GavahiPdf
 {
-    public static function getLinkAndBarcode($postalcodes,$user_id, $values = null, $input = null, $invalid_values = null)
+    public static function getLinkAndBarcode($postalcodes,$user_id,$tracking_code, $values = null, $input = null,
+                                             $invalid_values = null)
     {
         $params['postalcode'] = $postalcodes;
+        $params['tracking_code']= $tracking_code;
         $error_msg_part1 = trans('messages.custom.error.msg_part1');
 
         $client = new Client();
