@@ -31,6 +31,8 @@ class Payment
                 ]
             );
         } catch (\Exception $e) {
+            dd($e->getMessage());
+
             if($e->getCode() === 404){
                 $res_msg = trans('messages.custom.error.transaction_not_found');
                 throw new ServicesException(null,
