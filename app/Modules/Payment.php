@@ -23,8 +23,8 @@ class Payment
                     RequestOptions::HEADERS => [
                         'Content-Type' => ' application/json',
                         'x-scopes' => 'admin',
-                        'x-api-key' => env('GNAF_API_KEY'),
-                        'token' => env('GNAF_TOKEN'),
+//                        'x-api-key' => env('GNAF_API_KEY'),
+//                        'token' => env('GNAF_TOKEN'),
 
                     ],
                     RequestOptions::QUERY => ['$filter' => 'payment_ref_num eq ' . $transaction_id]
