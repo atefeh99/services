@@ -220,6 +220,7 @@ class Post extends Model
 
     }
 
+
     public function scopeActionArea($query, $scopes)
     {
         if (array_key_exists('province', $scopes)) {
@@ -263,6 +264,11 @@ class Post extends Model
         }
         return $this->attributes['floorno'];
     }
+    public static function getActionArea($lat,$lon)
+    {
+        self::where(DB::raw('ST_X(geom)=?'));
+    }
+
 
 
 }

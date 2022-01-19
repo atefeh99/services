@@ -31,6 +31,7 @@ class TaskManager
                 ]
             );
         } catch (\Exception $e) {
+            dd($e->getMessage());
             $error_msg_part1 = trans('messages.custom.error.msg_part1');
             throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
         }

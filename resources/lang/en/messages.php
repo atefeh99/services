@@ -41,7 +41,8 @@ return [
             'activitycodeMsg' => ': کدفعالیت در بانک کدپستی موجود نیست',
             'transaction_part1' => 'تراکنش مالی با شماره ی ',
             'transaction_part2' => 'ناموفق می باشد',
-            'transaction_not_found' => 'تراکنش مالی یافت نشد'
+            'transaction_not_found' => 'تراکنش مالی یافت نشد',
+            '-8'=> 'خطای ذخیره درخواست'
         ],
         'success' => [
             'send' => 'send successfully',

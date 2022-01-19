@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Helpers\Constant;
 use App\Helpers\ServicesResponse;
+use App\Models\PopulationPoint;
 use App\Models\Post;
 use App\Exceptions\ServicesException;
 use App\Modules\GavahiPdf;
@@ -436,14 +437,15 @@ class Gnafservices
 
     }
 
-    public static function requestPostCode($data, $scopes, $user_id, $input)
+    public static function requestPostCode($data, $user_id, $input)
     {
         $values[0] = [
             'ClientRowID' => $data['ClientRowID'],
             'TransactionID' => $data['TransactionID']
         ];
         $tracking_code = Payment::getTrackingCode($data['TransactionID'], $values, $input);
-        $task_manager_params = self::createTaskManagerParams($data, $scopes, $tracking_code, $user_id);
+        $action_areas = PopulationPoint::getActionAreas($data['localityCode']);
+        $task_manager_params = self::createTaskManagerParams($data, $tracking_code, $user_id, $action_areas);
         $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input, $user_id);
         if ($status['message'] == 'successfully created') {
             $msg = trans('messages.custom.success.ResMsg');
@@ -460,18 +462,34 @@ class Gnafservices
         }
     }
 
-    public static function createTaskManagerParams($data, $scopes, $tracking_code, $reporter_id)
+
+    public static function createTaskManagerParams($data, $tracking_code, $reporter_id, $action_areas)
     {
         $params ["task_type_id"] = 6;
         $params["reporter"] = $reporter_id;
-        if (array_key_exists('province', $scopes['action_areas'])) {
-            $params["action_area"]["province"]["id"] = $scopes['action_areas']['province'][0];
+        if ($action_areas[0]['province_id']) {
+            $params["action_area"]["province"]["id"] = $action_areas[0]['province_id'];
         }
-        if (array_key_exists('city', $scopes['action_areas'])) {
-            $params["action_area"]["city"]["id"] = $scopes['action_areas']['city'][0];
+        if ($action_areas[0]['province'] && $action_areas[0]['province']['name']) {
+            $params["action_area"]["province"]["name"] = $action_areas[0]['province']['name'];
         }
-        if (array_key_exists('county', $scopes['action_areas'])) {
-            $params["action_area"]["county"]["id"] = $scopes['action_areas']['county'][0];
+        if ($action_areas[0]['county_id']) {
+            $params["action_area"]["county"]["id"] = $action_areas[0]['county_id'];
+        }
+        if ($action_areas[0]['county'] && $action_areas[0]['county']['name']) {
+            $params["action_area"]["county"]["name"] = $action_areas[0]['county']['name'];
+        }
+        if ($action_areas[0]['zone_id']) {
+            $params["action_area"]["zone"]["id"] = $action_areas[0]['zone_id'];
+        }
+        if ($action_areas[0]['zone'] && $action_areas[0]['zone']['name']) {
+            $params["action_area"]["zone"]["name"] = $action_areas[0]['zone']['name'];
+        }
+        if ($action_areas[0]['rural_id']) {
+            $params["action_area"]["rural"]["id"] = $action_areas[0]['rural_id'];
+        }
+        if ($action_areas[0]['rural'] && $action_areas[0]['rural']['name']) {
+            $params["action_area"]["rural"]["name"] = $action_areas[0]['rural']['name'];
         }
 
         $params["unique_features"] = [
@@ -498,8 +516,6 @@ class Gnafservices
             "plate_no" => $data['houseNo'],
             "province" => array_key_exists('unit', $data) ? $data['unit'] : null
         ];
-        Log::info(print_r($scopes, TRUE));
-        Log::info(print_r($params, TRUE));
         return $params;
     }
 
@@ -559,6 +575,12 @@ class Gnafservices
             //throw exception??
             Log::error('tacking code null');
         }
+
+    }
+
+    public static function getActionAreasFromLatAndLon($lat, $lon)
+    {
+        Post::getActionArea($lat, $lon);
 
     }
 }
