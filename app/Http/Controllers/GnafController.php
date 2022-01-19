@@ -83,12 +83,8 @@ class GnafController extends ApiController
         if (!isset($user_id)) {
             throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
         }
-        $scopes = null;
-        if (!empty($request->header("x-scopes"))) {
-            $scopes = Scopes::getScopes($request->header("x-scopes"));
-        }
 
-        $result = Gnafservices::requestPostCode($data, $scopes, $user_id,$input);
+        $result = Gnafservices::requestPostCode($data, $user_id,$input);
         return $this->respondArrayResult($result);
     }
 
