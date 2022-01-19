@@ -577,10 +577,4 @@ class Gnafservices
         }
 
     }
-
-    public static function getActionAreasFromLatAndLon($lat, $lon)
-    {
-        Post::getActionArea($lat, $lon);
-
-    }
 }
