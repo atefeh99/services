@@ -30,7 +30,6 @@ class GavahiPdf
                 ]
             );
         } catch (\Exception $e) {
-            dd($e->getMessage());
             throw new ServicesException($values, $input, $invalid_values, 9070, $error_msg_part1);
 
         }

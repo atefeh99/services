@@ -23,16 +23,14 @@ class Payment
                     RequestOptions::HEADERS => [
                         'Content-Type' => ' application/json',
                         'x-scopes' => 'admin',
-                        'x-api-key' => env('GNAF_API_KEY'),
-                        'token' => env('GNAF_TOKEN'),
+//                        'x-api-key' => env('GNAF_API_KEY'),
+//                        'token' => env('GNAF_TOKEN'),
 
                     ],
                     RequestOptions::QUERY => ['$filter' => 'payment_ref_num eq ' . $transaction_id]
                 ]
             );
         } catch (\Exception $e) {
-            dd($e->getMessage());
-
             if($e->getCode() === 404){
                 $res_msg = trans('messages.custom.error.transaction_not_found');
                 throw new ServicesException(null,

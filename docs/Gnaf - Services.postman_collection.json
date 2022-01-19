@@ -904,7 +904,13 @@
 			"name": "ActivityCodeByPostCode",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8000013786\"\n        },\n        {\n            \"ClientRowID\": 129,\n            \"PostCode\": \"8913614838\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
@@ -1013,7 +1019,18 @@
 			"name": "‫‪GenerateCertificate‬‬",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"ClientBatchID\": 38,\n    \"Postcodes\": [\n        {\n            \"ClientRowID\": 120,\n            \"PostCode\": \"8913614838\"\n        },\n        {\n            \"ClientRowID\": 129,\n            \"PostCode\": \"891369\"\n        },\n         {\n            \"ClientRowID\": 129,\n            \"PostCode\": \"8913615968\"\n        }\n    ],\n    \"Signature\": \"\"\n}",
@@ -1208,7 +1225,18 @@
 			"name": "AddressByTelephone‬‬",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":5217087},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":222}\n\n],\n\"Signature\":\"\"\n}",
@@ -1237,7 +1265,18 @@
 			"name": "AddressAndPostcodeByTelephone‬‬",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":5217087},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":8000},{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":6225070}\n\n],\n\"Signature\":\"\"\n}",
@@ -1295,7 +1334,18 @@
 			"name": "WorkshopByTelephone‬‬",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":5217087},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":8000},{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":6225070}\n\n],\n\"Signature\":\"\"\n}",
@@ -1324,10 +1374,21 @@
 			"name": "PositionByTelephone‬‬",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":1},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":222}\n\n],\n\"Signature\":\"\"\n}",
+					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":5217087},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":222}\n\n],\n\"Signature\":\"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1353,7 +1414,18 @@
 			"name": "ValidateTelephone‬‬",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "\n{\n\"ClientBatchID\":7,\n\"Telephones\":[\n{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":5217087},{\"ClientRowID\":129,\"AreaCode\":20,\"TelephoneNo\":8000},{\"ClientRowID\":120,\"AreaCode\":21,\"TelephoneNo\":6225070}\n\n],\n\"Signature\":\"\"\n}",
