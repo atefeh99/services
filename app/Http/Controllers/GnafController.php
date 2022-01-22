@@ -7,6 +7,7 @@ use App\Exceptions\ServicesException;
 use App\Exceptions\UnauthorizedUserException;
 use App\Helpers\Constant;
 use App\Helpers\Scopes;
+use App\Helpers\ServicesResponse;
 use App\Models\Post;
 use App\Http\Services\Gnafservices;
 use App\Models\Province;
@@ -212,6 +213,19 @@ class GnafController extends ApiController
             null,
             $input);
         $result = Gnafservices::AddressByCertificateNo($data,$user_id);
+        return $this->respondArrayResult($result);
+
+    }
+    public function Version(Request $request)
+    {
+        $user_id = $request->header('x-user-id');
+
+        if (!isset($user_id)) {
+            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 7000);
+        }
+
+        $msg  = trans('messages.custom.success.ResMsg');
+        $result = ServicesResponse::makeResponse2(0,$msg,'1.0.0.0');
         return $this->respondArrayResult($result);
 
     }

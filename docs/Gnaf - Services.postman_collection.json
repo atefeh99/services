@@ -688,6 +688,32 @@
 			]
 		},
 		{
+			"name": "Version",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-user-id",
+						"value": "1234",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{Host}}/api/v0/BaseInfo/Version",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"BaseInfo",
+						"Version"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "AddressByPostcode‬‬",
 			"request": {
 				"method": "POST",
@@ -1572,6 +1598,41 @@
 						"v0",
 						"Postcode",
 						"GenerateCertificateByTxn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddressByCertificateNo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-user-id",
+						"value": "1234",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientRowID\":\"\",\n    \"CertificateNo\":\"\",\n    \"signature\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/api/v0/Certificate/AddressByCertificateNo",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"Certificate",
+						"AddressByCertificateNo"
 					]
 				}
 			},
