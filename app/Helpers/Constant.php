@@ -15,7 +15,8 @@ class Constant
     ];
     const INPUTM = [
         'Telephone' => 'TelephoneNo',
-        'Postcode' => 'PostCode'
+        'Postcode' => 'PostCode',
+        'CertificateNo'=>'CertificateNo'
     ];
 
     const ALIASES = [
@@ -29,6 +30,7 @@ class Constant
 //        'electricity' => 'elec',
         'Postcode' => 'postalcode',
         'postalcode' => 'Postcode',
+        'CertificateNo' => 'CertificateNo'
 //        'modernization' => 'nosazi',
 //        'mobile' => 'mobile',
 //        'parcel' => 'parcel',
@@ -71,7 +73,8 @@ class Constant
         'AccuratePosition' => 'AccuratePosition',
         'EstimatedPosition' => 'EstimatedPosition',
         'ReqStatus' => 'ReqStatus',
-        'GenerateCertificateByTxn'=> 'GenerateCertificateByTxn'
+        'GenerateCertificateByTxn'=> 'GenerateCertificateByTxn',
+        'Certification' => 'Certification'
     ];
 
     const CAN = [

@@ -41,9 +41,8 @@ class GavahiPdf
 
     }
 
-    public static function AddressByCertificateNo($data, $user_id)
+    public static function AddressByCertificateNo($data, $user_id,$values, $input)
     {
-//        {{Host}}?geo=0&$filter= barcode eq '21212817790534906111'
         $Cert_no = $data['CertificateNo'];
 
         $client = new Client();
@@ -56,7 +55,6 @@ class GavahiPdf
                         'Content-Type' => ' application/json',
                         'x-user-id' => $user_id
                     ],
-//                    RequestOptions::JSON => $params,
                     RequestOptions::QUERY => ['geo' => 0, '$filter' => "barcode eq '$Cert_no'"]
                 ]
             );
@@ -64,19 +62,20 @@ class GavahiPdf
         } catch (\Exception $e) {
             if ($e->getCode() == '410') {
                 $msg = trans('messages.custom.error.1102');
-                throw new ServicesException(null, null, [], null, null, null, 1102, $msg, 'empty');
+                throw new ServicesException($values, $input, [], 1102, $msg);
             } elseif ($e->getCode() == '404') {
-                $msg = trans('messages.custom.error.1103');
-                throw new ServicesException(null, null, [], null, null, null, 1103, $msg, 'empty');
+                $msg = trans('messages.custom.error.1101');
+                throw new ServicesException($values, $input,[], 1101, $msg);
             } else{
                 $msg = trans('messages.custom.error.msg_part1');
-                throw new ServicesException(null, null, [], null, null, null,9070 , $msg, 'empty');
+                throw new ServicesException($values, $input, [], 9070, $msg);
             }
 
         }
 
         if ($resp->getStatusCode() >= 299 || $resp->getStatusCode() < 200) {
-        throw new ServicesException(null, null, [], null, null, null,9070 , $msg, 'empty');
+            $msg = trans('messages.custom.error.msg_part1');
+            throw new ServicesException($values, $input, [], 9070, $msg);
         }
 
         return json_decode($resp->getBody()->getContents(), true);

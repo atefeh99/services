@@ -165,6 +165,9 @@ class Gnafservices
             'CertificateUrl' => 'CertificateUrl',
             'CertificateNo' => 'CertificateNo',
             'building_name' => 'BuildingName'
+        ],
+        'Certification'=>[
+            'link' => 'link'
         ]
 
 
@@ -453,7 +456,6 @@ class Gnafservices
             && !$validate) {
             $name ['postalcode'] = 'PostCode';
         }
-//        dd($input, $name);
         return $name;
 
     }
@@ -599,17 +601,18 @@ class Gnafservices
 
     }
 
-    public static function AddressByCertificateNo($data, $user_id)
+    public static function AddressByCertificateNo($data, $user_id,$input,$input_alias,$output_alias)
     {
-        $link = GavahiPdf::AddressByCertificateNo($data, $user_id);
-        $msg = trans('messages.custom.success.ResMsg');
-
-        $res_data = [
-            'Succ' => true,
-            'Link' => $link['data']['link'],
-            'Errors' => null
+        $values[0] = [
+            'ClientRowID'=> $data['ClientRowID'],
+            'CertificateNo' => $data['CertificateNo']
         ];
-        return ServicesResponse::makeResponse2(0, $msg, $res_data);
+        $link = GavahiPdf::AddressByCertificateNo($data, $user_id,$values, $input);
+        $output_result = self::createResponseFields($input, $output_alias);
+
+        $info[$data['CertificateNo']]['link'] = $link['data']['link'];
+
+        return ServicesResponse::makeResponse($input,$info,$input_alias,$output_alias,$values,$output_result,[]);
 
     }
 }
