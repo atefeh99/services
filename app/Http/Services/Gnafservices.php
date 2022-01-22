@@ -366,6 +366,27 @@ class Gnafservices
             //description
 
         ],
+        'AddressByCertificateNo' => [
+            'statename',
+            'townname',
+            'zonename',
+            'villagename',
+            'locationtype',
+            'locationname',
+            'population_point_id',
+            'parish',
+            'avenuetypename',
+            'preaventypename',
+            'preaven',
+            'avenue',
+            'plate_no',
+            'floorno',
+            'unit',
+            'province_id',
+            'building_name'
+            //description
+
+        ],
     ];
     public static $output_attrs = [];
 
@@ -575,6 +596,20 @@ class Gnafservices
             //throw exception??
             Log::error('tacking code null');
         }
+
+    }
+
+    public static function AddressByCertificateNo($data, $user_id)
+    {
+        $link = GavahiPdf::AddressByCertificateNo($data, $user_id);
+        $msg = trans('messages.custom.success.ResMsg');
+
+        $res_data = [
+            'Succ' => true,
+            'Link' => $link['data']['link'],
+            'Errors' => null
+        ];
+        return ServicesResponse::makeResponse2(0, $msg, $res_data);
 
     }
 }

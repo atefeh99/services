@@ -25,96 +25,7 @@ class GnafController extends ApiController
         'postalcode' => 'integer',
     ];
 
-    public function generateCertificateByTxn(Request $request)
-    {
-        $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1000);
-        }
-        $input = 'Postcode';
-        $output = 'GenerateCertificateByTxn';
-        $data = self::checkRules(
-            $request->all(),
-            __FUNCTION__,
-            null,
-            $input);
-        $scopes = null;
-        if (!empty($request->header("x-scopes"))) {
-            $scopes = Scopes::getScopes($request->header("x-scopes"));
-        }
-        $invalid_inputs = self::findInvalids($data, 'PostCode', 2);
-        $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
-        $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
-
-        $result = Gnafservices::generateCertificateByTxn($data,$user_id, $input, $invalid_inputs, $output_alias, $scopes,$input_alias);
-        return $this->respondArrayResult($result);
-    }
-
-    public function trackRequest(Request $request)
-    {
-        $user_id = $request->header('x-user-id');
-
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 2000);
-        }
-        $input = 'Postcode';
-//        $output = 'trackRequest';
-        $data = self::checkRules(
-            $request->all(),
-            __FUNCTION__,
-            null,
-            $input);
-        $result = Gnafservices::trackRequest($data,$input,$user_id);
-        return $this->respondArrayResult($result);
-    }
-
-    public function requestPostCode(Request $request)
-    {
-        $input = 'Postcode';
-        $output = 'requestPostCode';
-        $data = self::checkRules(
-            $request->all(),
-            __FUNCTION__,
-            null,
-            $input);
-        $user_id = $request->header('x-user-id');
-
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
-        }
-
-        $result = Gnafservices::requestPostCode($data, $user_id,$input);
-        return $this->respondArrayResult($result);
-    }
-
-//    public function reqStatus(Request $request)
-//    {
-//        $input = 'Postcode';
-//        $output = 'ReqStatus';
-//        $data = self::checkRules(
-//            $request->all(),
-//            __FUNCTION__,
-//            null,
-//            $input);
-//        $error_msg1 = trans('messages.custom.error.2117');
-//        $scopes = null;
-//        if (!empty($request->header("x-scopes"))) {
-//            $scopes = Scopes::getScopes($request->header("x-scopes"));
-//        }
-//        $inputval[0] = $data;
-//        $invalid_inputs = self::findInvalids($data, 'PostalCode', 2);
-//        $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
-//        $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
-//        if (!array_key_exists($input_alias, Constant::CAN)) {
-//            throw new ServicesException($inputval, $input, [], 2117, $error_msg1);
-//        }
-//        if (!in_array($output_alias, Constant::CAN[$input_alias])) {
-//            throw new ServicesException($inputval, $input, [], 2118, $error_msg1);
-//        }
-//        $response = Gnafservices::serach($input_alias, $output_alias, $inputval, $input, $invalid_inputs, $scopes,/*$user_id*/);
-//
-//    }
 
 
     public function search($input, $output, Request $request)
@@ -194,6 +105,115 @@ class GnafController extends ApiController
                 return $invalids;
 
         }
+    }
+    //    public function reqStatus(Request $request)
+//    {
+//        $input = 'Postcode';
+//        $output = 'ReqStatus';
+//        $data = self::checkRules(
+//            $request->all(),
+//            __FUNCTION__,
+//            null,
+//            $input);
+//        $error_msg1 = trans('messages.custom.error.2117');
+//        $scopes = null;
+//        if (!empty($request->header("x-scopes"))) {
+//            $scopes = Scopes::getScopes($request->header("x-scopes"));
+//        }
+//        $inputval[0] = $data;
+//        $invalid_inputs = self::findInvalids($data, 'PostalCode', 2);
+//        $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
+//        $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
+//        if (!array_key_exists($input_alias, Constant::CAN)) {
+//            throw new ServicesException($inputval, $input, [], 2117, $error_msg1);
+//        }
+//        if (!in_array($output_alias, Constant::CAN[$input_alias])) {
+//            throw new ServicesException($inputval, $input, [], 2118, $error_msg1);
+//        }
+//        $response = Gnafservices::serach($input_alias, $output_alias, $inputval, $input, $invalid_inputs, $scopes,/*$user_id*/);
+//
+//    }
+
+    public function requestPostCode(Request $request)
+    {
+        $input = 'Postcode';
+        $output = 'requestPostCode';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $user_id = $request->header('x-user-id');
+
+        if (!isset($user_id)) {
+            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
+        }
+
+        $result = Gnafservices::requestPostCode($data, $user_id,$input);
+        return $this->respondArrayResult($result);
+    }
+
+
+    public function trackRequest(Request $request)
+    {
+        $user_id = $request->header('x-user-id');
+
+        if (!isset($user_id)) {
+            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 2000);
+        }
+        $input = 'Postcode';
+//        $output = 'trackRequest';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $result = Gnafservices::trackRequest($data,$input,$user_id);
+        return $this->respondArrayResult($result);
+    }
+    public function generateCertificateByTxn(Request $request)
+    {
+        $user_id = $request->header('x-user-id');
+
+        if (!isset($user_id)) {
+            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1000);
+        }
+        $input = 'Postcode';
+        $output = 'GenerateCertificateByTxn';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $scopes = null;
+        if (!empty($request->header("x-scopes"))) {
+            $scopes = Scopes::getScopes($request->header("x-scopes"));
+        }
+        $invalid_inputs = self::findInvalids($data, 'PostCode', 2);
+        $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
+        $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
+
+        $result = Gnafservices::generateCertificateByTxn($data,$user_id, $input, $invalid_inputs, $output_alias, $scopes,$input_alias);
+        return $this->respondArrayResult($result);
+    }
+
+    public function addressByCertificateNo(Request $request)
+    {
+        $user_id = $request->header('x-user-id');
+
+        if (!isset($user_id)) {
+            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1003);
+        }
+        $input = 'CertificateNo';
+        $output = 'Certification';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $result = Gnafservices::AddressByCertificateNo($data,$user_id);
+        return $this->respondArrayResult($result);
+
     }
 
 

@@ -105,6 +105,13 @@ trait RulesTrait
                         'PostCode' => 'string|required',
                         'signature' => 'string'
                     ]
+                ],
+                'addressByCertificateNo' => [
+                    'CertificateNo' => [
+                        'ClientRowID' => 'integer|required',
+                        'CertificateNo' => 'numeric|required',
+                        'signature' => 'string'
+                    ]
                 ]
             ]
         ];
@@ -113,13 +120,14 @@ trait RulesTrait
     public static function checkRules($data, $function, $code = null, $input = null)
     {
         $controller = __CLASS__;
-
         if (strpos($controller, 'GnafController') == true) {
             $category = '';
             if (array_key_exists('Postcodes', $data) || array_key_exists('PostalCode', $data) || $input == 'Postcode') {
                 $category = 'postcode';
             } elseif (array_key_exists('Telephones', $data)) {
                 $category = 'telephone';
+            }elseif(array_key_exists('CertificateNo', $data)){
+                $category = 'CertificateNo';
             }
             if (is_object($data)) {
                 $validation = Validator::make(
