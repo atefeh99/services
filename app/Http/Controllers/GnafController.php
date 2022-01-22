@@ -201,18 +201,22 @@ class GnafController extends ApiController
     public function addressByCertificateNo(Request $request)
     {
         $user_id = $request->header('x-user-id');
+        $input = 'CertificateNo';
+        $output = 'Certification';
+        $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
+        $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
+
 
         if (!isset($user_id)) {
             throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1003);
         }
-        $input = 'CertificateNo';
-        $output = 'Certification';
+
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,
             null,
             $input);
-        $result = Gnafservices::AddressByCertificateNo($data,$user_id);
+        $result = Gnafservices::AddressByCertificateNo($data,$user_id,$input,$input_alias,$output_alias);
         return $this->respondArrayResult($result);
 
     }
