@@ -161,7 +161,6 @@ class GnafController extends ApiController
             throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 2000);
         }
         $input = 'Postcode';
-//        $output = 'trackRequest';
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,

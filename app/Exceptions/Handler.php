@@ -5,8 +5,6 @@ namespace App\Exceptions;
 use App\Helpers\Constant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Throwable;
@@ -27,12 +25,6 @@ class Handler extends ExceptionHandler
      *
      * @var array
      */
-//    protected $dontFlash = [
-//        'current_password',
-//        'password',
-//        'password_confirmation',
-//    ];
-
     /**
      * Register the exception handling callbacks for the application.
      *
@@ -41,7 +33,6 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         $debug = env('APP_DEBUG');
-
         if ($debug) {
             return parent::report($exception);
         }
@@ -62,10 +53,7 @@ class Handler extends ExceptionHandler
                 ],
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR
             ];
-
             if ($e instanceof ServicesException) {
-//                dd($return_object);
-
                 $return_object = [
                     'ResCode' => $e->getResCode(),
                     'ResMsg' => $e->getResMessage(),
@@ -94,17 +82,13 @@ class Handler extends ExceptionHandler
                     ],
                     'status' => Response::HTTP_NOT_FOUND
                 ];
-
             } elseif ((strpos($request->getRequestUri(), 'Telephones') == true
                     || strpos($request->getRequestUri(), 'Postcode') == true) &&
-                ($e instanceof QueryException))
-            {
+                ($e instanceof QueryException)) {
                 $input = $request->input;
                 $info = $request->input(Constant::INPUTMAPS[$input]);
                 $msg_part1 = trans('messages.custom.error.msg_part1');
                 $msg_part2 = trans('messages.custom.error.9070');
-
-
 
                 throw new ServicesException($info,
                     $input,

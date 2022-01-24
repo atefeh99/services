@@ -81,7 +81,6 @@ class ServicesResponse
     public static function getCodeAndMsg($data)
     {
         $array = collect($data)->unique('Succ')->values();
-//        dd(count($array));
         if (!$array[0]['Succ'] && count($array) == 1) {
             $msg = trans('messages.custom.error.ResMsg');
             $code = Constant::ERROR_RESPONSE_CODE;
@@ -156,8 +155,6 @@ class ServicesResponse
 
     public static function succTrue($info, $client_row_id, $input, $area_code, $inp, $temp, $output, $output_result)
     {
-//        dd($input);
-
         $record = [
             'ClientRowID' => $client_row_id,
         ];
@@ -211,7 +208,6 @@ class ServicesResponse
 
     public static function makeAddressString($v)
     {
-//        dd($v);
         $result = "";
         //state
         if (array_key_exists('statename', $v) && $v['statename']) {
@@ -272,16 +268,12 @@ class ServicesResponse
         ) {
             if ($v['preaventypename'] ||
                 $v['preaven']) {
-//                $result .= $v['preaventypename'];
-//                $result .= ' ';
                 $result .= $v['preaven'];
                 $result .= '، ';
 
             }
             if ($v['avenuetypename'] ||
                 $v['avenue']) {
-//                $result .= $v['avenuetypename'];
-//                $result .= ' ';
                 $result .= $v['avenue'];
                 $result .= '، ';
 
@@ -315,7 +307,6 @@ class ServicesResponse
             && $v['unit']) {
             $result .= 'واحد ';
             $result .= $v['unit'];
-//            $result .= '، ';
         }
 
         return $result;

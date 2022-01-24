@@ -177,8 +177,6 @@ class InitData extends Migration
             'fa_name' => 'اعتبارسنجی شماره تلفن ثابت',
             'document_link' => '',
         ]);
-
-
     }
 
     /**

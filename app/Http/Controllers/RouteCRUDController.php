@@ -16,7 +16,6 @@ class RouteCRUDController extends ApiController
 
     public function filter($request)
     {
-
         $odata_query = OdataQueryParser::parse($request->fullUrl());
         if (OdataQueryParser::isFails()) {
             return $this->respondInvalidParams('1001', OdataQueryParser::getErrors(), 'bad request');
@@ -47,7 +46,6 @@ class RouteCRUDController extends ApiController
 
         return ['take' => $take, 'skip' => $skip];
     }
-
 
     public function createItem(Request $request)
     {

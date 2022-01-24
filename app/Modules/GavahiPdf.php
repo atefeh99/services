@@ -37,11 +37,9 @@ class GavahiPdf
             throw new ServicesException($values, $input, $invalid_values, 9070, $error_msg_part1);
         }
         return json_decode($resp->getBody()->getContents(), true);;
-
-
     }
 
-    public static function AddressByCertificateNo($data, $user_id,$values, $input)
+    public static function AddressByCertificateNo($data, $user_id, $values, $input)
     {
         $Cert_no = $data['CertificateNo'];
 
@@ -65,14 +63,13 @@ class GavahiPdf
                 throw new ServicesException($values, $input, [], 1102, $msg);
             } elseif ($e->getCode() == '404') {
                 $msg = trans('messages.custom.error.1101');
-                throw new ServicesException($values, $input,[], 1101, $msg);
-            } else{
+                throw new ServicesException($values, $input, [], 1101, $msg);
+            } else {
                 $msg = trans('messages.custom.error.msg_part1');
                 throw new ServicesException($values, $input, [], 9070, $msg);
             }
 
         }
-
         if ($resp->getStatusCode() >= 299 || $resp->getStatusCode() < 200) {
             $msg = trans('messages.custom.error.msg_part1');
             throw new ServicesException($values, $input, [], 9070, $msg);
@@ -80,8 +77,6 @@ class GavahiPdf
 
         return json_decode($resp->getBody()->getContents(), true);
 
-
     }
-
 
 }
