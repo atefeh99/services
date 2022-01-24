@@ -12,15 +12,13 @@ class Redis
 
     private static function createRedisClient()
     {
-
-            self::$redis = new Client(
-                [
-                    'scheme' => 'tcp',
-                    'host' => env('REDIS_HOST', '127.0.0.1'),
-                    'port' => env('REDIS_PORT', 6379)
-                ]
-            );
-
-            return self::$redis;
+        self::$redis = new Client(
+            [
+                'scheme' => 'tcp',
+                'host' => env('REDIS_HOST', '127.0.0.1'),
+                'port' => env('REDIS_PORT', 6379)
+            ]
+        );
+        return self::$redis;
     }
 }

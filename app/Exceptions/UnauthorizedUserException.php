@@ -37,7 +37,6 @@ class UnauthorizedUserException extends Exception
         $this->code = $code;
     }
 
-
     public function getFields()
     {
         return $this->fields;

@@ -14,7 +14,6 @@ class Data
     public $Result;
     public $Errors;
 
-
     public function __construct($client_row_id,
                                 $succ,
                                 $result,

@@ -6,12 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-//use Illuminate\Support\Facades\DB;
-
-
 class Route extends Model
 {
-    // use Common;
     use SoftDeletes;
 
     protected $fillable = [
@@ -22,9 +18,6 @@ class Route extends Model
 
     ];
     protected $table = 'routes';
-
-//    protected static $_table = 'post_data_integrated';
-
 
     public static function createItem($data)
     {
@@ -54,9 +47,7 @@ class Route extends Model
         if (isset($data['document_link'])) {
             $item->uri = $data['uri'];
         }
-
         return $item->save();
-
     }
 
     public static function deleteRecord($id)
@@ -68,24 +59,20 @@ class Route extends Model
     public static function showAll($take, $skip)
     {
         $count = self::all()->count();
-        if ($skip>$count){
+        if ($skip > $count) {
             throw new ModelNotFoundException();
         }
-        if($take+$skip > $count){
-            $take = $count-$skip;
+        if ($take + $skip > $count) {
+            $take = $count - $skip;
         }
         $items = self::all(['id', 'uri', 'description', 'fa_name', 'document_link'])
             ->skip($skip)
             ->take($take)
             ->toArray();
-
-
         if (count($items) > 0) {
             return ['items' => $items, 'count' => $count];
         } else {
             throw new ModelNotFoundException();
         }
     }
-
-
 }

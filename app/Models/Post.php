@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Exceptions\RequestRulesException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\Log;
 
 class Post extends Model
 {
@@ -54,7 +52,6 @@ class Post extends Model
         ]
     ];
 
-//
     protected $table = 'sina_units';
     protected static $_table = 'sina_units';
 
@@ -112,7 +109,7 @@ class Post extends Model
     {
 //toDo if statement should be correct
         $result = self::query();
-        if (in_array("ST_X(geom),ST_Y(geom)",$out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))",$out_fields)) {
+        if (in_array("ST_X(geom),ST_Y(geom)", $out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields)) {
             $i = 0;
             $count = count($out_fields);
             $temp = "";
@@ -128,15 +125,11 @@ class Post extends Model
                 }
                 return $query;
             });
-//            $result = Post::whereRaw("$input @> array[?]", [$value]);
             if (!empty($scopes)) {
                 $result = $result->actionArea($scopes);
             }
             $result = $result->get(DB::raw($temp))
                 ->toArray();
-//            dd($result);
-
-
         } else {
             try {
                 $result = $result->where(function ($query) use ($value) {
@@ -148,17 +141,13 @@ class Post extends Model
                 if (!empty($scopes)) {
                     $result = $result->actionArea($scopes);
                 }
-//                dd($result->toSql());
                 $result = $result->get($out_fields)
                     ->toArray();
-//                dd($result);
-
             } catch (\Exception $e) {
-                dd($e->getMessage());
+                Log::error($e->getMessage());
             }
         }
         $f = [];
-//        dd($result);
         foreach ($value as $item) {
             foreach ($result as $r) {
                 foreach ($r['tels'] as $tel) {
@@ -169,17 +158,16 @@ class Post extends Model
             }
         }
         if (count($f) > 0) {
-//            dd($f);
             return $f;
         } else {
             return null;
         }
-
     }
 
     public static function search($input, $values, $out_fields, $scopes)
     {
-        if (in_array("ST_X(geom),ST_Y(geom)",$out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))",$out_fields)) {
+        $result = [];
+        if (in_array("ST_X(geom),ST_Y(geom)", $out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields)) {
             $i = 0;
             $count = count($out_fields);
             $temp = "";
@@ -208,7 +196,7 @@ class Post extends Model
                     ->keyby($input)
                     ->toArray();
             } catch (\Exception $e) {
-                dd($e->getMessage());
+                Log::error($e->getMessage());
 
             }
         }
@@ -226,13 +214,11 @@ class Post extends Model
         if (array_key_exists('province', $scopes)) {
             $query->whereIn('province_id', $scopes['province']);
         }
-
         return $query;
     }
 
     public function getTelsAttribute()
     {
-
         if ($this->attributes['tels'] == "[null]" || !$this->attributes['tels'])
             return null;
 
@@ -264,8 +250,4 @@ class Post extends Model
         }
         return $this->attributes['floorno'];
     }
-
-
-
-
 }

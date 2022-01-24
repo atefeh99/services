@@ -166,7 +166,7 @@ class Gnafservices
             'CertificateNo' => 'CertificateNo',
             'building_name' => 'BuildingName'
         ],
-        'Certification'=>[
+        'Certification' => [
             'link' => 'link'
         ]
 
@@ -407,7 +407,6 @@ class Gnafservices
         }
         if ($input_alias == "tels") {
             $result = Post::searchInArray($input_alias, $query_field, $out_fields, $action_areas);
-//            dd($result);
         } elseif ($input_alias == "postalcode" && $output_alias == 'ReqStatus') {
             //todo call the model related to address verification
         } elseif ($input_alias == "postalcode") {
@@ -601,18 +600,17 @@ class Gnafservices
 
     }
 
-    public static function AddressByCertificateNo($data, $user_id,$input,$input_alias,$output_alias)
+    public static function AddressByCertificateNo($data, $user_id, $input, $input_alias, $output_alias)
     {
         $values[0] = [
-            'ClientRowID'=> $data['ClientRowID'],
+            'ClientRowID' => $data['ClientRowID'],
             'CertificateNo' => $data['CertificateNo']
         ];
-        $link = GavahiPdf::AddressByCertificateNo($data, $user_id,$values, $input);
+        $link = GavahiPdf::AddressByCertificateNo($data, $user_id, $values, $input);
         $output_result = self::createResponseFields($input, $output_alias);
 
         $info[$data['CertificateNo']]['link'] = $link['data']['link'];
-
-        return ServicesResponse::makeResponse($input,$info,$input_alias,$output_alias,$values,$output_result,[]);
+        return ServicesResponse::makeResponse($input, $info, $input_alias, $output_alias, $values, $output_result, []);
 
     }
 }

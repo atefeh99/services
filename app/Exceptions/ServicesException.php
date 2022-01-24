@@ -25,7 +25,6 @@ class ServicesException extends Exception
         $data = null
     )
     {
-
         parent::__construct();
         $this->res_code = empty($res_code) ? Constant::ERROR_RESPONSE_CODE : $res_code;
         $this->res_message = empty($res_message) ? trans('messages.custom.error.ResMsg') : $res_message;
@@ -38,6 +37,7 @@ class ServicesException extends Exception
         $PorT = Constant::INPUTM[$input];
         $area_code = '';
         $client_row_id = null;
+        $data = [];
         foreach ($info as $i) {
             if (isset($i['ClientRowID'])) {
                 $client_row_id = $i['ClientRowID'];
@@ -78,7 +78,6 @@ class ServicesException extends Exception
 
     public function getResCode()
     {
-//        dd($this->res_code);
         return $this->res_code;
     }
 
