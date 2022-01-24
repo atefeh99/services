@@ -114,8 +114,7 @@ class ServicesResponse
                     $error_code = 1201;
                     $error_msg_part1 = trans('messages.custom.error.1201');
                     $error_msg_part2 = '';
-                }
-                if ($temp <= 0) {
+                } elseif ($temp <= 0) {
                     $error_code = 1202;
                     $error_msg_part1 = trans('messages.custom.error.1202');
                     $error_msg_part2 = '';
