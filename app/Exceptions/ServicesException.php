@@ -38,6 +38,7 @@ class ServicesException extends Exception
         $PorT = Constant::INPUTM[$input];
         $area_code = '';
         $client_row_id = null;
+        $data=[];
         foreach ($info as $i) {
             if (isset($i['ClientRowID'])) {
                 $client_row_id = $i['ClientRowID'];
@@ -78,7 +79,6 @@ class ServicesException extends Exception
 
     public function getResCode()
     {
-//        dd($this->res_code);
         return $this->res_code;
     }
 

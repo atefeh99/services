@@ -10,7 +10,6 @@ class ServicesResponse
 
     public static function makeResponse($input, $info, $input_alias, $output_alias, $values, $output_result, $invalid_values)
     {
-//        dd($input, $info, $input_alias, $output_alias, $values, $output_result, $invalid_values);
 //        dd($input_alias);
         $inp = Constant::INPUTM[$input];
         $data = array();
@@ -104,12 +103,23 @@ class ServicesResponse
         $record = [];
 
         if (isset($invalid_values) && in_array($temp, $invalid_values)) {
-            $error_code = 1001;
-            $error_msg_part2 = '';
+
             if ($input == 'Postcode') {
+                $error_code = 1001;
                 $error_msg_part1 = trans('messages.custom.error.invalidPostcode');
-            } else {
-                $error_msg_part1 = '';
+                $error_msg_part2 = '';
+
+            } elseif ($input == 'Telephone') {
+                if ($area_code <= 0) {
+                    $error_code = 1201;
+                    $error_msg_part1 = trans('messages.custom.error.1201');
+                    $error_msg_part2 = '';
+                }
+                if ($temp <= 0) {
+                    $error_code = 1202;
+                    $error_msg_part1 = trans('messages.custom.error.1202');
+                    $error_msg_part2 = '';
+                }
             }
         } elseif (empty($error_code)) {
             $error_code = 9040;

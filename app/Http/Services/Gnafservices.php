@@ -407,7 +407,6 @@ class Gnafservices
         }
         if ($input_alias == "tels") {
             $result = Post::searchInArray($input_alias, $query_field, $out_fields, $action_areas);
-//            dd($result);
         } elseif ($input_alias == "postalcode" && $output_alias == 'ReqStatus') {
             //todo call the model related to address verification
         } elseif ($input_alias == "postalcode") {

@@ -27,8 +27,6 @@ class GnafController extends ApiController
     ];
 
 
-
-
     public function search($input, $output, Request $request)
     {
         $user_id = $request->header('x-user-id');
@@ -36,7 +34,6 @@ class GnafController extends ApiController
         if (!isset($user_id)) {
             throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 4000);
         }
-
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,
@@ -60,21 +57,17 @@ class GnafController extends ApiController
         }
 
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
-//        dd($inputval);
-//        $count = is_string($inputval) ? 1 : count($inputval);
         $inp = $input;
         $invalid_inputs = self::findInvalids($inputval, Constant::INPUTM[$inp]);
-//        $input_alias = in_array($input, array_keys(Constant::ALIASES)) ? Constant::ALIASES[$input] : $input;
         $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
         $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
-//        $error_msg1 = trans('messages.custom.error.2117');
         if (!array_key_exists($input_alias, Constant::CAN)) {
             throw new ServicesException($inputval, $input, [], 2117, $error_msg1);
         }
         if (!in_array($output_alias, Constant::CAN[$input_alias])) {
             throw new ServicesException($inputval, $input, [], 2118, $error_msg1);
         }
-        $response = Gnafservices::serach($input_alias, $output_alias, $inputval, $input, $invalid_inputs, $scopes,$user_id);
+        $response = Gnafservices::serach($input_alias, $output_alias, $inputval, $input, $invalid_inputs, $scopes, $user_id);
 
         return $this->respondArrayResult($response);
     }
@@ -96,6 +89,11 @@ class GnafController extends ApiController
                     return $invalids;
                 } else {
                     //todo tel regex
+                    foreach ($inputval as $item) {
+                        if ($item[$inp] <= 0 || $item['AreaCode'] <= 0) {
+                            $invalids[] = $item[$inp];
+                        }
+                    }
                     return $invalids;
                 }
             case 2:
@@ -150,7 +148,7 @@ class GnafController extends ApiController
             throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
         }
 
-        $result = Gnafservices::requestPostCode($data, $user_id,$input);
+        $result = Gnafservices::requestPostCode($data, $user_id, $input);
         return $this->respondArrayResult($result);
     }
 
@@ -169,9 +167,10 @@ class GnafController extends ApiController
             __FUNCTION__,
             null,
             $input);
-        $result = Gnafservices::trackRequest($data,$input,$user_id);
+        $result = Gnafservices::trackRequest($data, $input, $user_id);
         return $this->respondArrayResult($result);
     }
+
     public function generateCertificateByTxn(Request $request)
     {
         $user_id = $request->header('x-user-id');
@@ -194,7 +193,7 @@ class GnafController extends ApiController
         $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
         $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
 
-        $result = Gnafservices::generateCertificateByTxn($data,$user_id, $input, $invalid_inputs, $output_alias, $scopes,$input_alias);
+        $result = Gnafservices::generateCertificateByTxn($data, $user_id, $input, $invalid_inputs, $output_alias, $scopes, $input_alias);
         return $this->respondArrayResult($result);
     }
 
@@ -216,10 +215,11 @@ class GnafController extends ApiController
             __FUNCTION__,
             null,
             $input);
-        $result = Gnafservices::AddressByCertificateNo($data,$user_id,$input,$input_alias,$output_alias);
+        $result = Gnafservices::AddressByCertificateNo($data, $user_id, $input, $input_alias, $output_alias);
         return $this->respondArrayResult($result);
 
     }
+
     public function Version(Request $request)
     {
         $user_id = $request->header('x-user-id');
@@ -228,8 +228,8 @@ class GnafController extends ApiController
             throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 7000);
         }
 
-        $msg  = trans('messages.custom.success.ResMsg');
-        $result = ServicesResponse::makeResponse2(0,$msg,'1.0.0.0');
+        $msg = trans('messages.custom.success.ResMsg');
+        $result = ServicesResponse::makeResponse2(0, $msg, '1.0.0.0');
         return $this->respondArrayResult($result);
 
     }

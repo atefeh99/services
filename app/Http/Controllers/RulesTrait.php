@@ -16,6 +16,12 @@ use Illuminate\Validation\Rule;
 trait RulesTrait
 {
 
+    public static function messages()
+    {
+        return [
+            'required' => trans('messages.custom.error.-7'),
+        ];
+    }
 
     public static function rules()
     {
@@ -124,25 +130,35 @@ trait RulesTrait
             $category = '';
             if (array_key_exists('Postcodes', $data) || array_key_exists('PostalCode', $data) || $input == 'Postcode') {
                 $category = 'postcode';
+
             } elseif (array_key_exists('Telephones', $data)) {
                 $category = 'telephone';
-            }elseif(array_key_exists('CertificateNo', $data)){
+            } elseif (array_key_exists('CertificateNo', $data)) {
                 $category = 'CertificateNo';
+            }
+            if ((array_key_exists('Postcodes', $data) && count($data['Postcodes']) > 10) ||
+                (array_key_exists('Telephones', $data) && count($data['Telephones']) > 10)
+            ) {
+                $msg = trans('messages.custom.error.-1');
+                throw new ServicesException(null,
+                    null,
+                    null,
+                    null,
+                    null, null, -1, $msg, 'empty');
             }
             if (is_object($data)) {
                 $validation = Validator::make(
                     $data->all(),
-                    self::rules()[$controller][$function][$category]
+                    self::rules()[$controller][$function][$category],
+                    self::messages()
                 );
             } else {
                 $validation = Validator::make(
                     $data,
-                    self::rules()[$controller][$function][$category]
-                );
-                if ($validation->fails() && $function == 'requestPostCode') {
-                    $data = array($data);
+                    self::rules()[$controller][$function][$category],
+                    self::messages()
 
-                }
+                );
             }
         } else {
             if (is_object($data)) {
@@ -161,14 +177,37 @@ trait RulesTrait
 
         if ($validation->fails()) {
             if (strpos($controller, 'GnafController') == true) {
-                $error_msg = trans('messages.custom.error.2115');
+                $errors = $validation->errors()->toArray();
+                foreach ($errors as $error) {
+                    foreach ($error as $item) {
+                        if ($item == trans('messages.custom.error.-7')) {
+                            throw new ServicesException(
+                                null,
+                                null,
+                                [],
+                                null,
+                                null,
+                                null,
+                                -7,
+                                trans('messages.custom.error.-7'),
+                                'empty'
+                            );
+                        }
+                    }
+                }
+
+
 
                 throw new ServicesException(
-                    $data,
-                    $input,
                     null,
-                    2115,
-                    $error_msg,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    -6,
+                    trans('messages.custom.error.-6'),
+                    'empty'
                 );
             } elseif (strpos($controller, 'RouteCRUDController') == true) {
                 throw new RequestRulesException($validation->errors()->getMessages(), $code);
