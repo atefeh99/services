@@ -10,10 +10,8 @@ class ServicesResponse
 
     public static function makeResponse($input, $info, $input_alias, $output_alias, $values, $output_result, $invalid_values)
     {
-//        dd($input_alias);
         $inp = Constant::INPUTM[$input];
         $data = array();
-
         //loop through postcodes or telephones
         foreach ($values as $PorT) {
             $area_code = '';
@@ -51,8 +49,6 @@ class ServicesResponse
                 } else {
                     $data[$temp] = self::succTrue($info[$temp], $client_row_id, $input, $area_code, $inp, $temp, $output_alias, $output_result);
                 }
-
-
 //no data for the specific postcode or tel
             } else {
                 $data[$temp] = self::succFalse($input, $area_code, $inp, $temp, $invalid_values, null, null, null, $client_row_id);
@@ -149,7 +145,6 @@ class ServicesResponse
             ]
         ];
         return $record;
-
     }
 
 
@@ -300,7 +295,6 @@ class ServicesResponse
                 'همکف' : $v['floorno'];
             $result .= '، ';
         }
-
 
 //        unit
         if (array_key_exists('unit', $v)
