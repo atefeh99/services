@@ -23,7 +23,6 @@ class ServicesResponse
             if (array_key_exists($temp, $info)) {
                 //there is record but column is null
                 if (($output_alias == 'Telephones' && !$info[$temp]['tels'])
-//                    || ($output_alias == 'AddressAndTelephones' && !$info[$temp]['tels'] && !$info[$temp]['statename'] && !$info[$temp]['townname'] && !$info[$temp]['zonename'])
                     || ($output_alias == 'BuildingUnits' && !$info[$temp]['unit'])
                     || ($output_alias == 'Postcode' && !$info[$temp]['postalcode'])
                     || (($output_alias == 'Position' || $output_alias == 'EstimatedPosition' || $output_alias == 'AccuratePosition')
