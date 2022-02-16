@@ -167,7 +167,9 @@ class Post extends Model
     public static function search($input, $values, $out_fields, $scopes)
     {
         $result = [];
-        if (in_array("ST_X(geom),ST_Y(geom)", $out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields)) {
+        if (in_array("ST_X(geom),ST_Y(geom)", $out_fields)
+            || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields))
+        {
             $i = 0;
             $count = count($out_fields);
             $temp = "";
@@ -206,6 +208,10 @@ class Post extends Model
             return null;
         }
 
+    }
+    public function postcodeByParcel()
+    {
+//        self::whereIn("ST_X(parcel)");
     }
 
 

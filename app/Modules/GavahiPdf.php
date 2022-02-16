@@ -36,7 +36,7 @@ class GavahiPdf
         if ($resp->getStatusCode() >= 299 || $resp->getStatusCode() < 200) {
             throw new ServicesException($values, $input, $invalid_values, 9070, $error_msg_part1);
         }
-        return json_decode($resp->getBody()->getContents(), true);;
+        return json_decode($resp->getBody()->getContents(), true);
     }
 
     public static function AddressByCertificateNo($data, $user_id, $values, $input)

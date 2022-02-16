@@ -7,10 +7,12 @@ use App\Helpers\ServicesResponse;
 use App\Models\PopulationPoint;
 use App\Models\Post;
 use App\Exceptions\ServicesException;
+use App\Modules\AppRegistration;
 use App\Modules\GavahiPdf;
 use App\Modules\Payment;
 use App\Modules\TaskManager;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\Helper;
 
 class Gnafservices
 {
@@ -168,6 +170,9 @@ class Gnafservices
         ],
         'Certification' => [
             'link' => 'link'
+        ],
+        'PostcodeByParcel' => [
+            'postalcode' => 'PostCode'
         ]
 
 
@@ -390,9 +395,24 @@ class Gnafservices
             //description
 
         ],
+        'PostcodeByParcel' => [
+            'postalcode'
+        ]
     ];
     public static $output_attrs = [];
 
+    public static function auth($data)
+    {
+        $appreg = new AppRegistration();
+        $user_token = $appreg->userToken($data);
+        $myself = $appreg->myself($user_token);
+        return [
+            'access_token' => $myself['api_key'],
+            'token_type' => 'bearer',
+            'expires_in' => $myself['expires_in']
+        ];
+
+    }
 
     public static function serach($input_alias, $output_alias, $values, $input, $invalid_values, $scopes, $user_id)
     {
@@ -613,4 +633,30 @@ class Gnafservices
         return ServicesResponse::makeResponse($input, $info, $input_alias, $output_alias, $values, $output_result, []);
 
     }
+
+    public static function postcodeByParcel($values, $invalid_values, $input, $output_alias, $scopes)
+    {
+
+        $query_field = array_udiff_assoc($values['Parcels'], $invalid_values, function ($a, $b) {
+            if ($a['Latitude'] != $b['Latitude'] && $a['Longitude'] != $b['Longitude']) return $a;
+        });
+        $out_fields = self::createDatabaseFields($input, $output_alias);
+        $output_result = self::createResponseFields($input, $output_alias);
+        $action_areas = null;
+        if ($scopes) {
+            $action_areas = $scopes['action_areas'];
+        }
+
+        $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
+
+        if (isset($result)) {
+
+            return ServicesResponse::makeResponse($input, $result, $input_alias, $output_alias, $values, $output_result, $invalid_values);
+        } else {
+            throw new ServicesException($values, $input, $invalid_values);
+        }
+
+    }
+
+
 }

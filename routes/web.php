@@ -16,6 +16,10 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+//auth
+$router->post("/token","GnafController@auth");
+
+//services
 $router->group(['prefix' => '/api/v0'], function () use ($router) {
     $router->post("/Postcode/ReqStatus", "GnafController@reqStatus");
     $router->post("/Postcode/RequestPostCode", "GnafController@requestPostCode");
@@ -23,10 +27,13 @@ $router->group(['prefix' => '/api/v0'], function () use ($router) {
     $router->post("/Postcode/GenerateCertificateByTxn","GnafController@generateCertificateByTxn");
     $router->post("/Certificate/AddressByCertificateNo","GnafController@addressByCertificateNo");
     $router->post("/BaseInfo/Version","GnafController@Version");
+    $router->post("/Parcel/PostcodeByParcel","GnafController@postcodeByParcel");
     $router->post("/{input}/{output}", "GnafController@search");
 
 
 });
+
+//routes
 $router->group(['prefix' => '/routes'], function () use ($router) {
     $router->get("/{id}", "RouteCRUDController@readItem");
     $router->post("", "RouteCRUDController@createItem");
@@ -36,4 +43,5 @@ $router->group(['prefix' => '/routes'], function () use ($router) {
 
 
 });
+
 

@@ -26,6 +26,17 @@ class GnafController extends ApiController
         'postalcode' => 'integer',
     ];
 
+    public function auth(Request $request)
+    {
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__
+        );
+        $result = Gnafservices::auth($data);
+        return $this->respondArrayResult($result);
+
+    }
+
 
     public function search($input, $output, Request $request)
     {
@@ -46,6 +57,7 @@ class GnafController extends ApiController
         if (!empty($request->header("x-scopes"))) {
             $scopes = Scopes::getScopes($request->header("x-scopes"));
         }
+
         if (isset($data[Constant::INPUTMAPS[$input]])) {
             $inputval = $data[Constant::INPUTMAPS[$input]];
         } elseif ($input == 'Telephone') {
@@ -59,6 +71,7 @@ class GnafController extends ApiController
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
         $inp = $input;
         $invalid_inputs = self::findInvalids($inputval, Constant::INPUTM[$inp]);
+
         $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
         $output_alias = in_array($output, array_keys(Constant::OUTPUT_CHECK)) ? Constant::OUTPUT_CHECK[$output] : $output;
         if (!array_key_exists($input_alias, Constant::CAN)) {
@@ -72,7 +85,7 @@ class GnafController extends ApiController
         return $this->respondArrayResult($response);
     }
 
-    public function findInvalids($inputval, $inp, $type = 1)
+    public function findInvalids($inputval, $inp = null, $type = 1)
     {
         $invalids = [];
 
@@ -86,7 +99,6 @@ class GnafController extends ApiController
                             $invalids[] = $datum;
                         }
                     }
-                    return $invalids;
                 } else {
                     //todo tel regex
                     foreach ($inputval as $item) {
@@ -94,17 +106,30 @@ class GnafController extends ApiController
                             $invalids[] = $item[$inp];
                         }
                     }
-                    return $invalids;
                 }
+                break;
             case 2:
                 $flag = preg_match(Constant::POSTCODE_PATTERN, $inputval[$inp]);
                 if ($flag == 0) {
                     $invalids[] = $inputval[$inp];
                 }
-                return $invalids;
-
+                break;
+            //parcels
+            case 3:
+                foreach ($inputval as $key => $parcel) {
+                    if ($parcel['Latitude'] < -90 || $parcel['Latitude'] > 90) {
+                        $invalids[$key]['Latitude'] = $parcel['Latitude'];
+                        $invalids[$key]['Longitude'] = $parcel['Longitude'];
+                    } elseif ($parcel['Longitude'] < -180 || $parcel['Longitude'] > 180) {
+                        $invalids[$key]['Latitude'] = $parcel['Latitude'];
+                        $invalids[$key]['Longitude'] = $parcel['Longitude'];
+                    }
+                }
         }
+        return $invalids;
+
     }
+
     //    public function reqStatus(Request $request)
 //    {
 //        $input = 'Postcode';
@@ -133,6 +158,29 @@ class GnafController extends ApiController
 //
 //    }
 
+    public function postcodeByParcel(Request $request)
+    {
+        $input = 'Parcel';
+        $output = 'PostcodeByParcel';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $invalid_inputs = self::findInvalids($data['Parcels'], null, 3);
+        $user_id = $request->header('x-user-id');
+
+        if (!isset($user_id)) {
+            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
+        }
+        $scopes = null;
+        if (!empty($request->header("x-scopes"))) {
+            $scopes = Scopes::getScopes($request->header("x-scopes"));
+        }
+        $result = Gnafservices::postcodeByParcel($data, $invalid_inputs, $input, $output, $scopes);
+        return $this->respondArrayResult($result);
+    }
+
     public function requestPostCode(Request $request)
     {
         $input = 'Postcode';
@@ -151,7 +199,6 @@ class GnafController extends ApiController
         $result = Gnafservices::requestPostCode($data, $user_id, $input);
         return $this->respondArrayResult($result);
     }
-
 
     public function trackRequest(Request $request)
     {
@@ -232,6 +279,5 @@ class GnafController extends ApiController
         return $this->respondArrayResult($result);
 
     }
-
 
 }
