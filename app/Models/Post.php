@@ -211,7 +211,7 @@ class Post extends Model
     }
     public function postcodeByParcel()
     {
-        self::whereIn("ST_X(parcel)",
+//        self::whereIn("ST_X(parcel)");
     }
 
 

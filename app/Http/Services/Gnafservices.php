@@ -475,7 +475,6 @@ class Gnafservices
             && !$validate) {
             $name ['postalcode'] = 'PostCode';
         }
-        dd($name);
         return $name;
 
     }
