@@ -63,6 +63,14 @@ class Handler extends ExceptionHandler
                 return response()
                     ->json($return_object)
                     ->header('Access-Control-Allow-Origin', '*');
+            } elseif ($e instanceof AuthenticationException) {
+                $return_object = [
+                    'error' => $e->getError(),
+                    'error_description' => $e->getErrorDescription(),
+                ];
+                return response()
+                    ->json($return_object)
+                    ->header('Access-Control-Allow-Origin', '*');
             } elseif ($e instanceof RequestRulesException) {
                 $return_object = [
                     'data' => [

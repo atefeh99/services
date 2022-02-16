@@ -42,6 +42,13 @@ trait RulesTrait
 
             ],
             GnafController::class => [
+                'auth' => [
+                    'userpass' => [
+                        'username' => 'required',
+                        'password' => 'required',
+                        'grant_type'=> 'required'
+                    ],
+                ],
                 'search' => [
                     'postcode' => [
                         'ClientBatchID' => 'numeric|required',
@@ -59,7 +66,7 @@ trait RulesTrait
                         'Telephones.*.TelephoneNo' => 'required',
                         'Telephones.*.AreaCode' => 'required',
                         'Signature' => 'string'
-                    ]
+                    ],
                 ],
                 'reqStatus' => [
                     'postcode' => [
@@ -111,6 +118,17 @@ trait RulesTrait
                         'CertificateNo' => 'numeric|required',
                         'signature' => 'string'
                     ]
+                ],
+                'postcodeByParcel' => [
+                    'parcel' => [
+                        'ClientBatchID' => 'numeric|required',
+                        'Parcels' => 'required|array',
+                        'Parcels.*' => 'required|array',
+                        'Parcels.*.ClientRowID' => 'required|numeric',
+                        'Parcels.*.Latitude' => 'required',
+                        'Parcels.*.Longitude' => 'required',
+                        'Signature' => 'string'
+                    ]
                 ]
             ]
         ];
@@ -128,9 +146,14 @@ trait RulesTrait
                 $category = 'telephone';
             } elseif (array_key_exists('CertificateNo', $data)) {
                 $category = 'CertificateNo';
+            } elseif (array_key_exists('Parcels', $data)) {
+                $category = 'parcel';
+            } elseif ($function == 'auth') {
+                $category = 'userpass';
             }
             if ((array_key_exists('Postcodes', $data) && count($data['Postcodes']) > 10) ||
-                (array_key_exists('Telephones', $data) && count($data['Telephones']) > 10)
+                (array_key_exists('Telephones', $data) && count($data['Telephones']) > 10) ||
+                (array_key_exists('Parcels', $data) && count($data['Parcels']) > 10)
             ) {
                 $msg = trans('messages.custom.error.-1');
                 throw new ServicesException(null,

@@ -11,19 +11,19 @@ class Constant
 
     const INPUTMAPS = [
         'Telephone' => 'Telephones',
-        'Postcode' => 'Postcodes'
+        'Postcode' => 'Postcodes',
     ];
     const INPUTM = [
         'Telephone' => 'TelephoneNo',
         'Postcode' => 'PostCode',
-        'CertificateNo' => 'CertificateNo'
+        'CertificateNo' => 'CertificateNo',
     ];
 
     const ALIASES = [
         'Telephone' => 'tels',
         'Postcode' => 'postalcode',
         'postalcode' => 'Postcode',
-        'CertificateNo' => 'CertificateNo'
+        'CertificateNo' => 'CertificateNo',
     ];
 
     const OUTPUT_CHECK = [
@@ -48,7 +48,7 @@ class Constant
         'EstimatedPosition' => 'EstimatedPosition',
         'ReqStatus' => 'ReqStatus',
         'GenerateCertificateByTxn' => 'GenerateCertificateByTxn',
-        'Certification' => 'Certification'
+        'Certification' => 'Certification',
     ];
 
     const CAN = [
@@ -77,6 +77,9 @@ class Constant
             'ValidateTelephone',
             'ActivityCode'
         ],
+        'parcel'=> [
+            'Postcode'
+        ]
 
     ];
     const POSTCODE_PATTERN = '/^(?![02])(?!\d{1}[02])(?!\d{2}[02])(?!\d{3}[02])(?!\d{4}[025])(?!\d{5}0)(?!\d{6}0000)\d{10}$/m';
