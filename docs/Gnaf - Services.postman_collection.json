@@ -688,6 +688,43 @@
 			]
 		},
 		{
+			"name": "ApiKey",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{USERNAME}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{PASSWORD}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{Host}}/token",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Version",
 			"request": {
 				"method": "POST",
@@ -1221,6 +1258,11 @@
 						"value": "action_area:province.2  action_area:zone.5 action_area:county.4",
 						"type": "text",
 						"disabled": true
+					},
+					{
+						"key": "x-user-id",
+						"value": "1234",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -1633,6 +1675,41 @@
 						"v0",
 						"Certificate",
 						"AddressByCertificateNo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostcodeByParcel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-user-id",
+						"value": "123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ClientRowID\": 120,\n     \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": [\n          [\n            [\n              49.658203125,\n              34.74161249883172\n            ],\n            [\n              55.5029296875,\n              32.91648534731439\n            ],\n            [\n              52.16308593749999,\n              36.63316209558658\n            ],\n            [\n              49.658203125,\n              34.74161249883172\n            ]\n          ]\n        ]\n      },\n    \"Signature\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Host}}/api/v0/Parcel/PostcodeByParcel",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"v0",
+						"Parcel",
+						"PostcodeByParcel"
 					]
 				}
 			},
