@@ -36,11 +36,15 @@ class AppRegistration
                 env('APPREG_HOST') . $uri,
                 $options
             );
+            Log::info(__FUNCTION__.':response_body:'.json_decode($response->getBody()->getContents(), true));
+
             $code = $response->getStatusCode();
             $body = json_decode($response->getBody()->getContents(), true);
         } catch (ClientException $e) {
             $code = $e->getCode();
             $body = json_decode($e->getResponse()->getBody()->getContents(), true);
+            Log::info(__FUNCTION__.':exception_body:'.json_decode($e->getResponse()->getBody()->getContents(), true));
+
         }
         return ['code' => $code, 'body' => $body];
 
@@ -63,6 +67,7 @@ class AppRegistration
         if ($resp['code'] == 200) {
             return $resp['body']['access_token'];
         } else {
+            Log::info('get user token failed: '.$resp['body']);
             if (array_key_exists('message', $resp['body'])) {
                 if (($resp['code'] == 404 && $resp['body']['message'] == "Resource Not Found")
                     || ($resp['code'] == 401 && $resp['body']['message'] == "your password is not correct!")
@@ -101,11 +106,13 @@ class AppRegistration
         if ($resp['code'] == 200) return [
             'api_key'=>$resp['body']['my_app']['access_token']['token'],
             'expires_in'=> $resp['body']['my_app']['access_token']['expired_at']];
-
-         else throw new AuthenticationException(
-            401,
-            trans('messages.custom.error.services_auth_401')
-        );
+         else {
+             Log::info('myself response: '. $resp['body']);
+             throw new AuthenticationException(
+                 401,
+                 trans('messages.custom.error.services_auth_401')
+             );
+         }
     }
 
 }
