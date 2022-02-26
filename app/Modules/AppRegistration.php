@@ -86,7 +86,6 @@ class AppRegistration
         $options = [
             RequestOptions::HEADERS => [
                 'x-client-id' => env('X_CLIENT_ID'),
-                'x-user-id' => env('ADMIN_USER_ID'),
                 'x-scopes' => [
                     'basic',
                     'admin'
@@ -98,6 +97,7 @@ class AppRegistration
         if (App::environment('local')) {
             $options[RequestOptions::HEADERS] = [
                 'x-api-key' => env('APPREG_API_KEY'),
+                'x-user-id' => env('ADMIN_USER_ID'),
                 'token' => $access_token
             ];
         }
