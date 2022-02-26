@@ -67,7 +67,7 @@ class AppRegistration
         if ($resp['code'] == 200) {
             return $resp['body']['access_token'];
         } else {
-            Log::info('get user token failed: '.$resp['body']);
+            Log::info('get user token failed: '.json_encode($resp['body']));
             if (array_key_exists('message', $resp['body'])) {
                 if (($resp['code'] == 404 && $resp['body']['message'] == "Resource Not Found")
                     || ($resp['code'] == 401 && $resp['body']['message'] == "your password is not correct!")
