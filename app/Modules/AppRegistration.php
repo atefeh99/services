@@ -36,10 +36,12 @@ class AppRegistration
                 env('APPREG_HOST') . $uri,
                 $options
             );
-            Log::info(__FUNCTION__.':response_body:'.json_decode($response->getBody()->getContents(), true));
-
             $code = $response->getStatusCode();
             $body = json_decode($response->getBody()->getContents(), true);
+
+            Log::info(__FUNCTION__.':response_body:'.json_encode($body));
+
+
         } catch (ClientException $e) {
             $code = $e->getCode();
             $body = json_decode($e->getResponse()->getBody()->getContents(), true);
