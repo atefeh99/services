@@ -39,13 +39,13 @@ class AppRegistration
             $code = $response->getStatusCode();
             $body = json_decode($response->getBody()->getContents(), true);
 
-            Log::info(__FUNCTION__.':response_body:'.json_encode($body));
+            Log::info('response_body:' . json_encode($body));
 
 
         } catch (ClientException $e) {
             $code = $e->getCode();
             $body = json_decode($e->getResponse()->getBody()->getContents(), true);
-            Log::info(__FUNCTION__.':exception_body:'.json_decode($e->getResponse()->getBody()->getContents(), true));
+            Log::info(__FUNCTION__ . ':exception_body:' . json_encode($body));
 
         }
         return ['code' => $code, 'body' => $body];
@@ -69,21 +69,21 @@ class AppRegistration
         if ($resp['code'] == 200) {
             return $resp['body']['access_token'];
         } else {
-            Log::info('get user token failed:res body: '.json_encode($resp['body']).' :res code:'.json_encode($resp['code']));
+            Log::info('get user token failed:res body: ' . json_encode($resp['body']) . ' :res code:' . json_encode($resp['code']));
             if (array_key_exists('message', $resp['body'])) {
                 if (($resp['code'] == 404 && $resp['body']['message'] == "Resource Not Found")
                     || ($resp['code'] == 401 && $resp['body']['message'] == "your password is not correct!")
-                ){
+                ) {
                     throw new AuthenticationException(417, trans('messages.custom.error.services_auth_417'));
                 }
             }
-                //todo else:handle captcha
+            //todo else:handle captcha
         }
         throw new AuthenticationException(401, trans('messages.custom.error.services_auth_401'));
 
     }
 
-    public function myself($access_token)
+    public function validateTokenAndGetUserId($access_token)
     {
         $options = [
             RequestOptions::HEADERS => [
@@ -94,27 +94,63 @@ class AppRegistration
                 ]
 
             ],
+            RequestOptions::JSON => [
+                "token" => $access_token,
+            ],
+        ];
+        if (App::environment('local')) {
+            $options[RequestOptions::HEADERS] = [
+                'x-api-key' => env('APPREG_API_KEY'),
+                'token' => $access_token
+            ];
+        }
+        $resp = $this->createRequest('POST', env('APPREG_VALIDATE_TOKEN_URI'), $options);
+
+        if ($resp['code'] == 200) return $resp['body']['claims']['sub'];
+
+        else {
+            Log::info('getUserIdFromToken: response: ' . json_encode($resp['body']));
+            throw new AuthenticationException(
+                401,
+                trans('messages.custom.error.services_auth_401')
+            );
+        }
+    }
+
+    public function myself($user_id, $access_token)
+    {
+        $options = [
+            RequestOptions::HEADERS => [
+                'x-client-id' => env('X_CLIENT_ID'),
+                'x-scopes' => [
+                    'basic',
+                    'admin'
+                ],
+                'x-user-id' => $user_id,
+
+
+            ],
 
         ];
         if (App::environment('local')) {
             $options[RequestOptions::HEADERS] = [
                 'x-api-key' => env('APPREG_API_KEY'),
-                'x-user-id' => env('ADMIN_USER_ID'),
                 'token' => $access_token
             ];
         }
         $resp = $this->createRequest('GET', env('APPREG_MYSELF_URI'), $options);
 
         if ($resp['code'] == 200) return [
-            'api_key'=>$resp['body']['my_app']['access_token']['token'],
-            'expires_in'=> $resp['body']['my_app']['access_token']['expired_at']];
-         else {
-             Log::info('myself response: '. json_encode($resp['body']));
-             throw new AuthenticationException(
-                 401,
-                 trans('messages.custom.error.services_auth_401')
-             );
-         }
+            'api_key' => $resp['body']['my_app']['access_token']['token'],
+            'expires_in' => $resp['body']['my_app']['access_token']['expired_at']];
+        else {
+            Log::info('myself failed: ' . json_encode($resp['body']));
+            throw new AuthenticationException(
+                401,
+                trans('messages.custom.error.services_auth_401')
+            );
+        }
     }
+
 
 }

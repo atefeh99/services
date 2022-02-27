@@ -405,9 +405,11 @@ class Gnafservices
     {
         $appreg = new AppRegistration();
         $user_token = $appreg->userToken($data);
-        Log::info(__CLASS__.':'.__FUNCTION__.':usertoken:'.$user_token);
-        $myself = $appreg->myself($user_token);
-        Log::info('myself: '.json_encode($myself));
+        Log::info(__CLASS__ . ':' . __FUNCTION__ . ':user token:' . $user_token);
+        $user_id = $appreg->validateTokenAndGetUserId($user_token);
+        Log::info(__CLASS__ . ':' . __FUNCTION__ . ':user_id:' . $user_id);
+        $myself = $appreg->myself($user_id,$user_token);
+        Log::info('myself: ' . json_encode($myself));
         return [
             'access_token' => $myself['api_key'],
             'token_type' => 'bearer',
