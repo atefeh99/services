@@ -124,7 +124,6 @@ class AppRegistration
                 'x-client-id' => env('X_CLIENT_ID'),
                 'x-scopes' => [
                     'basic',
-
                     'admin'
                 ],
                 'x-user-id' => $user_id,
