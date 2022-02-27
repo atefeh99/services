@@ -107,7 +107,7 @@ class AppRegistration
             'api_key'=>$resp['body']['my_app']['access_token']['token'],
             'expires_in'=> $resp['body']['my_app']['access_token']['expired_at']];
          else {
-             Log::info('myself response: '. $resp['body']);
+             Log::info('myself response: '. json_encode($resp['body']));
              throw new AuthenticationException(
                  401,
                  trans('messages.custom.error.services_auth_401')
