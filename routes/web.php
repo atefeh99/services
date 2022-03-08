@@ -21,13 +21,13 @@ $router->post("/token","GnafController@auth");
 
 //services
 $router->group(['prefix' => '/api/v0'], function () use ($router) {
+    $router->post("/Parcel/PostcodeByParcel","GnafController@postcodeByParcel");
     $router->post("/Postcode/ReqStatus", "GnafController@reqStatus");
     $router->post("/Postcode/RequestPostCode", "GnafController@requestPostCode");
     $router->post("/Postcode/TrackRequest", "GnafController@trackRequest");
     $router->post("/Postcode/GenerateCertificateByTxn","GnafController@generateCertificateByTxn");
     $router->post("/Certificate/AddressByCertificateNo","GnafController@addressByCertificateNo");
     $router->post("/BaseInfo/Version","GnafController@Version");
-    $router->post("/Parcel/PostcodeByParcel","GnafController@postcodeByParcel");
     $router->post("/{input}/{output}", "GnafController@search");
 
 

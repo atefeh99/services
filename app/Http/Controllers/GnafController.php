@@ -116,13 +116,20 @@ class GnafController extends ApiController
                 break;
             //parcels
             case 3:
-                foreach ($inputval as $key => $parcel) {
-                    if ($parcel['Latitude'] < -90 || $parcel['Latitude'] > 90) {
-                        $invalids[$key]['Latitude'] = $parcel['Latitude'];
-                        $invalids[$key]['Longitude'] = $parcel['Longitude'];
-                    } elseif ($parcel['Longitude'] < -180 || $parcel['Longitude'] > 180) {
-                        $invalids[$key]['Latitude'] = $parcel['Latitude'];
-                        $invalids[$key]['Longitude'] = $parcel['Longitude'];
+                foreach ($inputval as $key => $point) {
+                    if ($point[1] < -90 || $point[1] > 90 || $point[0] < -180 || $point[0] > 180) {
+                        throw new ServicesException(
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            -6,
+                            trans('messages.custom.error.-6'),
+                            'empty'
+                        );
+
                     }
                 }
         }
@@ -167,7 +174,7 @@ class GnafController extends ApiController
             __FUNCTION__,
             null,
             $input);
-        $invalid_inputs = self::findInvalids($data['Parcels'], null, 3);
+        self::findInvalids($data['geometry']['coordinates'][0], null, 3);
         $user_id = $request->header('x-user-id');
 
         if (!isset($user_id)) {
@@ -177,7 +184,7 @@ class GnafController extends ApiController
         if (!empty($request->header("x-scopes"))) {
             $scopes = Scopes::getScopes($request->header("x-scopes"));
         }
-        $result = Gnafservices::postcodeByParcel($data, $invalid_inputs, $input, $output, $scopes);
+        $result = Gnafservices::postcodeByParcel($data, null, $input, $output, $scopes);
         return $this->respondArrayResult($result);
     }
 

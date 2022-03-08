@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ServicesException;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\RequestRulesException;
+use Illuminate\Validation\Rule;
 
 trait RulesTrait
 {
@@ -46,7 +47,7 @@ trait RulesTrait
                     'userpass' => [
                         'username' => 'required',
                         'password' => 'required',
-                        'grant_type'=> 'required'
+                        'grant_type' => 'required'
                     ],
                 ],
                 'search' => [
@@ -121,12 +122,10 @@ trait RulesTrait
                 ],
                 'postcodeByParcel' => [
                     'parcel' => [
-                        'ClientBatchID' => 'numeric|required',
-                        'Parcels' => 'required|array',
-                        'Parcels.*' => 'required|array',
-                        'Parcels.*.ClientRowID' => 'required|numeric',
-                        'Parcels.*.Latitude' => 'required',
-                        'Parcels.*.Longitude' => 'required',
+                        'ClientRowID' => 'required|numeric',
+                        'geometry' => 'required|array',
+                        'geometry.type' => Rule::in(['Polygon']),
+                        'geometry.coordinates' => 'required|array',
                         'Signature' => 'string'
                     ]
                 ]
@@ -146,14 +145,13 @@ trait RulesTrait
                 $category = 'telephone';
             } elseif (array_key_exists('CertificateNo', $data)) {
                 $category = 'CertificateNo';
-            } elseif (array_key_exists('Parcels', $data)) {
+            } elseif ($function =='postcodeByParcel') {
                 $category = 'parcel';
             } elseif ($function == 'auth') {
                 $category = 'userpass';
             }
             if ((array_key_exists('Postcodes', $data) && count($data['Postcodes']) > 10) ||
-                (array_key_exists('Telephones', $data) && count($data['Telephones']) > 10) ||
-                (array_key_exists('Parcels', $data) && count($data['Parcels']) > 10)
+                (array_key_exists('Telephones', $data) && count($data['Telephones']) > 10)
             ) {
                 $msg = trans('messages.custom.error.-1');
                 throw new ServicesException(null,
