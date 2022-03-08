@@ -168,8 +168,7 @@ class Post extends Model
     {
         $result = [];
         if (in_array("ST_X(geom),ST_Y(geom)", $out_fields)
-            || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields))
-        {
+            || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields)) {
             $i = 0;
             $count = count($out_fields);
             $temp = "";
@@ -209,9 +208,34 @@ class Post extends Model
         }
 
     }
-    public function postcodeByParcel()
+
+    //get center of polygon and find parcels that contains the center
+    public function postcodeByParcel($scopes, $polygon, $out_fields, $geometry)
     {
-//        self::whereIn("ST_X(parcel)");
+        $postalcodes = [];
+        $query = '';
+
+        try {
+            $query = self::whereRaw("st_contains(parcel,st_setsrid(ST_Centroid(ST_GeomFromText(?)),4326))"
+                , ["POLYGON (($polygon))"]
+            );
+            if (!empty($scopes)) {
+                $query = $query->actionArea($scopes);
+            }
+            $query = $query
+                ->get($out_fields);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        if (count(collect($query)) > 0) {
+            foreach (collect($query) as $item) {
+                $postalcodes[] = $item['postalcode'];
+            }
+            return $postalcodes;
+        } else {
+            return null;
+        }
+
     }
 
 

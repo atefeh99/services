@@ -172,7 +172,7 @@ class Gnafservices
             'link' => 'link'
         ],
         'PostcodeByParcel' => [
-            'postalcode' => 'PostCode'
+            'postalcode' => 'PostCodes'
         ]
 
 
@@ -408,7 +408,7 @@ class Gnafservices
         Log::info(__CLASS__ . ':' . __FUNCTION__ . ':user token:' . $user_token);
         $user_id = $appreg->validateTokenAndGetUserId($user_token);
         Log::info(__CLASS__ . ':' . __FUNCTION__ . ':user_id:' . $user_id);
-        $myself = $appreg->myself($user_id,$user_token);
+        $myself = $appreg->myself($user_id, $user_token);
         Log::info('myself: ' . json_encode($myself));
         return [
             'access_token' => $myself['api_key'],
@@ -587,7 +587,7 @@ class Gnafservices
         } elseif ($state == 'failed') {
             $code = 12;
             $msg = trans('messages.custom.error.ResMsg');
-            $res_data = null;
+            $res_data = 'empty';
         }
         return ServicesResponse::makeResponse2($code, $msg, $res_data);
     }
@@ -641,23 +641,41 @@ class Gnafservices
     public static function postcodeByParcel($values, $invalid_values, $input, $output_alias, $scopes)
     {
 
-        $query_field = array_udiff_assoc($values['Parcels'], $invalid_values, function ($a, $b) {
-            if ($a['Latitude'] != $b['Latitude'] && $a['Longitude'] != $b['Longitude']) return $a;
-        });
         $out_fields = self::createDatabaseFields($input, $output_alias);
-        $output_result = self::createResponseFields($input, $output_alias);
         $action_areas = null;
         if ($scopes) {
             $action_areas = $scopes['action_areas'];
         }
+        $polygon = Helper::getPolygon($values['geometry']['coordinates'][0]);
 
-        $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
+        $result = Post::postcodeByParcel($action_areas, $polygon, $out_fields, $values['geometry']);
+        if (!empty($result)) {
+            $data = [
+                'ClientRowID' => $values['ClientRowID'],
+                'geometry' => $values['geometry'],
+                'Succ' => true,
+                'Result' => [
+                    'TraceID' => "",
+                    "Postcodes" => [
+                        $result
+                    ],
+                    'Errors' => null
 
-        if (isset($result)) {
+                ]
 
-            return ServicesResponse::makeResponse($input, $result, $input_alias, $output_alias, $values, $output_result, $invalid_values);
+            ];
+            return ServicesResponse::makeResponse2(0, trans('messages.custom.success.ResMsg'), $data);
         } else {
-            throw new ServicesException($values, $input, $invalid_values);
+            throw new ServicesException(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                404
+                , trans('messages.custom.error.404'),
+                'empty');
         }
 
     }
