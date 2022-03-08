@@ -133,7 +133,6 @@ class Gnafservices
             'CertificateUrl' => 'CertificateUrl',
             'CertificateNo' => 'CertificateNo',
             'building_name' => 'BuildingName'
-
             //            'description'=>'Description',
 
 
@@ -170,12 +169,7 @@ class Gnafservices
         ],
         'Certification' => [
             'link' => 'link'
-        ],
-        'PostcodeByParcel' => [
-            'postalcode' => 'PostCodes'
         ]
-
-
     ];
     public static $composite_database_fields = [
         'Position' => [
@@ -399,7 +393,6 @@ class Gnafservices
             'postalcode'
         ]
     ];
-    public static $output_attrs = [];
 
     public static function auth($data)
     {

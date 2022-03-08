@@ -17,7 +17,6 @@ class Constant
         'Telephone' => 'TelephoneNo',
         'Postcode' => 'PostCode',
         'CertificateNo' => 'CertificateNo',
-        'Parcel'=>'geometry'
     ];
 
     const ALIASES = [
