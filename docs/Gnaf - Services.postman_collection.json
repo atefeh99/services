@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b7168b89-9fed-4450-962f-8c2d8adc0334",
+		"_postman_id": "b926604d-3e2e-4332-8e87-1b9aa2ea581b",
 		"name": "Gnaf - Services",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -688,29 +688,29 @@
 			]
 		},
 		{
-			"name": "ApiKey",
+			"name": "api-key",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "username",
-							"value": "{{USERNAME}}",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "{{PASSWORD}}",
-							"type": "text"
-						},
-						{
-							"key": "grant_type",
-							"value": "password",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"system_administrator@post.ir\",\r\n    \"password\": \"My123456!\",\r\n    \"grant_type\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
 					"raw": "{{Host}}/token",
@@ -732,6 +732,16 @@
 					{
 						"key": "x-user-id",
 						"value": "1234",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
@@ -789,7 +799,7 @@
 					"query": [
 						{
 							"key": "",
-							"value": null,
+							"value": "",
 							"disabled": true
 						}
 					]
@@ -1687,13 +1697,24 @@
 				"header": [
 					{
 						"key": "x-user-id",
-						"value": "123",
+						"value": "12255",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "token",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ClientRowID\": 120,\n     \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": [\n          [\n            [\n              49.658203125,\n              34.74161249883172\n            ],\n            [\n              55.5029296875,\n              32.91648534731439\n            ],\n            [\n              52.16308593749999,\n              36.63316209558658\n            ],\n            [\n              49.658203125,\n              34.74161249883172\n            ]\n          ]\n        ]\n      },\n    \"Signature\": \"\"\n}",
+					"raw": "{\r\n    \"ClientRowID\": 123,\r\n    \"geometry\": {\r\n        \"type\": \"Polygon\",\r\n        \"coordinates\": [\r\n            [\r\n                [\r\n                    54.357441481987365,\r\n                    31.895026510962936\r\n                ],\r\n                [\r\n                    54.35747018675394,\r\n                    31.894983336092423\r\n                ],\r\n                [\r\n                    54.357506843407435,\r\n                    31.894927873564068\r\n                ],\r\n                [\r\n                    54.35752159194779,\r\n                    31.894905572615016\r\n                ],\r\n                [\r\n                    54.35750891222756,\r\n                    31.894899140879982\r\n                ],\r\n                [\r\n                    54.357507464143296,\r\n                    31.89489840717559\r\n                ],\r\n                [\r\n                    54.35744390115045,\r\n                    31.894863088682026\r\n                ],\r\n                [\r\n                    54.35744322561733,\r\n                    31.894862713440133\r\n                ],\r\n                [\r\n                    54.35742535093981,\r\n                    31.894889728565392\r\n                ],\r\n                [\r\n                    54.35736482335429,\r\n                    31.894981207436313\r\n                ],\r\n                [\r\n                    54.35741542096267,\r\n                    31.89501819540313\r\n                ],\r\n                [\r\n                    54.3574203715782,\r\n                    31.895012897026746\r\n                ],\r\n                [\r\n                    54.35742116748553,\r\n                    31.895012038242815\r\n                ],\r\n                [\r\n                    54.357441481987365,\r\n                    31.895026510962936\r\n                ]\r\n            ]\r\n        ]\r\n    },\r\n    \"Signature\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
