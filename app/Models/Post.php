@@ -210,7 +210,7 @@ class Post extends Model
     }
 
     //get center of polygon and find parcels that contains the center
-    public function postcodeByParcel($scopes, $polygon, $out_fields, $geometry)
+    public static function postcodeByParcel($scopes, $polygon, $out_fields, $geometry)
     {
         $postalcodes = [];
         $query = '';
