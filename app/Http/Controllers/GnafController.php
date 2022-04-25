@@ -42,9 +42,9 @@ class GnafController extends ApiController
     {
         $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 4000);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 4000);
+//        }
         $data = self::checkRules(
             $request->all(),
             __FUNCTION__,
@@ -177,9 +177,9 @@ class GnafController extends ApiController
         self::findInvalids($data['geometry']['coordinates'][0], null, 3);
         $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
+//        }
         $scopes = null;
         if (!empty($request->header("x-scopes"))) {
             $scopes = Scopes::getScopes($request->header("x-scopes"));
@@ -199,9 +199,9 @@ class GnafController extends ApiController
             $input);
         $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
+//        }
 
         $result = Gnafservices::requestPostCode($data, $user_id, $input);
         return $this->respondArrayResult($result);
@@ -211,9 +211,9 @@ class GnafController extends ApiController
     {
         $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 2000);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 2000);
+//        }
         $input = 'Postcode';
         $data = self::checkRules(
             $request->all(),
@@ -228,9 +228,9 @@ class GnafController extends ApiController
     {
         $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1000);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1000);
+//        }
         $input = 'Postcode';
         $output = 'GenerateCertificateByTxn';
         $data = self::checkRules(
@@ -259,9 +259,9 @@ class GnafController extends ApiController
         $input_alias = array_key_exists($input, Constant::ALIASES) ? Constant::ALIASES[$input] : $input;
 
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1003);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1003);
+//        }
 
         $data = self::checkRules(
             $request->all(),
@@ -277,9 +277,9 @@ class GnafController extends ApiController
     {
         $user_id = $request->header('x-user-id');
 
-        if (!isset($user_id)) {
-            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 7000);
-        }
+//        if (!isset($user_id)) {
+//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 7000);
+//        }
 
         $msg = trans('messages.custom.success.ResMsg');
         $result = ServicesResponse::makeResponse2(0, $msg, '1.0.0.0');
