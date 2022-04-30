@@ -641,7 +641,6 @@ class Gnafservices
         }
         $polygon = Helper::getPolygon($values['geometry']['coordinates'][0]);
 
-
         $result = Post::postcodeByParcel($action_areas, $polygon, $out_fields, $values['geometry']);
         if (!empty($result)) {
             $data = [
