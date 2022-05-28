@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "b926604d-3e2e-4332-8e87-1b9aa2ea581b",
 		"name": "Gnaf - Services",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14842644"
 	},
 	"item": [
 		{

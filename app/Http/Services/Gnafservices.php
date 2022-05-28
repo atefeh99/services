@@ -506,6 +506,7 @@ class Gnafservices
 
     public static function requestPostCodes($data, $user_id, $input)
     {
+        $tracking_code = null;
         $building = Building::getItem($data['BuildingID']);
 //        dd($building);
         $post_unit = Redis::getPostUnit($building);
@@ -513,11 +514,38 @@ class Gnafservices
         $invoice_id = $payment->createInvoice($post_unit);
         $quantity = count($data['BuildingUnits']);
         $payment_service_id = $payment->getServices();
-        Payment::insertInvoiceLine($invoice_id, $quantity);
+        $invoice_line_id = $payment->insertInvoiceLine($invoice_id, $quantity, $payment_service_id);
+        if (empty($invoice_line_id)) {
+            throw new ServicesException(null, null, null,
+                null, null, null, 12, trans('messages.custom.error.12'), null);
+        }
+        $payment_init = $payment->initPayment($invoice_id);
+        if ($payment_init) {
+            $tracking_code = $payment->getByUserId($invoice_line_id);
+            if (empty($tracking_code)) {
+                $res_msg = trans('messages.custom.error.transaction_not_found');
+                throw new ServicesException(null,
+                    null,
+                    [],
+                    null,
+                    null,
+                    null,
+                    -34,
+                    $res_msg,
+                    'empty'
+                );
+            } else {
+                $msg = trans('messages.custom.success.ResMsg');
+                $res_data = [
+                    "BuildingID" => $data['BuildingID'],
+                    "TrackingCode" => $tracking_code
+                ];
+                return ServicesResponse::makeResponse2(0, $msg, $res_data);
 
+            }
+        }
 
     }
-
 
     public static function createTaskManagerParams($data, $tracking_code, $reporter_id, $action_areas)
     {
