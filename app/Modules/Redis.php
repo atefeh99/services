@@ -10,6 +10,9 @@ class Redis
 {
     private static $redis;
 
+    const STATE_ID_PREFIX = 'df:1:province_id';
+
+
     private static function createRedisClient()
     {
         self::$redis = new Client(
@@ -20,5 +23,15 @@ class Redis
             ]
         );
         return self::$redis;
+    }
+
+    public static function getPostUnit($building)
+    {
+        $redis = self::createRedisClient();
+        $province_id = $building['province_id'];
+        $prefix1 = self::STATE_ID_PREFIX;
+        $key = "$prefix1:$province_id:state_id";
+        return $redis->get($key);
+
     }
 }

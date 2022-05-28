@@ -199,11 +199,22 @@ class GnafController extends ApiController
             $input);
         $user_id = $request->header('x-user-id');
 
-//        if (!isset($user_id)) {
-//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 3000);
-//        }
-
         $result = Gnafservices::requestPostCode($data, $user_id, $input);
+        return $this->respondArrayResult($result);
+    }
+
+    public function requestPostCodes(Request $request)
+    {
+        $input = 'BuildingID';
+        $output = 'requestPostCode';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $user_id = $request->header('x-user-id');
+
+        $result = Gnafservices::requestPostCodes($data, $user_id, $input);
         return $this->respondArrayResult($result);
     }
 

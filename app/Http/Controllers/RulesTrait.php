@@ -98,6 +98,27 @@ trait RulesTrait
                         'Signature' => 'string'
                     ]
                 ],
+                'requestPostCodes' => [
+                    'BuildingID' => [
+                        'FirstName' => 'string|required',
+                        'LastName' => 'string|required',
+                        'MobileNo' => 'numeric|required',
+                        'RequestType' => 'numeric|required',
+                        'BuildingID' => 'numeric|required',
+                        'BuildingAddress' => 'string|required',
+                        'OldUnitsCount' => 'numeric|required',
+                        'OldPostCodes' => 'array|required',
+                        'BuildingUnits' => 'array|required',
+                        'BuildingUnits.*.UniqueID' => 'required|numeric',
+                        'BuildingUnits.*.UnitNo' => 'required|numeric',
+                        'BuildingUnits.*.SideFloor' => 'required|string',
+                        'BuildingUnits.*.Area' => 'required|numeric',
+                        'ParcelCoordinates' => 'required|array',
+                        'ParcelCoordinates.*.Lat' => 'required|numeric',
+                        'ParcelCoordinates.*.Lon' => 'required|numeric',
+                        'Signature' => 'string'
+                    ]
+                ],
                 'trackRequest' => [
                     'postcode' => [
                         'ClientRowID' => 'integer|required',
@@ -145,10 +166,12 @@ trait RulesTrait
                 $category = 'telephone';
             } elseif (array_key_exists('CertificateNo', $data)) {
                 $category = 'CertificateNo';
-            } elseif ($function =='postcodeByParcel') {
+            } elseif ($function == 'postcodeByParcel') {
                 $category = 'parcel';
             } elseif ($function == 'auth') {
                 $category = 'userpass';
+            }elseif($function == 'requestPostCodes'){
+                $category = $input;
             }
             if ((array_key_exists('Postcodes', $data) && count($data['Postcodes']) > 10) ||
                 (array_key_exists('Telephones', $data) && count($data['Telephones']) > 10)

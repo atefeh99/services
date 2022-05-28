@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "b926604d-3e2e-4332-8e87-1b9aa2ea581b",
 		"name": "Gnaf - Services",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14842644"
 	},
 	"item": [
 		{
@@ -684,6 +685,60 @@
 							"body": "{\n    \"id\": \"15\",\n    \"message\": \"successfully deleted\"\n}"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "shahrdari",
+			"item": [
+				{
+					"name": "requestPostcode",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"FirstName\": \"محبوبه\",\n    \"LastName\": \"شیری\",\n    \"MobileNo\": \"09016975280\",\n    \"RequestType\": 1,\n    \"BuildingID\": 3,\n    \"BuildingAddress\": \"s\",\n    \"OldUnitsCount\": 4,\n    \"OldPostCodes\": [\n        \"222\",\n        \"333\",\n        \"23\",\n        \"345\"\n    ],\n    \"BuildingUnits\": [\n        {\n            \"UniqueID\": 1,\n            \"UnitNo\": 1,\n            \"FloorNo\": \"0\",\n            \"SideFloor\": \"شرق\",\n            \"Area\": 100.4\n        },\n        {\n            \"UniqueID\": 2,\n            \"UnitNo\": 2,\n            \"FloorNo\": \"0\",\n            \"SideFloor\": \"غرب\",\n            \"Area\": 100.4\n        }\n    ],\n    \"ParcelCoordinates\": [\n        {\n            \"Lat\": 4.5,\n            \"Lon\": 3.7\n        },\n        {\n            \"Lat\": 4.5,\n            \"Lon\": 3.7\n        },\n        {\n            \"Lat\": 4.5,\n            \"Lon\": 3.7\n        },\n        {\n            \"Lat\": 4.5,\n            \"Lon\": 3.7\n        }\n    ],\n    \"Signature\": \"dfdg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/v0/ConstructionLicense/RequestPostCode",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"v0",
+								"ConstructionLicense",
+								"RequestPostCode"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TrackLicense",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{Host}}/api/v0/ConstructionLicense/TrackLicense",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"v0",
+								"ConstructionLicense",
+								"TrackLicense"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

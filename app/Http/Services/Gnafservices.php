@@ -4,12 +4,14 @@ namespace App\Http\Services;
 
 use App\Helpers\Constant;
 use App\Helpers\ServicesResponse;
+use App\Models\Building;
 use App\Models\PopulationPoint;
 use App\Models\Post;
 use App\Exceptions\ServicesException;
 use App\Modules\AppRegistration;
 use App\Modules\GavahiPdf;
 use App\Modules\Payment;
+use App\Modules\Redis;
 use App\Modules\TaskManager;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\Helper;
@@ -482,7 +484,8 @@ class Gnafservices
             'ClientRowID' => $data['ClientRowID'],
             'TransactionID' => $data['TransactionID']
         ];
-        $tracking_code = Payment::getTrackingCode($data['TransactionID'], $values, $input);
+        $payment = new Payment();
+        $tracking_code = $payment->getTrackingCode($data['TransactionID'], $values, $input);
         $action_areas = PopulationPoint::getActionAreas($data['localityCode']);
         $task_manager_params = self::createTaskManagerParams($data, $tracking_code, $user_id, $action_areas);
         $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input, $user_id);
@@ -501,6 +504,48 @@ class Gnafservices
         }
     }
 
+    public static function requestPostCodes($data, $user_id, $input)
+    {
+        $tracking_code = null;
+        $building = Building::getItem($data['BuildingID']);
+//        dd($building);
+        $post_unit = Redis::getPostUnit($building);
+        $payment = new Payment();
+        $invoice_id = $payment->createInvoice($post_unit);
+        $quantity = count($data['BuildingUnits']);
+        $payment_service_id = $payment->getServices();
+        $invoice_line_id = $payment->insertInvoiceLine($invoice_id, $quantity, $payment_service_id);
+        if (empty($invoice_line_id)) {
+            throw new ServicesException(null, null, null,
+                null, null, null, 12, trans('messages.custom.error.12'), null);
+        }
+        $payment_init = $payment->initPayment($invoice_id);
+        if ($payment_init) {
+            $tracking_code = $payment->getByUserId($invoice_line_id);
+            if (empty($tracking_code)) {
+                $res_msg = trans('messages.custom.error.transaction_not_found');
+                throw new ServicesException(null,
+                    null,
+                    [],
+                    null,
+                    null,
+                    null,
+                    -34,
+                    $res_msg,
+                    'empty'
+                );
+            } else {
+                $msg = trans('messages.custom.success.ResMsg');
+                $res_data = [
+                    "BuildingID" => $data['BuildingID'],
+                    "TrackingCode" => $tracking_code
+                ];
+                return ServicesResponse::makeResponse2(0, $msg, $res_data);
+
+            }
+        }
+
+    }
 
     public static function createTaskManagerParams($data, $tracking_code, $reporter_id, $action_areas)
     {
