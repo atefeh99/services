@@ -3,7 +3,6 @@
 
 namespace App\Modules;
 
-use App\Models\Tour;
 use Predis\Client;
 
 
@@ -32,7 +31,6 @@ class Redis
         $province_id = $building['province_id'];
         $prefix1 = self::STATE_ID_PREFIX;
         $key = "$prefix1:$province_id:state_id";
-        //ex : df:1:province_id:15:state_id
         return $redis->get($key);
 
     }
