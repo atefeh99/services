@@ -5,6 +5,7 @@ namespace App\Modules;
 
 
 use App\Exceptions\ServicesException;
+use App\Helpers\GuzzleRequest;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
@@ -21,9 +22,9 @@ class Payment
 
     public function request($method, $url, $headers = null, $body = null, $query = null)
     {
-        $resp = null;
+
         try {
-            $resp = $this->client->request(
+            return $this->client->request(
                 $method,
                 $url,
                 [
@@ -32,11 +33,16 @@ class Payment
                     RequestOptions::QUERY => $query
                 ]
             );
-
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null, null, null,
+                null, null, null, 12, trans('messages.custom.error.12'), null);
         }
-        return $resp;
+
     }
 
     public function getTrackingCode($transaction_id, $values = null, $input = null, $invalid_values = null)
@@ -47,13 +53,20 @@ class Payment
             'x-scopes' => 'admin',
         ];
         $query = ['$filter' => 'payment_ref_num eq ' . $transaction_id];
+
         try {
-            $resp = $this->request(
+            $resp = $this->client->request(
                 'GET',
                 env("PAYMENT_URL") . env("PAYMENTS_URI"),
-                $headers,
-                null,
-                $query);
+                [
+                    RequestOptions::HEADERS => $headers,
+                    RequestOptions::QUERY => $query
+                ]
+            );
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
 
         } catch (\Exception $e) {
             if ($e->getCode() === 404) {
@@ -84,14 +97,21 @@ class Payment
     public function createInvoice($post_unit)
     {
         try {
+            $headers = [
+                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+            ];
             $body = ['post_unit' => $post_unit];
-            $resp = $this->request(
+            $resp = $this->client->request(
                 'POST',
                 env("PAYMENT_URL") . env("INVOICE_URI"),
-                null,
-                $body,
-                null
-            );
+                [
+                    RequestOptions::HEADERS => $headers,
+                    RequestOptions::JSON => $body,
+                ]);
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -100,6 +120,7 @@ class Payment
 
         Log::info('invoice created');
         $body = json_decode($resp->getBody()->getContents(), true);
+        dd($body);
         return $body["data"]["id"];
     }
 
@@ -110,13 +131,21 @@ class Payment
                 "quantity" => $quantity,
                 "service_id" => $service_id
             ];
-            $resp = $this->request(
+            $headers = [
+                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+            ];
+            $resp = $this->client->request(
                 'POST',
                 env("PAYMENT_URL") . env("INVOICE_URI") . "/$invoice_id/rows",
-                null,
-                $body,
-                null
+                [
+                    RequestOptions::HEADERS => $headers,
+                    RequestOptions::JSON => $body,
+                ]
             );
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -129,17 +158,29 @@ class Payment
 
     public function getServices()
     {
-        try {
-            $resp = $this->request(
-                'GET',
-                env("PAYMENT_URL") . env("SERVICES_URI")
-            );
 
+        $headers = [
+            "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+        ];
+        try {
+            $resp = $this->client->request(
+                'GET',
+                env("PAYMENT_URL") . env("SERVICES_URI"),
+                [
+                    RequestOptions::HEADERS => $headers,
+                ]
+            );
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
                 null, null, null, 12, trans('messages.custom.error.12'), null);
         }
+
+
         $body = json_decode($resp->getBody()->getContents(), true);
         if (array_key_exists('odata.count', $body) && $body['odata.count'] > 0) {
             foreach ($body['value'] as $service) {
@@ -156,10 +197,20 @@ class Payment
     public function initPayment($invoice_id)
     {
         try {
-            $resp = $this->request(
+            $headers = [
+                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+            ];
+            $resp = $this->client->request(
                 'GET',
-                env("PAYMENT_URL") . env("INVOICE_URI") . "/$invoice_id/pay"
+                env("PAYMENT_URL") . env("INVOICE_URI") . "/$invoice_id/pay",
+                [
+                    RequestOptions::HEADERS => $headers,
+                ]
             );
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -176,11 +227,22 @@ class Payment
 
         $tracking_code = null;
         try {
-            $resp = $this->request(
+            $headers = [
+                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+            ];
+            $resp = $this->client->request(
                 'GET',
-                env("PAYMENT_URL") . env("PAYMENTS_URI")
+                env("PAYMENT_URL") . env("PAYMENTS_URI"),
+                [
+                    RequestOptions::HEADERS => $headers,
+
+                ]
             );
 
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
         } catch (\Exception $e) {
             if ($e->getCode() === 404) {
                 $res_msg = trans('messages.custom.error.transaction_not_found');

@@ -488,8 +488,11 @@ class Gnafservices
         $tracking_code = $payment->getTrackingCode($data['TransactionID'], $values, $input);
         $action_areas = PopulationPoint::getActionAreas($data['localityCode']);
         $task_manager_params = self::createTaskManagerParams($data, $tracking_code, $user_id, $action_areas);
-        $status = TaskManager::createPostCodeTask($task_manager_params, $values, $input, $user_id);
+
+        $task_manager = new TaskManager();
+        $status = $task_manager->createPostCodeTask($task_manager_params, $values, $input, $user_id);
         if ($status['message'] == 'successfully created') {
+            dd('sde');
             $msg = trans('messages.custom.success.ResMsg');
             $res_data = [
                 "FollowUpCode" => $tracking_code,
@@ -499,6 +502,7 @@ class Gnafservices
             return ServicesResponse::makeResponse2(0, $msg, $res_data);
 
         } else {
+            dd('mo');
             $msg = trans('messages.custom.error.transaction_part1') . $data['TransactionID'] . trans('messages.custom.error.transaction_part2');
             throw new ServicesException(null, null, [], null, null, null, -35, $msg, 'empty');
         }
@@ -508,7 +512,6 @@ class Gnafservices
     {
         $tracking_code = null;
         $building = Building::getItem($data['BuildingID']);
-//        dd($building);
         $post_unit = Redis::getPostUnit($building);
         $payment = new Payment();
         $invoice_id = $payment->createInvoice($post_unit);
@@ -535,6 +538,10 @@ class Gnafservices
                     'empty'
                 );
             } else {
+                $action_areas = PopulationPoint::getActionAreas($building['population_point_id']);
+                $task_manager_params = self::createTaskManagerParams($data, $tracking_code, $user_id, $action_areas);
+                $task_manager = new TaskManager();
+                $status = $task_manager->createPostCodeTask($task_manager_params, null, null, $user_id);
                 $msg = trans('messages.custom.success.ResMsg');
                 $res_data = [
                     "BuildingID" => $data['BuildingID'],
@@ -577,29 +584,70 @@ class Gnafservices
         }
 
         $params["unique_features"] = [
-            "name" => $data['firstName'],
-            "surname" => $data['lastName'],
-            "user_mobile" => $data['mobileNo'],
-            "phone_number" => $data["prePhoneNo"] . $data["phoneNo"],
-            "detailed_address" => $data['address'],
-            "detailed_address_geom" => [
+            "name" => $data['firstName'] ?? $data['FirstName'],
+            "surname" => $data['lastName'] ?? $data['LastName'],
+            "user_mobile" => $data['mobileNo'] ?? $data['MobileNo'],
+            "detailed_address" => $data['address'] ?? $data['BuildingAddress'],
+            "tracking_number" => $tracking_code,
+        ];
+        if(array_key_exists('RequestType',$data)){
+            $params["unique_features"]["request_type"] = $data['RequestType'];
+        }
+        if(array_key_exists('RequestType',$data)){
+            $params["unique_features"]["old_units_count"] = $data['OldUnitsCount'];
+        }
+        if(array_key_exists('OldPostCodes',$data)){
+            $params["unique_features"]["old_post_codes"] = $data['OldPostCodes'];
+        }
+        if (array_key_exists("prePhoneNo", $data) && array_key_exists("phoneNo", $data)) {
+            $params["unique_features"]["phone_number"] = $data["prePhoneNo"] . $data["phoneNo"];
+        }
+        if (array_key_exists('lon', $data) && array_key_exists('lat', $data)) {
+            $params["unique_features"]["detailed_address_geom"] = [
                 $data['lon'],
                 $data['lat']
-            ],
-            "tracking_number" => $tracking_code,
-            "nearest_postcode" => $data['nearestPostCode'],
-            "units" => [
+            ];
+        } elseif (array_key_exists('ParcelCoordinates', $data)) {
+            $params["unique_features"]["detailed_address_geom"] = $data["ParcelCoordinates"];
+        }
+        if (array_key_exists('nearestPostCode', $data)) {
+            $params["unique_features"]["nearest_postcode"] = $data['nearestPostCode'];
+        }
+        if (array_key_exists('floorNo', $data)
+            && array_key_exists('sideFloor', $data)
+            && array_key_exists('landUse', $data)) {
+            $params["unique_features"]["units"][] =
                 [
                     "floor" => $data['floorNo'],
                     "unit" => $data['sideFloor'],
                     "activityType" => $data['landUse']
-                ]
-            ],
-            "population_point_id" => $data['localityCode'],
-            "email" => $data['email'],
-            "plate_no" => $data['houseNo'],
-            "province" => array_key_exists('unit', $data) ? $data['unit'] : null
-        ];
+                ];
+
+        } else {
+            foreach ($data['BuildingUnits'] as $unit) {
+                $params["unique_features"]["units"][] =
+                    [
+                        "floor" => $unit['FloorNo'],
+                        "unit" => $unit['SideFloor'],
+                        "unique_id" => $unit['UniqueID'],
+                        "unit_no"=>$unit['UnitNo'],
+                        "area" => $unit['Area']
+                ];
+
+            }
+        }
+        if (array_key_exists('localityCode', $data)) {
+            $params["unique_features"]["population_point_id"] = $data['localityCode'];
+        }
+        if (array_key_exists('email', $data)) {
+            $params["unique_features"]["email"] = $data['email'];
+        }
+        if (array_key_exists('houseNo', $data)) {
+            $params["unique_features"]["plate_no"] = $data['houseNo'];
+        }
+        if (array_key_exists('houseNo', $data)) {
+            $params["unique_features"]["province"] = $data['unit'];
+        }
         return $params;
     }
 

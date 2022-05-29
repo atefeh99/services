@@ -52,8 +52,8 @@ class Post extends Model
         ]
     ];
 
-    protected $table = 'sina_units';
-    protected static $_table = 'sina_units';
+    protected $table = 'sina_units_table';
+    protected static $_table = 'sina_units_table';
 
     protected $connection = 'gnaf';
 
@@ -201,6 +201,7 @@ class Post extends Model
 
             }
         }
+
         if (count($result) > 0) {
             return $result;
         } else {

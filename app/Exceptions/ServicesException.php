@@ -28,7 +28,10 @@ class ServicesException extends Exception
         parent::__construct();
         $this->res_code = empty($res_code) ? Constant::ERROR_RESPONSE_CODE : $res_code;
         $this->res_message = empty($res_message) ? trans('messages.custom.error.ResMsg') : $res_message;
-        $this->data = ($data == 'empty') ? null : self::setData($info, $input, $invalid_inputs, $error_code, $error_msg1, $error_msg2);
+        $this->data = ($data == 'empty') ?
+            null :
+            self::setData($info, $input, $invalid_inputs, $error_code, $error_msg1, $error_msg2);
+
     }
 
 //each record has special error code/msg
