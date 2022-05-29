@@ -26,10 +26,10 @@ class TaskManager
     {
         try {
             $headers = [
-                'Content-Type' => ' application/json',
-                'x-user-id' => $user_id,
-                'x-api-key' => env('GNAF_API_KEY'),
-                'token' => env('GNAF_TOKEN'),
+                'Content-Type' => ' application/json'
+//                'x-user-id' => $user_id,
+//                'x-api-key' => env('GNAF_API_KEY'),
+//                'token' => env('GNAF_TOKEN'),
 
             ];
             $resp = $this->client->request(
@@ -61,7 +61,7 @@ class TaskManager
         try {
             $headers = [
                 'Content-Type' => ' application/json',
-                'x-user-id' => $user_id,
+//                'x-user-id' => $user_id,
 //                        'x-api-key' => env('GNAF_API_KEY'),
 //                        'token' => env('GNAF_TOKEN'),
             ];

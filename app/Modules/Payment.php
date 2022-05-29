@@ -73,7 +73,7 @@ class Payment
     {
         try {
             $headers = [
-                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+//                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
             ];
             $body = ['post_unit' => $post_unit];
             $resp = $this->client->request(
@@ -106,7 +106,7 @@ class Payment
                 "service_id" => $service_id
             ];
             $headers = [
-                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+//                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
             ];
             $resp = $this->client->request(
                 'POST',
@@ -134,7 +134,7 @@ class Payment
     {
 
         $headers = [
-            "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+//            "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
         ];
         try {
             $resp = $this->client->request(
@@ -172,7 +172,7 @@ class Payment
     {
         try {
             $headers = [
-                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+//                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
             ];
             $resp = $this->client->request(
                 'GET',
@@ -202,7 +202,7 @@ class Payment
         $tracking_code = null;
         try {
             $headers = [
-                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
+//                "x-user-id" => "1544a2ce-9634-4ae3-83ff-02becd4e6450"
             ];
             $resp = $this->client->request(
                 'GET',
