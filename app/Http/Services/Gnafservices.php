@@ -510,6 +510,7 @@ class Gnafservices
     {
         $tracking_code = null;
         $building = Building::getItem($data['BuildingID']);
+        $data['localityCode'] = $building['population_point_id'];
         $post_unit = Redis::getPostUnit($building);
         $payment = new Payment();
         $invoice_id = $payment->createInvoice($post_unit);
