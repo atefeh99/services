@@ -5,67 +5,89 @@ namespace App\Modules;
 
 
 use App\Exceptions\ServicesException;
+use App\Helpers\GuzzleRequest;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Facades\Log;
 
 class TaskManager
 {
 
-    public static function createPostCodeTask($data, $values, $input, $user_id)
+    public $client;
+
+    public function __construct()
     {
-        $client = new Client();
+        $this->client = new Client();
+    }
+
+
+    public function createPostCodeTask($data, $values, $input, $user_id)
+    {
         try {
-            $resp = $client->request(
+            $headers = [
+                'Content-Type' => ' application/json'
+//                'x-user-id' => $user_id,
+//                'x-api-key' => env('GNAF_API_KEY'),
+//                'token' => env('GNAF_TOKEN'),
+
+            ];
+            $resp = $this->client->request(
                 'POST',
                 env("TASKMANAGER_URL"),
                 [
-                    RequestOptions::HEADERS => [
-                        'Content-Type' => ' application/json',
-//                        'x-user-id' => $user_id,
-//                        'x-api-key' => env('GNAF_API_KEY'),
-                        'token' => env('GNAF_TOKEN'),
-
-                    ],
+                    RequestOptions::HEADERS => $headers,
                     RequestOptions::JSON => $data,
-                    RequestOptions::QUERY => ['' => '']
                 ]
             );
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-12'), 'empty');
         } catch (\Exception $e) {
-            $error_msg_part1 = trans('messages.custom.error.msg_part1');
-            throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
+            if (!empty($values) && !empty($input)) {
+                $error_msg_part1 = trans('messages.custom.error.msg_part1');
+                throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
+            } else {
+                throw new ServicesException(null, null, null,
+                    null, null, null, -12, trans('messages.error.-12'), 'empty');
+            }
         }
         return json_decode($resp->getBody()->getContents(), true);
     }
 
-    public static function getTask($tracking_number, $values, $input, $user_id)
+    public function getTask($tracking_number, $values, $input, $user_id)
     {
-        $client = new Client();
         try {
-            $resp = $client->request(
+            $headers = [
+                'Content-Type' => ' application/json',
+//                'x-user-id' => $user_id,
+//                        'x-api-key' => env('GNAF_API_KEY'),
+//                        'token' => env('GNAF_TOKEN'),
+            ];
+            $query = [
+                '$top' => 20,
+                '$skip' => 0,
+                '$filter' => "tracking_number eq $tracking_number"
+            ];
+
+            $resp = $this->client->request(
                 'GET',
                 env("TASKMANAGER_URL"),
                 [
-                    RequestOptions::HEADERS => [
-                        'Content-Type' => ' application/json',
-                        'x-user-id' => $user_id,
-//                        'x-api-key' => env('GNAF_API_KEY'),
-//                        'token' => env('GNAF_TOKEN'),
-
-                    ],
-//                    RequestOptions::JSON => $data,
-                    RequestOptions::QUERY => ['$top' => 20,
-                        '$skip' => 0,
-                        '$filter' => "tracking_number eq $tracking_number"]
+                    RequestOptions::HEADERS => $headers,
+                    RequestOptions::QUERY => $query
                 ]
+
             );
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            throw new ServicesException(null,
+                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
         } catch (\Exception $e) {
             $error_msg_part1 = trans('messages.custom.error.msg_part1');
             throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
         }
-
         return json_decode($resp->getBody()->getContents(), true);
-
-
     }
-
 }

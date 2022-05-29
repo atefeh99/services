@@ -204,7 +204,6 @@ trait RulesTrait
                     self::rules()[$controller][$function]
                 );
             } else {
-
                 $validation = Validator::make(
                     $data,
                     self::rules()[$controller][$function]

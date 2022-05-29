@@ -222,9 +222,6 @@ class GnafController extends ApiController
     {
         $user_id = $request->header('x-user-id');
 
-//        if (!isset($user_id)) {
-//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 2000);
-//        }
         $input = 'Postcode';
         $data = self::checkRules(
             $request->all(),
@@ -232,6 +229,20 @@ class GnafController extends ApiController
             null,
             $input);
         $result = Gnafservices::trackRequest($data, $input, $user_id);
+        return $this->respondArrayResult($result);
+    }
+
+    public function trackLicense(Request $request)
+    {
+        $user_id = $request->header('x-user-id');
+
+        $input = 'TrackingCode';
+        $data = self::checkRules(
+            $request->all(),
+            __FUNCTION__,
+            null,
+            $input);
+        $result = Gnafservices::trackLisence($data, $input, $user_id);
         return $this->respondArrayResult($result);
     }
 
