@@ -492,7 +492,6 @@ class Gnafservices
         $task_manager = new TaskManager();
         $status = $task_manager->createPostCodeTask($task_manager_params, $values, $input, $user_id);
         if ($status['message'] == 'successfully created') {
-            dd('sde');
             $msg = trans('messages.custom.success.ResMsg');
             $res_data = [
                 "FollowUpCode" => $tracking_code,
@@ -502,7 +501,6 @@ class Gnafservices
             return ServicesResponse::makeResponse2(0, $msg, $res_data);
 
         } else {
-            dd('mo');
             $msg = trans('messages.custom.error.transaction_part1') . $data['TransactionID'] . trans('messages.custom.error.transaction_part2');
             throw new ServicesException(null, null, [], null, null, null, -35, $msg, 'empty');
         }
@@ -542,16 +540,19 @@ class Gnafservices
                 $task_manager_params = self::createTaskManagerParams($data, $tracking_code, $user_id, $action_areas);
                 $task_manager = new TaskManager();
                 $status = $task_manager->createPostCodeTask($task_manager_params, null, null, $user_id);
-                $msg = trans('messages.custom.success.ResMsg');
-                $res_data = [
-                    "BuildingID" => $data['BuildingID'],
-                    "TrackingCode" => $tracking_code
-                ];
-                return ServicesResponse::makeResponse2(0, $msg, $res_data);
-
+                if ($status['message'] == 'successfully created') {
+                    $msg = trans('messages.custom.success.ResMsg');
+                    $res_data = [
+                        "BuildingID" => $data['BuildingID'],
+                        "TrackingCode" => $tracking_code
+                    ];
+                    return ServicesResponse::makeResponse2(0, $msg, $res_data);
+                } else {
+                    throw new ServicesException(null, null, null, null, null, null,
+                        -2, trans('messages.error.-12'), 'empty');
+                }
             }
         }
-
     }
 
     public static function createTaskManagerParams($data, $tracking_code, $reporter_id, $action_areas)
@@ -590,13 +591,13 @@ class Gnafservices
             "detailed_address" => $data['address'] ?? $data['BuildingAddress'],
             "tracking_number" => $tracking_code,
         ];
-        if(array_key_exists('RequestType',$data)){
+        if (array_key_exists('RequestType', $data)) {
             $params["unique_features"]["request_type"] = $data['RequestType'];
         }
-        if(array_key_exists('RequestType',$data)){
+        if (array_key_exists('RequestType', $data)) {
             $params["unique_features"]["old_units_count"] = $data['OldUnitsCount'];
         }
-        if(array_key_exists('OldPostCodes',$data)){
+        if (array_key_exists('OldPostCodes', $data)) {
             $params["unique_features"]["old_post_codes"] = $data['OldPostCodes'];
         }
         if (array_key_exists("prePhoneNo", $data) && array_key_exists("phoneNo", $data)) {
@@ -630,9 +631,9 @@ class Gnafservices
                         "floor" => $unit['FloorNo'],
                         "unit" => $unit['SideFloor'],
                         "unique_id" => $unit['UniqueID'],
-                        "unit_no"=>$unit['UnitNo'],
+                        "unit_no" => $unit['UnitNo'],
                         "area" => $unit['Area']
-                ];
+                    ];
 
             }
         }

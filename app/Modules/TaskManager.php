@@ -21,20 +21,6 @@ class TaskManager
         $this->client = new Client();
     }
 
-    public function request($method, $url, $headers = null, $body = null, $query = null)
-    {
-        return $this->client->request(
-            $method,
-            $url,
-            [
-                RequestOptions::HEADERS => $headers,
-                RequestOptions::JSON => $body,
-                RequestOptions::QUERY => $query
-            ]
-        );
-
-    }
-
 
     public function createPostCodeTask($data, $values, $input, $user_id)
     {
@@ -43,7 +29,8 @@ class TaskManager
                 'Content-Type' => ' application/json',
                 'x-user-id' => $user_id,
                 'x-api-key' => env('GNAF_API_KEY'),
-                'token' => env('GNAF_TOKEN')
+                'token' => env('GNAF_TOKEN'),
+
             ];
             $resp = $this->client->request(
                 'POST',
@@ -54,20 +41,19 @@ class TaskManager
                 ]
             );
         } catch (GuzzleException $e) {
+            dd($e->getMessage());
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.error.-12'), 'empty');
         } catch (\Exception $e) {
-//            dd($e->getMessage());
             if (!empty($values) && !empty($input)) {
                 $error_msg_part1 = trans('messages.custom.error.msg_part1');
                 throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
             } else {
                 throw new ServicesException(null, null, null,
-                    null, null, null, -2, trans('messages.error.-2'), 'empty');
+                    null, null, null, -12, trans('messages.error.-12'), 'empty');
             }
         }
-        dd(json_decode($resp->getBody()->getContents(), true));
         return json_decode($resp->getBody()->getContents(), true);
     }
 

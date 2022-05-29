@@ -20,31 +20,6 @@ class Payment
         $this->client = new Client();
     }
 
-    public function request($method, $url, $headers = null, $body = null, $query = null)
-    {
-
-        try {
-            return $this->client->request(
-                $method,
-                $url,
-                [
-                    RequestOptions::HEADERS => $headers,
-                    RequestOptions::JSON => $body,
-                    RequestOptions::QUERY => $query
-                ]
-            );
-        } catch (GuzzleException $e) {
-            Log::error($e->getMessage());
-            throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            throw new ServicesException(null, null, null,
-                null, null, null, 12, trans('messages.custom.error.12'), null);
-        }
-
-    }
-
     public function getTrackingCode($transaction_id, $values = null, $input = null, $invalid_values = null)
     {
         $error_msg_part1 = trans('messages.custom.error.msg_part1');
@@ -120,7 +95,6 @@ class Payment
 
         Log::info('invoice created');
         $body = json_decode($resp->getBody()->getContents(), true);
-        dd($body);
         return $body["data"]["id"];
     }
 
