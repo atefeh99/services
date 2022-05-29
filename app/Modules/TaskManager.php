@@ -41,7 +41,6 @@ class TaskManager
                 ]
             );
         } catch (GuzzleException $e) {
-            dd($e->getMessage());
             Log::error($e->getMessage());
             throw new ServicesException(null,
                 null, null, null, null, null, -2, trans('messages.error.-12'), 'empty');
