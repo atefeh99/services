@@ -250,9 +250,6 @@ class GnafController extends ApiController
     {
         $user_id = $request->header('x-user-id');
 
-//        if (!isset($user_id)) {
-//            throw new UnauthorizedUserException(trans('messages.custom.unauthorized_user'), 1000);
-//        }
         $input = 'Postcode';
         $output = 'GenerateCertificateByTxn';
         $data = self::checkRules(
