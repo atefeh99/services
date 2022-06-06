@@ -686,7 +686,8 @@ class Gnafservices
             "ClientRowID" => $data['ClientRowID'],
             "PostCode" => $data['PostCode']
         ];
-        $tracking_code = Payment::getTrackingCode($data['TransactionID'], $values, $input);
+        $payment = new Payment();
+        $tracking_code = $payment->getTrackingCode($data['TransactionID'], $values, $input);
 
         $postcodes[0] = $data['PostCode'];
         $action_areas = null;
