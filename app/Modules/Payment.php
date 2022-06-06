@@ -41,7 +41,7 @@ class Payment
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
 
         } catch (\Exception $e) {
             if ($e->getCode() === 404) {
@@ -86,7 +86,7 @@ class Payment
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -119,7 +119,7 @@ class Payment
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -147,7 +147,7 @@ class Payment
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -184,7 +184,7 @@ class Payment
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null, null, null,
@@ -216,7 +216,7 @@ class Payment
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
         } catch (\Exception $e) {
             if ($e->getCode() === 404) {
                 $res_msg = trans('messages.custom.error.transaction_not_found');

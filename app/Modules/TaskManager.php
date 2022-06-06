@@ -43,14 +43,14 @@ class TaskManager
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-12'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-12'), 'empty');
         } catch (\Exception $e) {
             if (!empty($values) && !empty($input)) {
                 $error_msg_part1 = trans('messages.custom.error.msg_part1');
                 throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
             } else {
                 throw new ServicesException(null, null, null,
-                    null, null, null, -12, trans('messages.error.-12'), 'empty');
+                    null, null, null, -12, trans('messages.custom.error.-12'), 'empty');
             }
         }
         return json_decode($resp->getBody()->getContents(), true);
@@ -83,7 +83,7 @@ class TaskManager
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new ServicesException(null,
-                null, null, null, null, null, -2, trans('messages.error.-2'), 'empty');
+                null, null, null, null, null, -2, trans('messages.custom.error.-2'), 'empty');
         } catch (\Exception $e) {
             $error_msg_part1 = trans('messages.custom.error.msg_part1');
             throw new ServicesException($values, $input, [], 9070, $error_msg_part1);
