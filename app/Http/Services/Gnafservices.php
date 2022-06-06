@@ -550,7 +550,7 @@ class Gnafservices
                     return ServicesResponse::makeResponse2(0, $msg, $res_data);
                 } else {
                     throw new ServicesException(null, null, null, null, null, null,
-                        -2, trans('messages.error.-12'), 'empty');
+                        -2, trans('messages.custom.error.-12'), 'empty');
                 }
             }
         }
