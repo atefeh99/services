@@ -196,7 +196,6 @@ class Post extends Model
                 $result = $result->get($out_fields)
                     ->keyby($input)
                     ->toArray();
-
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
 
