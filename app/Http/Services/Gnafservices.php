@@ -440,8 +440,8 @@ class Gnafservices
         }
         if ($input_alias == 'postalcode' && $output_alias == 'Address') {
             foreach ($result as $key => $res) {
-                if (str_contains($res['statename'], 'تهران')) {
-                    $result[$key]['statename'] = 'تهران';
+                if (str_contains($res['statename'], trans('words.Tehran', [],'fa'))) {
+                    $result[$key]['statename'] = trans('words.Tehran', [],'fa');
                 }
             }
         }
