@@ -438,6 +438,13 @@ class Gnafservices
                 $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
             }
         }
+        if ($input_alias == 'postalcode' && $output_alias == 'Address') {
+            foreach ($result as $key => $res) {
+                if (str_contains($res['statename'], 'تهران')) {
+                    $result[$key]['statename'] = 'تهران';
+                }
+            }
+        }
 
         if (isset($result)) {
 
