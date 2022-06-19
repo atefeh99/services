@@ -261,7 +261,10 @@ class Post extends Model
         $value = Cache::rememberForever($this->province_id . '_phone_code', function () {
             return Province::where('id', $this->province_id)->first();
         });
-        return $value->phone_code;
+        if (array_key_exists('phone_code', get_object_vars($value)['attributes'])) {
+            return $value->phone_code ?? "";
+        }
+        return "";
     }
 
     public function getAvenueAttribute()
