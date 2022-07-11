@@ -61,13 +61,19 @@ class Payment
         }
 
         $body = json_decode($resp->getBody()->getContents(), true);
-
-        if (array_key_exists('tracking_code', $body['value'][0]) && !empty($body['value'][0]['tracking_code'])) {
-            return $body['value'][0]['tracking_code'];
+        if (!empty($body)) {
+            if (array_key_exists('tracking_code', $body['value'][0]) && !empty($body['value'][0]['tracking_code'])) {
+                return $body['value'][0]['tracking_code'];
+            } else {
+                Log::error('tracking code not set or null');
+                return null;
+            }
         } else {
             Log::error('tracking code not set or null');
+            return null;
         }
     }
+<<<<<<< HEAD
 
     public function createInvoice($post_unit)
     {
@@ -252,4 +258,6 @@ class Payment
         return $tracking_code;
     }
 
+=======
+>>>>>>> dc6561e771088ad56da0d97435ec47ba653f6a95
 }

@@ -47,7 +47,8 @@ class Gnafservices
             'floorno' => 'Floor',
             'unit' => 'SideFloor',
             'building_name' => 'BuildingName',
-//            'description'=>'Description',
+            'entrance' => 'Description',
+            'mainavenue' => 'MainAvenue'
 
         ],
         'AddressAndTelephones' => [
@@ -65,7 +66,7 @@ class Gnafservices
             'floorno' => 'Floor',
             'unit' => 'SideFloor',
             'building_name' => 'BuildingName',
-//            'description'=>'Description',
+//            'entrance' => 'Description',
             'tels' => 'TelephoneNo'
 
         ],
@@ -85,7 +86,7 @@ class Gnafservices
             'floorno' => 'Floor',
             'unit' => 'SideFloor',
             'building_name' => 'BuildingName',
-//            'description'=>'Description',
+//            'entrance' => 'Description',
         ],
         'Workshop' => [
             'activity_name' => 'Name',
@@ -134,8 +135,8 @@ class Gnafservices
             'unit' => 'SideFloor',
             'CertificateUrl' => 'CertificateUrl',
             'CertificateNo' => 'CertificateNo',
-            'building_name' => 'BuildingName'
-            //            'description'=>'Description',
+            'building_name' => 'BuildingName',
+            'entrance' => 'Description',
 
 
         ],
@@ -167,7 +168,9 @@ class Gnafservices
             'unit' => 'SideFloor',
             'CertificateUrl' => 'CertificateUrl',
             'CertificateNo' => 'CertificateNo',
-            'building_name' => 'BuildingName'
+            'building_name' => 'BuildingName',
+            'entrance' => 'Description',
+
         ],
         'Certification' => [
             'link' => 'link'
@@ -207,8 +210,9 @@ class Gnafservices
             'floorno',
             'unit',
             'building_name',
-//            'description',
+            'entrance',
             'province_id',
+            'mainavenue',
             'tels'
 
         ],
@@ -228,7 +232,10 @@ class Gnafservices
             'floorno',
             'unit',
             'building_name',
-            'province_id'
+            'province_id',
+            'mainavenue',
+            'entrance',
+            'building_type'
 
         ],
         'AddressAndTelephones' => [
@@ -249,7 +256,7 @@ class Gnafservices
             'unit',
             'building_name',
             'province_id',
-            //'description'
+//            'entrance',
             'tels',
 
         ],
@@ -272,7 +279,7 @@ class Gnafservices
             'unit',
             'building_name',
             'province_id',
-//            'description',
+//            'entrance',
             'tels',
 
         ],
@@ -334,9 +341,8 @@ class Gnafservices
             'floorno',
             'unit',
             'province_id',
-            'building_name'
-
-            //description
+            'building_name',
+            'entrance'
 
         ],
         'ReqStatus' => [
@@ -366,9 +372,8 @@ class Gnafservices
             'floorno',
             'unit',
             'province_id',
-            'building_name'
-            //description
-
+            'building_name',
+            'entrance'
         ],
         'AddressByCertificateNo' => [
             'statename',
@@ -387,9 +392,8 @@ class Gnafservices
             'floorno',
             'unit',
             'province_id',
-            'building_name'
-            //description
-
+            'building_name',
+//            'entrance'
         ],
         'PostcodeByParcel' => [
             'postalcode'
@@ -431,12 +435,15 @@ class Gnafservices
         } elseif ($input_alias == "postalcode") {
             $result = Post::search($input_alias, $query_field, $out_fields, $action_areas);
         }
-        if ($output_alias == 'GenerateCertificate') {
-            $gavahi_info = GavahiPdf::getLinkAndBarcode($query_field, $user_id, null, $values, $input, $invalid_values);
-            foreach ($result as $k => $r) {
-                $result[$k]['CertificateUrl'] = $gavahi_info['link'];
-                $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
+        if (isset($result)) {
+            if ($output_alias == 'GenerateCertificate') {
+                $gavahi_info = GavahiPdf::getLinkAndBarcode($query_field, $user_id, null, $values, $input, $invalid_values);
+                foreach ($result as $k => $r) {
+                    $result[$k]['CertificateUrl'] = $gavahi_info['link'];
+                    $result[$k]['CertificateNo'] = $gavahi_info['extra_info'][$k]['barcode'];
+                }
             }
+<<<<<<< HEAD
         }
         if ($input_alias == 'postalcode' && $output_alias == 'Address') {
             foreach ($result as $key => $res) {
@@ -445,7 +452,17 @@ class Gnafservices
                 }
             }
         }
+=======
+>>>>>>> dc6561e771088ad56da0d97435ec47ba653f6a95
 
+            if ($input_alias == 'postalcode' && ($output_alias == 'Address' || $output_alias == 'AddressString')) {
+                foreach ($result as $key => $res) {
+                    if (str_contains($res['statename'], trans('words.Tehran', [], 'fa'))) {
+                        $result[$key]['statename'] = trans('words.Tehran', [], 'fa');
+                    }
+                }
+            }
+        }
         if (isset($result)) {
 
             return ServicesResponse::makeResponse($input, $result, $input_alias, $output_alias, $values, $output_result, $invalid_values);

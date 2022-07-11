@@ -60,13 +60,14 @@ class GnafController extends ApiController
 
         if (isset($data[Constant::INPUTMAPS[$input]])) {
             $inputval = $data[Constant::INPUTMAPS[$input]];
-        } elseif ($input == 'Telephone') {
-            $info = $data[Constant::INPUTMAPS['Postcode']];
-            throw new ServicesException($info, 'Postcode', null, 2117, $error_msg1, null);
-        } elseif ($input == 'Postcode') {
-            $info = $data[Constant::INPUTMAPS['Telephone']];
-            throw new ServicesException($info, 'Telephone', null, 2117, $error_msg1, null);
         }
+//        elseif ($input == 'Telephone') {
+//            $info = $data[Constant::INPUTMAPS['Postcode']];
+//            throw new ServicesException($info, 'Postcode', null, 2117, $error_msg1, null);
+//        } elseif ($input == 'Postcode') {
+//            $info = $data[Constant::INPUTMAPS['Telephone']];
+//            throw new ServicesException($info, 'Telephone', null, 2117, $error_msg1, null);
+//        }
 
         $inputval = is_string($inputval) ? [$inputval] : $inputval;
         $inp = $input;

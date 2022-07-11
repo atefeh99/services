@@ -34,9 +34,9 @@ class ServicesResponse
                     $error_msg_part1 = trans('messages.custom.error.msg_part1');
                     $error_msg_part2 = '';
                     if ($output_alias == 'Telephones') {
-                        $error_msg_part2 = trans('messages.custom.error.telMsg');
+                        $error_msg_part2 = trans('messages.custom.error.telMsg1');
                     } elseif ($output_alias == 'Postcode') {
-                        $error_msg_part2 = trans('messages.custom.error.postcodeMsg');
+                        $error_msg_part2 = trans('messages.custom.error.postcodeMsg1');
                     } elseif ($output_alias == 'Position' || $output_alias == 'EstimatedPosition' || $output_alias == 'AccuratePosition') {
                         $error_msg_part2 = trans('messages.custom.error.positionMsg');
                     } elseif ($output_alias == 'BuildingUnits') {
@@ -116,7 +116,6 @@ class ServicesResponse
             }
         } elseif (empty($error_code)) {
             $error_code = 9040;
-            $error_msg_part1 = trans('messages.custom.error.msg_part1');
             if ($input == "Telephone") {
                 $error_msg_part2 = trans('messages.custom.error.telMsg');
             } else {
@@ -202,105 +201,271 @@ class ServicesResponse
 
     public static function makeAddressString($v)
     {
+
         $result = "";
+        $state_not_null = !empty($v['statename']);
+        $town_not_null = !empty($v['townname']);
+        $zone_not_null = !empty($v['zonename']);
+        $location_type_not_null = !empty($v['locationtype']);
+        $location_name_not_null = !empty($v['locationname']);
+        $parish_not_null = !empty($v['parish']);
+        $mainavenue_not_null = !empty($v['mainavenue']);
+        $preaventype_not_null = !empty($v['preaventypename']);
+        $preaven_not_null = !empty($v['preaven']);
+        $avenuetype_not_null = !empty($v['avenuetypename']);
+        $avenue_not_null = !empty($v['avenue']);
+        $plate_not_null = isset($v['plate_no']);
+        $building_not_null = !empty($v['building_name']);
+        $building_type_not_null = !empty($v['building_type']);
+        $entrance_not_null = !empty($v['entrance']);
+        $floor_not_null = isset($v['floorno']);
+        $unit_not_null = !empty($v['unit']);
+
         //state
-        if (array_key_exists('statename', $v) && $v['statename']) {
+        if ($state_not_null && $v['statename']) {
             $result .= 'استان ';
             $result .= $v['statename'];
-            $result .= '، ';
+            if (
+                ($town_not_null && $v['townname'])
+                || ($zone_not_null && $v['zonename'])
+                || (($location_name_not_null && $v['locationname'])
+                    || ($location_type_not_null && $v['locationtype']))
+                || ($parish_not_null && $v['parish'])
+                || ($mainavenue_not_null && $v['mainavenue'])
+                || (($preaven_not_null && $v['preaven']) || ($preaventype_not_null && $v['preaventypename']))
+                || (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                || ($plate_not_null)
+                || ($entrance_not_null && $v['entrance'])
+                || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                || ($floor_not_null)
+                || ($unit_not_null && $v['unit'])
+
+            ) $result .= '، ';
         }
+
         //town
-        if (array_key_exists('townname', $v) && $v['townname']) {
+        if ($town_not_null && $v['townname']) {
             $result .= 'شهرستان ';
             $result .= $v['townname'];
-            $result .= '، ';
+            if (
+                ($zone_not_null && $v['zonename'])
+                || (($location_name_not_null && $v['locationname'])
+                    || ($location_type_not_null && $v['locationtype']))
+                || ($parish_not_null && $v['parish'])
+                || ($mainavenue_not_null && $v['mainavenue'])
+                || (($preaven_not_null && $v['preaven']) || ($preaventype_not_null && $v['preaventypename']))
+                || (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                || ($plate_not_null)
+                || ($entrance_not_null && $v['entrance'])
+                || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                || ($floor_not_null)
+                || ($unit_not_null && $v['unit'])
+
+            ) $result .= '، ';
         }
+
         //zone
-        if (array_key_exists('zonename', $v) && $v['zonename']) {
+        if ($zone_not_null && $v['zonename']) {
             $result .= 'بخش ';
             $result .= $v['zonename'];
-            $result .= '، ';
+            if (
+                (($location_name_not_null && $v['locationname'])
+                    || ($location_type_not_null && $v['locationtype']))
+                || ($parish_not_null && $v['parish'])
+                || ($mainavenue_not_null && $v['mainavenue'])
+                || (($preaven_not_null && $v['preaven']) || ($preaventype_not_null && $v['preaventypename']))
+                || (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                || ($plate_not_null)
+                || ($entrance_not_null && $v['entrance'])
+                || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                || ($floor_not_null)
+                || ($unit_not_null && $v['unit'])
+
+            ) $result .= '، ';
         }
+
         //location
-        if (array_key_exists('locationtype', $v)
-            && array_key_exists('locationname', $v)) {
+        if ($location_type_not_null
+            && $location_name_not_null) {
 
+            if ($v['locationtype'] || $v['locationname']) {
+                if ($v['locationtype'] == 'روستا') {
+                    $result .= 'روستای ';
+                    $result .= $v['locationname'];
+                } else {
+                    $result .= $v['locationtype'] . ' ' . $v['locationname'];
+                }
+                if (
+                    ($parish_not_null && $v['parish'])
+                    || ($mainavenue_not_null && $v['mainavenue'])
+                    || (($preaven_not_null && $v['preaven']) || ($preaventype_not_null && $v['preaventypename']))
+                    || (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                    || ($plate_not_null)
+                    || ($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
 
-            if ($v['locationtype'] == 'شهر' &&
-                $v['locationname']) {
-
-                $result .= 'شهر ';
-                $result .= $v['locationname'];
-                $result .= '، ';
-            } elseif ($v['locationtype'] == 'روستا' &&
-                $v['locationname']) {
-
-                $result .= 'روستای ';
-                $result .= $v['locationname'];
-                $result .= '، ';
-            } elseif ($v['locationtype'] == 'آبادی' &&
-                $v['locationname']) {
-
-                $result .= 'آبادی ';
-                $result .= $v['locationname'];
-                $result .= '، ';
+                ) $result .= '، ';
             }
         }
-//parish
-        if (array_key_exists('parish', $v)) {
+
+        //parish
+        if ($parish_not_null) {
             if ($v['parish']) {
                 $result .= $v['parish'];
-                $result .= '، ';
+                if (
+                    ($mainavenue_not_null && $v['mainavenue'])
+                    || (($preaven_not_null && $v['preaven']) || ($preaventype_not_null && $v['preaventypename']))
+                    || (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                    || ($plate_not_null)
+                    || ($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+
+                ) $result .= '، ';
             }
         }
-//preavenue avenue
+
+        //mainavenue
+        if ($mainavenue_not_null) {
+            if ($v['mainavenue']) {
+                $result .= $v['mainavenue'];
+                if (
+                    (($preaven_not_null && $v['preaven']) || ($preaventype_not_null && $v['preaventypename']))
+                    || (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                    || ($plate_not_null)
+                    || ($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+
+                ) $result .= '، ';
+            }
+        }
+
+        //preavenue
         if (
-            array_key_exists('preaventypename', $v)
-            && array_key_exists('preaven', $v)
-            && array_key_exists('avenue', $v)
-            && array_key_exists('avenuetypename', $v)
+            $preaventype_not_null
+            && $preaven_not_null
+
         ) {
             if ($v['preaventypename'] ||
                 $v['preaven']) {
                 $result .= $v['preaven'];
-                $result .= '، ';
 
+                if (
+                    (($avenue_not_null && $v['avenue']) || ($avenuetype_not_null && $v['avenuetypename']))
+                    || ($plate_not_null)
+                    || ($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+
+                ) $result .= '، ';
             }
+
+
+        }
+
+//        avenue
+        if ($avenuetype_not_null
+            && $avenue_not_null) {
             if ($v['avenuetypename'] ||
                 $v['avenue']) {
                 $result .= $v['avenue'];
-                $result .= '، ';
 
+                if (($plate_not_null)
+                    || ($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+                ) $result .= '، ';
+            }
+        }
+
+//        plateno
+        if ($plate_not_null) {
+            $result .= 'پلاک ';
+            $result .= abs($v['plate_no']);
+            if ($v['plate_no'] < 0) {
+                if (($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+                ) {
+                    $result .= '-';
+                    $result .= '، ';
+                } else {
+                    $result = '-' . $result;
+                }
+
+            } else {
+                if (($entrance_not_null && $v['entrance'])
+                    || (($building_not_null && $v['building_name']) || ($building_type_not_null && $v['building_type']))
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+                ) {
+                    $result .= '، ';
+                }
+            }
+        }
+
+        //building_name
+        if ($building_not_null && $building_type_not_null) {
+            if ($v['building_name'] && $v['building_type']) {
+                $result .= $v['building_type'] . ' ';
+                $result .= $v['building_name'];
+                if (($entrance_not_null && $v['entrance'])
+                    || ($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+                ) $result .= '، ';
             }
 
         }
-//        plateno
-        if (array_key_exists('plate_no', $v)
-            && $v['plate_no']) {
-            $result .= 'پلاک ';
-            $result .= $v['plate_no'];
-            $result .= '، ';
+
+        //entrance
+        if ($entrance_not_null) {
+            if ($v['entrance']) {
+                $result .= $v['entrance'];
+                if (($floor_not_null)
+                    || ($unit_not_null && $v['unit'])
+                ) $result .= '، ';
+            }
+
         }
-        //building_name
-        if (array_key_exists('building_name', $v)
-            && $v['building_name']) {
-            $result .= $v['building_name'];
-            $result .= '، ';
-        }
+
 //        floor
-        if (array_key_exists('floorno', $v)) {
+        if ($floor_not_null) {
             $result .= 'طبقه ';
             $result .= ((int)$v['floorno'] == 0) ?
-                'همکف' : $v['floorno'];
-            $result .= '، ';
+                'همکف' : abs($v['floorno']);
+            if ((int)$v['floorno'] < 0) {
+                if ($unit_not_null && $v['unit']) {
+                    $result .= '-';
+                    $result .= '، ';
+                } else {
+                    $result = '-' . $result;
+                }
+            } else {
+                if ($unit_not_null && $v['unit']) {
+                    $result .= '، ';
+                }
+            }
         }
 
 //        unit
-        if (array_key_exists('unit', $v)
-            && $v['unit']) {
-            $result .= 'واحد ';
-            $result .= $v['unit'];
+        if ($unit_not_null) {
+            if ($v['unit']) {
+                $result .= 'واحد ';
+                $result .= $v['unit'];
+            }
         }
+
+        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        $num = range(0, 9);
+        $result = str_replace($num, $persian, $result);
 
         return $result;
     }

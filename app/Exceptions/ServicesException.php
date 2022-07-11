@@ -61,6 +61,9 @@ class ServicesException extends Exception
                 $data[$temp] = ServicesResponse::succFalse($input, $area_code,
                     $PorT, $temp, $invalid_inputs, null, null, null, $client_row_id);
             } elseif ((isset($error_msg1) || isset($error_msg2)) && (isset($error_code))) {
+                if(array_key_exists('TransactionID',$info[0])){
+                    $PorT = 'TransactionID';
+                }
                 $data[$temp] = ServicesResponse::succFalse($input, $area_code,
                     $PorT, $temp, $invalid_inputs, $error_code, $error_msg1, $error_msg2, $client_row_id);
             } else {

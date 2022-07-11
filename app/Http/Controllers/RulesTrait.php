@@ -137,7 +137,7 @@ trait RulesTrait
                 'addressByCertificateNo' => [
                     'CertificateNo' => [
                         'ClientRowID' => 'integer|required',
-                        'CertificateNo' => 'numeric|required',
+                        'CertificateNo' => 'string|required',
                         'signature' => 'string'
                     ]
                 ],

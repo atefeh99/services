@@ -108,6 +108,9 @@ class Post extends Model
     public static function searchInArray($input, $value, $out_fields, $scopes)
     {
 //toDo if statement should be correct
+        if(empty($value)){
+            return null;
+        }
         $result = self::query();
         if (in_array("ST_X(geom),ST_Y(geom)", $out_fields) || in_array("ST_X(ST_AsText(ST_Centroid(parcel))),ST_Y(ST_AsText(ST_Centroid(parcel)))", $out_fields)) {
             $i = 0;
@@ -263,7 +266,10 @@ class Post extends Model
         });
         if (!empty($value) && array_key_exists('phone_code', get_object_vars($value)['attributes'])) {
             return $value->phone_code ?? "";
+<<<<<<< HEAD
 
+=======
+>>>>>>> dc6561e771088ad56da0d97435ec47ba653f6a95
         }
         return "";
     }
